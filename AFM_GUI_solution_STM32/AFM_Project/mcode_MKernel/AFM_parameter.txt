@@ -1,0 +1,14 @@
+1	%point_now_x
+128	%point_now_y
+128	%N_x
+128	%N_y
+6000	%XL
+3500	%YL
+7000	%Dx
+7000	%Dy
+0.3	%ScanRate
+500	%SetDeltaVoltage
+96	%Sensitivity
+0.05	%Z_PID_P
+0.02	%Z_PID_I
+0	%Z_PID_D

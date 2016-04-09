@@ -1,0 +1,1 @@
+regsvr32.exe MKernel_1_0.dll
