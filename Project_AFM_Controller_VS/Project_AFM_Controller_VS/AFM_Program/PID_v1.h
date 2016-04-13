@@ -19,9 +19,9 @@ class PID
   #define REVERSE  1
 
   //commonly used functions **************************************************************************
-    PID(double, double, double,        // * constructor.  links the PID to the Input, Output, and 
-        double, double, double,bool Direction_DirectTrue_ReverseFalse);     //   Setpoint.  Initial tuning parameters are also set here
-
+//    PID(double, double, double,        // * constructor.  links the PID to the Input, Output, and 
+//        double, double, double,bool Direction_DirectTrue_ReverseFalse);     //   Setpoint.  Initial tuning parameters are also set here
+	PID(bool Direction_DirectTrue_ReverseFalse);     //   Setpoint.  Initial tuning parameters are also set here
     //void SetMode(int Mode);               // * sets PID to either Manual (0) or Auto (non-0)
 	//void FastCompute(); 14us
 	double Compute(double mInput);                     // * performs the PID calculation.  it should be
@@ -37,10 +37,7 @@ class PID
 	void SetPID_P(double value){SetTunings(value,ki,kd);};
 	void SetPID_I(double value){SetTunings(kp,value,kd);};
 	void SetPID_D(double value){SetTunings(kp,ki,value);};
-  //available but not commonly used functions ********************************************************
-    void SetTunings(double, double,       // * While most users will set the tunings once in the 
-                    double);         	  //   constructor, this function gives the user the option
-                                          //   of changing tunings during runtime for Adaptive control
+
 	void SetControllerDirection(int);	  // * Sets the Direction, or "Action" of the controller. DIRECT
 										  //   means the output will increase when error is positive. REVERSE
 										  //   means the opposite.  it's very unlikely that this will be needed
@@ -69,7 +66,11 @@ class PID
   private:
 	  double error;
 	void Initialize();
-	
+	  //available but not commonly used functions ********************************************************
+	void SetTunings(double,
+		double,       // * While most users will set the tunings once in the 
+		double);         	  //   constructor, this function gives the user the option
+		                      //   of changing tunings during runtime for Adaptive control
 	double dispKp;				// * we'll hold on to the tuning parameters in user-entered 
 	double dispKi;				//   format for display purposes
 	double dispKd;				//

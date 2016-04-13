@@ -46,6 +46,13 @@ typedef  uint8_t byte;
 
 /////////////////////////////////////////AFM global members///////////////////////////////////////////////////////////////////////
 extern DigitalOut* p_LED;
+extern DigitalOut *p_LED;// = new DigitalOut(PORT_LED);
+extern DigitalOut *p_Tdio1;// = new DigitalOut(Tdio1);
+extern DigitalOut *p_Tdio2;// = new DigitalOut(Tdio2);
+extern DigitalOut *p_Tdio3;// = new DigitalOut(Tdio3);
+extern DigitalOut *p_Tdio4;// = new DigitalOut(Tdio4);
+extern DigitalOut *p_Tdio5;// = new DigitalOut(Tdio5);
+
 extern CDAC mAFM_DAC;	
 extern CSEM mAFM_SEM;
 
@@ -240,7 +247,7 @@ public:
 	int Vdf_infinite;// BIT18MAX_HALF;
 
 
-	double threshold_approach_delta;// PRC_sensitivity_ADC18_per_nm * 4;//7nm  threashold to avoid peak-to-peak noise //112*5;// vpp*5 102*4;//87*11;//;3nm112*3;
+	double threshold_approach_delta_B18;// DTS_Sensitivity_B18_per_nm * 4;//7nm  threashold to avoid peak-to-peak noise //112*5;// vpp*5 102*4;//87*11;//;3nm112*3;
 
 	
 #define  sampling_period_us_of_Approach_Process (250.0)//old;//2000.0
@@ -305,7 +312,7 @@ public:
 	   								//-------------------------- indentation------------------------------------------------------------------//
 	//int mI_MaxStep;// 4096;//6000;
 	// indentation parameters, input from GUI
-	double mI_MaxDepth;// 1;//MAX_RANGE_Z_NM for savety reason only
+	double mI_MaxDepth;// 1;//SCANNER_RANGE_Z_NM for savety reason only
 	double mI_StiffnessPRC_nN_per_nm;// 40.0;//40N/m, 40 nN/nm
 	double mI_TriggerForce_nN;// mI_StiffnessPRC_nN_per_nm * 37.5;// 100nm
 	double mI_PRC_ADCValue_per_nm;// 86.9;//
@@ -316,7 +323,7 @@ public:
 	double mI_PRC_Force_nN_per_ADCValue;// mI_StiffnessPRC_nN_per_nm / mI_PRC_ADCValue_per_nm;
 	double mI_PRC_Force_nN_Now;// 0;
 	double mI_step_size_nm;// 1;//Math_Min;//0.0816
-	double mI_step_size_01;// mI_step_size_nm / MAX_RANGE_Z_NM;// 4.675524715375971e-05
+	double mI_step_size_01;// mI_step_size_nm / SCANNER_RANGE_Z_NM;// 4.675524715375971e-05
 	bool mI_direction_indent_True_withdraw_False;// true;
 #define mI_Withdraw_Done_Threshold_nm (1)// should not be smaller than noise level
 	double mI_Withdraw_Done_Threshold_ADC;// mI_PRC_ADCValue_per_nm*mI_Withdraw_Done_Threshold_nm;
@@ -324,16 +331,16 @@ public:
 #define mI_MaxStep (4096)
 	uint32_t mIndentData[3][mI_MaxStep];// {0};
 
-	uint32_t VWset_deltaV_input_mV;// 500 / 4;// set working voltage;// receive from rs232
-	double TF_Sinsitivity;// 1;//192/2;// nm/V   // receive from rs232
-	int32_t VWset_deltaV_ADC_b18;// 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(VWset_deltaV_input_mV);// update VWset_deltaV_ADC_b18 each time when set VWset_deltaV_input_mV
+	uint32_t mZPID_WorkingDistance_nm;// 500 / 4;// set working voltage;// receive from rs232
+	double DTS_Sensitivity_B18_per_nm;// 1;//192/2;// nm/V   // receive from rs232
+	int32_t VWset_deltaV_ADC_b18;// 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZPID_WorkingDistance_nm
 	double mTF_DC_Gain;// 1;// gain for tf DC actuation
 
 	double TF_SensorRange;// nm, assumed range, or Zmax
-	//double pid_input_Gain_adjust;//0;//5.0*TF_Sinsitivity/BIT18MAX/TF_SensorRange;
+	//double pid_input_Gain_adjust;//0;//5.0*DTS_Sensitivity_B18_per_nm/BIT18MAX/TF_SensorRange;
 
 	//
-	//double DSet_01=(-(double)VWset_deltaV_input_mV/1000.0/4.0+2.5)// voltage 0~5 //2.375V
+	//double DSet_01=(-(double)mZPID_WorkingDistance_nm/1000.0/4.0+2.5)// voltage 0~5 //2.375V
 	//	*BIT18MAX/5// adc value 0~2^18
 	//	*pid_input_Gain_adjust;// pid range 1000 nm
 	double DSet_01;// 0;
@@ -353,7 +360,7 @@ public:
 	double measured_sampling_frequency_of_system;// 0;
 	
 	double mStepSize_Appoach;
-	
+	byte sys_idle_package_index;
 	
 	//-----------------------------------------------------------------------------------------
 	
@@ -379,9 +386,9 @@ public:
 //#define SamplingTime_us_Zloop  (400)// (330)//1000 
 //#define SamplingFrequency_Zloop  (1000000.0/SamplingTime_us_Zloop)// Hz
 //
-		
+		sys_idle_package_index = 0;
 		mPeriod_Realtime_us = 501;//200;
-		mPeriod_Communication_us = 2001;	
+		mPeriod_Communication_us = 1000007;	
 		
 		mSamplingFrequency_Realtime_MHz = 1000000.0 / mPeriod_Realtime_us;
 		
@@ -428,15 +435,6 @@ public:
 		//V18_Dac[4] = {0};//
 		//position_feedforward_output_01[4] = {0};//
 
-		Vdf_infinite = BIT18MAX_HALF;
-
-
-#if (ADC_PORT_ZlOOP_SENSOR==ADC_CHANNEL_PRC)
-#define PRC_sensitivity_ADC18_per_nm (41.2)
-		threshold_approach_delta = PRC_sensitivity_ADC18_per_nm * 2;//7nm  threashold to avoid peak-to-peak noise //112*5;// vpp*5 102*4;//87*11;//;3nm112*3;
-#else
-		threshold_approach_delta = (150.0 / MAX_RANGE_Z_NM*BIT18MAX);//1638;//0.025V/4*bit18=5nm;
-#endif
 
 					////////////////////////// input for  xy scan
 		N_FramesToScan = 1;
@@ -479,7 +477,7 @@ public:
 		  //-------------------------- indentation------------------------------------------------------------------//
 		
 		// indentation parameters, input from GUI
-		mI_MaxDepth = 1;//MAX_RANGE_Z_NM for savety reason only
+		mI_MaxDepth = 1;//SCANNER_RANGE_Z_NM for savety reason only
 		mI_StiffnessPRC_nN_per_nm = 40.0;//40N/m, 40 nN/nm
 		mI_TriggerForce_nN = mI_StiffnessPRC_nN_per_nm * 37.5;// 100nm
 		mI_PRC_ADCValue_per_nm = 86.9;//
@@ -490,23 +488,23 @@ public:
 		mI_PRC_Force_nN_per_ADCValue = mI_StiffnessPRC_nN_per_nm / mI_PRC_ADCValue_per_nm;
 		mI_PRC_Force_nN_Now = 0;
 		mI_step_size_nm = 1;//Math_Min=0.0816
-		mI_step_size_01 = mI_step_size_nm / MAX_RANGE_Z_NM;// 4.675524715375971e-05
+		mI_step_size_01 = mI_step_size_nm / SCANNER_RANGE_Z_NM;// 4.675524715375971e-05
 		mI_direction_indent_True_withdraw_False = true;
 
 		mI_Withdraw_Done_Threshold_ADC = mI_PRC_ADCValue_per_nm*mI_Withdraw_Done_Threshold_nm;
 
 		//mIndentData[3][mI_MaxStep] = {0};
 
-		VWset_deltaV_input_mV = 500 / 4;// set working voltage;// receive from rs232
-		TF_Sinsitivity = 1;//192/2;// nm/V   // receive from rs232
-		VWset_deltaV_ADC_b18 = 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(VWset_deltaV_input_mV);// update VWset_deltaV_ADC_b18 each time when set VWset_deltaV_input_mV
+		mZPID_WorkingDistance_nm = 2;// set working voltage;// receive from rs232
+		DTS_Sensitivity_B18_per_nm = 1; //192/2;// nm/V   // receive from rs232
+		VWset_deltaV_ADC_b18 = 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZPID_WorkingDistance_nm
 		mTF_DC_Gain = 1;// gain for tf DC actuation
 
 		TF_SensorRange = 1000;// nm, assumed range, or Zmax
-	   // pid_input_Gain_adjust=0;//5.0*TF_Sinsitivity/BIT18MAX/TF_SensorRange;
+	   // pid_input_Gain_adjust=0;//5.0*DTS_Sensitivity_B18_per_nm/BIT18MAX/TF_SensorRange;
 
 	   	//
-	   	// DSet_01=(-()VWset_deltaV_input_mV/1000.0/4.0+2.5)// voltage 0~5 //2.375V
+	   	// DSet_01=(-()mZPID_WorkingDistance_nm/1000.0/4.0+2.5)// voltage 0~5 //2.375V
 	   	//	*BIT18MAX/5// adc value 0~2^18
 	   	//	*pid_input_Gain_adjust;// pid range 1000 nm
 		DSet_01 = 0;
@@ -518,12 +516,14 @@ public:
 		//com_image_frame_buffer[LENGTH_IMAGE_FRAME_BUFFER] = {0};// 
 		pointer_out_frame_buffer = LENGTH_IMAGE_FRAME_BUFFER;
 
-		mZ_Loop_PID = new PID(DInput_01, DOutput_01, DSet_01, 0.05, 0.02, 0, true);// use true for PRC imagining scanning
+		mZ_Loop_PID = new PID(true);//DInput_01, DOutput_01, DSet_01, 0.05, 0.02, 0, use true for PRC imagining scanning
 		z_output_01 = 0;
 		//com_buffer[LENGTH_COM_BUFFER_PC2MCU * 2] = {0};
 		//com_buffer_frame[LENGTH_COM_BUFFER_PC2MCU - 4] = {0};
 
 		measured_sampling_frequency_of_system = 0;
+		
+		calculate_scan_parameter();
 
 	}
 	;
@@ -560,7 +560,7 @@ public:
 		mI_PRC_Force_nN_per_ADCValue = mI_StiffnessPRC_nN_per_nm / mI_PRC_ADCValue_per_nm;
 		mI_PRC_Force_nN_Now = 0;
 
-		mI_step_size_01 = mI_step_size_nm / MAX_RANGE_Z_NM;// 4.675524715375971e-05
+		mI_step_size_01 = mI_step_size_nm / SCANNER_RANGE_Z_NM;// 4.675524715375971e-05
 		mI_direction_indent_True_withdraw_False = true;
 		mI_Withdraw_Done_Threshold_ADC = mI_PRC_ADCValue_per_nm*mI_Withdraw_Done_Threshold_nm;
 		memset(&(mIndentData[0][0]), 0, 3*mI_MaxStep*sizeof(mIndentData[0][0]));
@@ -569,7 +569,9 @@ public:
 
 			//-------------------------
 		sys_state = SS_Indent;
-		console_ResetScannerModel(PIEZO_Z);
+		
+		console_ResetScannerModel(PIEZO_Z);  // for vibration test, comment
+		
 		V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR);
 	
 		mI_PRC_ADC_ValueInitial = mAFM_SEM.ADC_Read_N_Average(ADC_PORT_ZlOOP_SENSOR, 20, 10);//1.97 kHz
@@ -741,7 +743,149 @@ public:
 	//	//prepare_system_package_to_PC((uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX),V18_Adc[ADC_PORT_ZlOOP_SENSOR],amp_ad0);
 	//}
 
+	void process_Indent_First_SendDataThen_vibration_test()
+	{
+		//   //if (PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(1300)==false) return;
+		int index = 0;
+		int withdraw_delay_steps = mI_HalfNumberOfSamplingPoints;// add more step while withdrawing
+		int index_store_at_max_point = 0;
+		double V18_Adc_Diff = 0;
+		//while(1)
+#define MAX_INDENT_STEPS (SCANNER_RANGE_Z_NM*2000)// 0.05 nm/ step
 
+#define PRE_ACC_DISTANCE (0.2)// take 4 um/20um
+		double mI_step_size_pre_acceleration = mI_step_size_01 / 50000;
+		double mI_step_size_pre_speed = 0;
+		//double mI_step_size_pre_step=0;
+		position_feedforward_output_01[PIEZO_Z] = 10.0 / SCANNER_RANGE_Z_NM;
+
+		for (int k = 0;k < MAX_INDENT_STEPS;k++)
+		{
+			if (sys_state != SS_Indent) return;// to interrupt during indentation
+				
+
+			//*p_LED=1;
+			toggle_pin();
+			//while(PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(mI_LoopDelay_uS)==false)
+			//	;
+			//-----------motion direction 
+			if (mI_direction_indent_True_withdraw_False == true)
+			{
+				if (position_feedforward_output_01[PIEZO_Z] > PRE_ACC_DISTANCE)
+					position_feedforward_output_01[PIEZO_Z] += mI_step_size_01;
+				else// acceleration, use 1000 steps to go to position PRE_ACC_DISTANCE
+				{
+					if (mI_step_size_pre_speed < mI_step_size_01)
+						mI_step_size_pre_speed += mI_step_size_pre_acceleration;
+		//mI_step_size_pre_speed=Max(mI_step_size_pre_speed,0.00001);// make sure at lease a little step
+					position_feedforward_output_01[PIEZO_Z] += mI_step_size_pre_speed;
+				}
+			}
+			else
+				position_feedforward_output_01[PIEZO_Z] -= mI_step_size_01;
+		//------------------------------------------- move and sensing
+			piezo_predict_Position01_To_Voltage_DAC18
+			(PIEZO_Z, position_feedforward_output_01[PIEZO_Z]);//,&V18_Adc[ADC_PORT_ZlOOP_SENSOR]);// time=80 uS
+			wait_us(mI_LoopDelay_uS);
+
+					//for noise rms test
+			V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR, true);
+			//use for indent
+			//V18_Adc[ADC_PORT_ZlOOP_SENSOR]=ADC_read_average(ADC_PORT_ZlOOP_SENSOR,25,10);//20_10-->1.97 kHz, noise rms=   11.9427ADC18, 0.311 nm;//40_10-->1.13 kHz
+
+
+					//V18_Adc[ADC_PORT_ZlOOP_SENSOR]=ADC_read_average(ADC_PORT_ZlOOP_SENSOR,5,10);// good for capture vibration noise
+
+							//MY_Debug_StringValue_LN("v now: ",V18_Adc[ADC_PORT_ZlOOP_SENSOR]);
+							//MY_Debug_StringValue_LN("v inf: ",mI_PRC_ADC_ValueInitial);
+							//MY_Debug_StringValue_LN("v ff:",position_feedforward_output_01[PIEZO_Z]);
+							//wait_ms(200);
+
+
+									//--------------------judge status----------
+			toggle_pin();
+			// 85 us for DAC and ADC part delay_1us
+			// 15 us for the following part
+			V18_Adc_Diff = Math_Abs((double)V18_Adc[ADC_PORT_ZlOOP_SENSOR] - (double)mI_PRC_ADC_ValueInitial);// use Math_Abs for both direction
+			mI_PRC_Force_nN_Now = V18_Adc_Diff*mI_PRC_Force_nN_per_ADCValue;
+
+
+			if (mI_direction_indent_True_withdraw_False == true)// judge while indenting
+			{
+				if (mI_PRC_Force_nN_Now >= mI_TriggerForce_nN)// reach trigger force
+				{
+					// old: trigger 
+					//mI_direction_indent_True_withdraw_False=false;// start to withdraw
+					//index_store_at_max_point=index;
+					//new:  read adc again to avoid sudden noise
+					wait_us(10);
+					V18_Adc[ADC_PORT_ZlOOP_SENSOR] = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 20, 10);
+					V18_Adc_Diff = Math_Abs((double)V18_Adc[ADC_PORT_ZlOOP_SENSOR] - (double)mI_PRC_ADC_ValueInitial);// use Math_Abs for both direction
+					mI_PRC_Force_nN_Now = V18_Adc_Diff*mI_PRC_Force_nN_per_ADCValue;
+
+					if (mI_PRC_Force_nN_Now >= mI_TriggerForce_nN)
+					{
+						mI_direction_indent_True_withdraw_False = false;// start to withdraw
+						index_store_at_max_point = index;
+						
+						/////////////////////////////// vibration test, stay here and record data
+						for (int index = 0;index < mI_MaxStep * 3;index++)
+						//mIndentData[0][index] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);//(uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX);
+						{
+							mIndentData[0][index] =  mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR, true);
+							mIndentData[1][index] =  mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR, true);
+							mIndentData[2][index] =  mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR, true);
+						
+							wait_us(mI_LoopDelay_uS);
+						}
+						
+						break;
+						//mIndentData[2][index] = (int)(position_feedforward_output_01[PIEZO_Z]*BIT18MAX);// V18_Dac[PIEZO_Z];
+						
+					}
+				}
+				if (position_feedforward_output_01[PIEZO_Z] >= mI_MaxDepth)// Math_Max indent depth without touching, withdraw to 0 directly
+					break;	
+
+			}		
+			else//if	(mI_direction_indent_True_withdraw_False==false)// judge while withdraw
+			{	
+				withdraw_delay_steps--;// start delay counter
+				if (withdraw_delay_steps <= 0) break;
+				if (position_feedforward_output_01[PIEZO_Z] <= 0)// Z piezo to end		
+					break;		// finished
+		//// previous indent data not to be covered
+		//int dis_in_circle_clockwise=index_store_at_max_point-index;
+		//if (dis_in_circle_clockwise<0) dis_in_circle_clockwise+=mI_MaxStep;
+		//if (dis_in_circle_clockwise<mI_HalfNumberOfSamplingPoints)
+		//	break;// withdraw data are too much and write over indent part.
+			}
+		}// fore loop
+
+			//------------------------------------------------------------------
+			// finished indentation, send data back to PC now
+		// withdraw Z piezo, and continue to send data in SS_Indent state
+		console_ResetScannerModel(PIEZO_Z);//console_WithDrawZScanner_SetSystemIdle();
+		int index_send = 0;
+		for (int k=0;k<mI_MaxStep;k++)
+		//for (int k = (index_store_at_max_point - mI_HalfNumberOfSamplingPoints);k < (index_store_at_max_point + mI_HalfNumberOfSamplingPoints);k++)	
+		{
+			if (sys_state != SS_Indent) return;// to interrupt during indentation
+			// keep the order
+			//index_send=k%mI_MaxStep; has error
+			index_send = MOD_range(k, mI_MaxStep); //here % operator has problem with int
+			send_IndentData_Package_To_PC(mIndentData[0][index_send], mIndentData[1][index_send], mIndentData[2][index_send]);
+			wait_ms(7);//old delay=4 , but lose point sometimes
+		}
+		for (int m = 0;m < 4;m++)// send finish signal multi times, to make sure PC receive it
+		{
+			wait_ms(100);
+			send_IndentData_Package_To_PC(BIT24MAX, BIT24MAX, BIT24MAX);// finished
+		}
+		// tuning fork indent
+		//uint32_t amp_ad0=analogRead(A0);
+		//prepare_system_package_to_PC((uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX),V18_Adc[ADC_PORT_ZlOOP_SENSOR],amp_ad0);
+	}
 
 	void process_Indent_First_SendDataThen()
 	{
@@ -751,21 +895,20 @@ public:
 		int index_store_at_max_point = 0;
 		double V18_Adc_Diff = 0;
 		//while(1)
-#define MAX_INDENT_STEPS (MAX_RANGE_Z_NM*2000)// 0.05 nm/ step
+#define MAX_INDENT_STEPS (SCANNER_RANGE_Z_NM*2000)// 0.05 nm/ step
 
 #define PRE_ACC_DISTANCE (0.2)// take 4 um/20um
 		double mI_step_size_pre_acceleration = mI_step_size_01 / 50000;
 		double mI_step_size_pre_speed = 0;
 		//double mI_step_size_pre_step=0;
-		position_feedforward_output_01[PIEZO_Z] = 10.0 / MAX_RANGE_Z_NM;
+		position_feedforward_output_01[PIEZO_Z] = 10.0 / SCANNER_RANGE_Z_NM;
 
 		for (int k = 0;k < MAX_INDENT_STEPS;k++)
 		{
 			if (sys_state != SS_Indent) return;// to interrupt during indentation
 				
+			*p_Tdio4 = 1;
 
-			//*p_LED=1;
-			toggle_pin();
 			//while(PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(mI_LoopDelay_uS)==false)
 			//	;
 			//-----------motion direction 
@@ -804,7 +947,7 @@ public:
 
 
 									//--------------------judge status----------
-			toggle_pin();
+			
 			// 85 us for DAC and ADC part delay_1us
 			// 15 us for the following part
 			V18_Adc_Diff = Math_Abs((double)V18_Adc[ADC_PORT_ZlOOP_SENSOR] - (double)mI_PRC_ADC_ValueInitial);// use Math_Abs for both direction
@@ -852,6 +995,8 @@ public:
 		//if (dis_in_circle_clockwise<mI_HalfNumberOfSamplingPoints)
 		//	break;// withdraw data are too much and write over indent part.
 			}
+			
+			*p_Tdio4 = 0;
 		}// fore loop
 
 			//------------------------------------------------------------------
@@ -862,12 +1007,14 @@ public:
 		//for (int k=0;k<mI_MaxStep;k++)
 		for (int k = (index_store_at_max_point - mI_HalfNumberOfSamplingPoints);k < (index_store_at_max_point + mI_HalfNumberOfSamplingPoints);k++)	
 		{
+			*p_Tdio5 = 1;
 			if (sys_state != SS_Indent) return;// to interrupt during indentation
 			// keep the order
 			//index_send=k%mI_MaxStep; has error
 			index_send = MOD_range(k, mI_MaxStep); //here % operator has problem with int
 			send_IndentData_Package_To_PC(mIndentData[0][index_send], mIndentData[1][index_send], mIndentData[2][index_send]);
 			wait_ms(7);//old delay=4 , but lose point sometimes
+			*p_Tdio5 = 0;
 		}
 		for (int m = 0;m < 4;m++)// send finish signal multi times, to make sure PC receive it
 		{
@@ -947,28 +1094,45 @@ public:
 	/////////////////////////////////////////////////////////////////////
 	void calculate_scan_parameter()
 	{
+		XL = XL_NM * DAC_PER_NM_X, DX = DX_NM * DAC_PER_NM_X, 
+		YL = YL_NM * DAC_PER_NM_Y, DY = DY_NM * DAC_PER_NM_Y;
+	
 		const double VADC_Ref_V = 5.0;	
 
-		VWset_deltaV_ADC_b18 = (double)(VWset_deltaV_input_mV) / 1000.0 / VADC_Ref_V*BIT18MAX;
+//		VWset_deltaV_ADC_b18 = (double)(mZPID_WorkingDistance_nm) / 1000.0 / VADC_Ref_V*BIT18MAX;
+		VWset_deltaV_ADC_b18 = (double)(mZPID_WorkingDistance_nm) *DTS_Sensitivity_B18_per_nm;
 
 		double VdeltaF_FarAway_01 = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 30, 100) / BIT18MAX;
+		
+
+		
+		Vdf_infinite = BIT18MAX_HALF;
+		
+#if (ADC_PORT_ZlOOP_SENSOR==ADC_CHANNEL_PRC)
+//#define PRC_sensitivity_ADC18_per_nm (41.2)
+		//threshold_approach_delta_B18 = PRC_sensitivity_ADC18_per_nm * mZPID_WorkingDistance_nm;
+		threshold_approach_delta_B18 = DTS_Sensitivity_B18_per_nm * mZPID_WorkingDistance_nm;//7nm  threashold to avoid peak-to-peak noise //112*5;// vpp*5 102*4;//87*11;//;3nm112*3;
+#else
+		threshold_approach_delta_B18 = (150.0 / SCANNER_RANGE_Z_NM*BIT18MAX);//1638;//0.025V/4*bit18=5nm;
+#endif		
+		
 #if(ADC_PORT_ZlOOP_SENSOR==ADC_CHANNEL_PRC)
-			// for PRC, use VWset_deltaV_input_mV as nm,
-		DSet_01 = VdeltaF_FarAway_01 - (double)(VWset_deltaV_input_mV) / PRC_sensitivity_ADC18_per_nm / BIT18MAX;
+			// for PRC, use mZPID_WorkingDistance_nm as nm,
+		DSet_01 = VdeltaF_FarAway_01 - (double)(mZPID_WorkingDistance_nm) / DTS_Sensitivity_B18_per_nm / BIT18MAX;
 #else	// tuning fork
-		DSet_01 = VdeltaF_FarAway_01 - (double)(VWset_deltaV_input_mV) / 1000.0 / VADC_Ref_V;
+		DSet_01 = VdeltaF_FarAway_01 - (double)(mZPID_WorkingDistance_nm) / 1000.0 / VADC_Ref_V;
 #endif	
-			/////////////////////
-			//XL_NM,YL_NM,DX_NM,DY_NM;
-		XL = XL_NM * DAC_PER_NM_X, DX = DX_NM * DAC_PER_NM_X, 
-			YL = YL_NM * DAC_PER_NM_Y, DY = DY_NM * DAC_PER_NM_Y;
-		//MY_Debug("DSet_01");
-		//MY_Debug_LN(DSet_01);
-		//USB_Debug("DSet_01");
-		//USB_Debug_LN(DSet_01);
+		
+		mZ_Loop_PID->SetSampleTime(mPeriod_Realtime_us);
+		mZ_Loop_PID->SetReferenceValue(DSet_01);
+		double zpid_limit = -1 / SCANNER_RANGE_Z_NM;
+		mZ_Loop_PID->SetOutputLimits(-zpid_limit, zpid_limit);// limit the change in each period
+		mZ_Loop_PID->SetPID_P(0.5);
+		mZ_Loop_PID->SetPID_I(0.1);
+		mZ_Loop_PID->SetPID_D(0);
 	}
 
-	int y_reverse(int u)
+	int XYScanning_y_reverse(int u)
 	{
 		static int t = 0, yt = -1;
 		if (u == 0 && t == 1)
@@ -985,7 +1149,7 @@ public:
 
 	int XYscanning()
 	{
-		diry_input =  y_reverse(diry_input);
+		diry_input =  XYScanning_y_reverse(diry_input);
 		//  static int px = XL, py = YL;
 		//	static int sawx = XL, sawy = YL;
 		static int frame_counter = 0;
@@ -1159,10 +1323,12 @@ public:
 	}
 	void process_XYscanningReset()
 	{
+		*p_Tdio3 = 1;
 		int state = XYscanning();
 		wait_ms(1);// otherwise, it is too fast
 		if (state == DDS_XY_Idle)
 			sys_state = SS_Idle;
+		*p_Tdio3 = 0;
 
 	}
 	//  int indx = 0, indy = 0, VDACx = 0, VDACy = 0, sys_state_out = 0, SX = 0, SY = 0;
@@ -1172,26 +1338,28 @@ public:
 
 	void process_ScanRealTimeLoop()
 	{
-		//if (PERIOD_CHECK_TIME_US_DUE_Z_REAL_TIME_SERVO_LOOP(SamplingTime_us_Zloop) == false) return;
-
-			//DIGITAL_PIN_TOGGLE(22);
-		*p_LED = 1;
-		//////////////////////////////////////
-		//ADC_read_DAC_write(ADC_PORT_ZlOOP_SENSOR,&V18_Adc[ADC_PORT_ZlOOP_SENSOR],PIEZO_Z,V18_Dac[PIEZO_Z]);
-		V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR);
-		double Z_sensor_height = (double)(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false)) / BIT24MAX;
-		DInput_01 = (double)V18_Adc[ADC_PORT_ZlOOP_SENSOR]*BIT18MAX_RECIPROCAL;
+		*p_Tdio2 = 1;
+		V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR,true);
+		double Z_sensor_height = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
+		Z_sensor_height = Z_sensor_height/BIT24MAX;
+		
+		DInput_01 = (double)V18_Adc[ADC_PORT_ZlOOP_SENSOR]*BIT18MAX_RECIPROCAL;// normalize
 		DOutput_01 = mZ_Loop_PID->Compute(DInput_01);
-
-			//USB_Debug("DInput_01 ");
-			//USB_Debug_LN(DInput_01);
-			//USB_Debug("DOutput_01 ");
-			//USB_Debug_LN(DOutput_01);
 
 		z_output_01 += DOutput_01;
 		z_output_01 = LIMIT_MAX_MIN(z_output_01, 1, 0);
 
-		
+		piezo_predict_Position01_To_Voltage_DAC18(PIEZO_Z, z_output_01);
+		int	xy_state = XYscanning();
+
+		if (xy_state == (int)DDS_XY_Scan)
+			prepare_image_package_to_PC(indx, indy, Z_sensor_height, mZ_Loop_PID->GetError());//z_output_01
+			//send_image_package_to_PC_direct(indx, indy, Z_sensor_height, mZ_Loop_PID->GetError());//z_output_01
+		else// after engage send out (0,0) point continuously
+			prepare_engaged_package_to_PC(0, 0, Z_sensor_height, mZ_Loop_PID->GetError());
+
+		*p_Tdio2 = 0;		
+	}
 			//mUSerial.print("_zoutput_01 accumu ");
 			//mUSerial.println(z_output_01,DEC);
 			//V18_Dac[PIEZO_Z]=(DOutput_01/(double)MAX_RANGE_Z_PM)*(double)BIT18MAX;
@@ -1206,8 +1374,7 @@ public:
 				//	V18_Dac[Z_scanner_port]=(z_output_01-PIEZO_T_Center01)*BIT18MAX+PIEZO_T_CenterBit18;
 				//	mAFM_DAC.DAC_write(PIEZO_T,V18_Dac[Z_scanner_port]);
 				//}
-		piezo_predict_Position01_To_Voltage_DAC18(PIEZO_Z, z_output_01);
-		
+
 		
 ////		if (Z_scanner_port == SCANNER_Z_ONLY)// Z piezo only with 
 ////			//V18_Dac[PIEZO_Z]=
@@ -1251,7 +1418,6 @@ public:
 
 														//V18_Dac[Z_scanner_port]=piezo_predict_Position01_To_Voltage_DAC18(Z_scanner_port,z_output_01);
 
-		int	xy_state = XYscanning();
 
 	
 						////TICX(2);
@@ -1286,14 +1452,7 @@ public:
 														////TOCX_P(2);
 	
 
-		if (xy_state == (int)DDS_XY_Scan)
-			prepare_image_package_to_PC(indx, indy, Z_sensor_height, mZ_Loop_PID->GetError());//z_output_01
-		else// after engage send out (0,0) point continuously
-			prepare_engaged_package_to_PC(0, 0, Z_sensor_height, mZ_Loop_PID->GetError());
 
-							//test prepare_image_package_to_PC(indx,indy,0.5,0.1);
-		*p_LED = 0;
-	}
 
 	float convert_byte4_to_float(byte* pb)
 		// accuracy 10^-4
@@ -1325,12 +1484,12 @@ public:
 //		MY_Debug(para);
 //		MY_Debug_LN(vf);	
 		// PID parameter
-		if (para == 'R') {TF_Sinsitivity = vf;}
-		if (para == 'P') mZ_Loop_PID->SetPID_P(vf*TF_Sinsitivity);
-		if (para == 'I') mZ_Loop_PID->SetPID_I(vf*TF_Sinsitivity);
-		if (para == 'D') mZ_Loop_PID->SetPID_D(vf*TF_Sinsitivity);
+		if (para == 'R') {DTS_Sensitivity_B18_per_nm = vf;}
+		if (para == 'P') mZ_Loop_PID->SetPID_P(vf*DTS_Sensitivity_B18_per_nm);
+		if (para == 'I') mZ_Loop_PID->SetPID_I(vf*DTS_Sensitivity_B18_per_nm);
+		if (para == 'D') mZ_Loop_PID->SetPID_D(vf*DTS_Sensitivity_B18_per_nm);
 
-			// when set:TF_Sinsitivity, also recalculate pid_input_Gain_adjustm, DSet_01
+			// when set:DTS_Sensitivity_B18_per_nm, also recalculate pid_input_Gain_adjustm, DSet_01
 		if (para == 'X') {console_XYScanReset();N_x = vf;}
 		if (para == 'Y') {console_XYScanReset();N_y = vf;}
 		if (para == 'x') {console_XYScanReset();DX_NM = vf;}
@@ -1339,20 +1498,20 @@ public:
 		if (para == 'n') {console_XYScanReset();YL_NM = vf;console_XYScanReset();}
 
 		if (para == 'S') {console_XYScanReset();scan_rate = vf;}
-		if (para == 'W') {VWset_deltaV_input_mV = vf;calculate_scan_parameter();}
+		if (para == 'W') {mZPID_WorkingDistance_nm = vf;calculate_scan_parameter();}
 		if (para == 'N') N_FramesToScan = vf;
 		//indentation
 		if (para == 'T') mI_TriggerForce_nN = vf;
 		if (para == 'k') mI_StiffnessPRC_nN_per_nm = vf;
 		if (para == 's') mI_PRC_ADCValue_per_nm = vf;// sensitivity
-		if (para == 'd') mI_MaxDepth = vf / MAX_RANGE_Z_NM;
+		if (para == 'd') mI_MaxDepth = vf / SCANNER_RANGE_Z_NM;
 		if (para == 'e') mI_step_size_nm = vf;
 		if (para == 'f') mI_LoopDelay_uS = vf;
 		if (para == 'g') mI_HalfNumberOfSamplingPoints = vf / 2;
 
 			//if(para=='t') mTF_DC_Gain=vf;
 
-				//if(para=='a') {Z_scanner_port=vf;console_TF_Scan_Enable();}
+		if(para=='a') {sys_idle_package_index = vf;}
 				//mUSerial.write(&para,1);
 				//mUSerial.println(v,DEC);
 	}
@@ -1622,12 +1781,12 @@ public:
 		if (com[1] == 'I' & com[2] == 'D') 
 			console_StartIndentation();
 	}
-	int  Communication_Command_Console()
+	void  Communication_Command_Console()
 	{
 //		static bool mlock = false;
 //		if (mlock ==true) return -1;
 //		mlock = true;// lock
-		
+	
 		bool echo_b = false;
 		//int byte_ready = 0;// mUSerial.available();// time consumption= 84 us
 		//if (byte_ready == 0) return 0;
@@ -1638,9 +1797,10 @@ public:
 		if (byte_ready == 0) 
 		{
 			//mlock = false;// unlock
-			return 0;
+			return;
 		}
 			
+		REGION_LOCK();	
 
 		for (int k = 0; k < LENGTH_COM_BUFFER_PC2MCU + 1; k++)
 			if (com_buffer[k] == COM_HEADER1)
@@ -1679,7 +1839,8 @@ public:
 						}
 		
 		//mlock = false;// unlock
-		return com_buffer_frame[0];
+		REGION_UNLOCK();	
+		return ;//com_buffer_frame[0];
 	
 
 	}
@@ -1913,7 +2074,7 @@ public:
 		//if (PERIOD_CHECK_TIME_US_DUE_ZSCANNERENGAGE(sampling_period_us_of_ZScannerEngage_Process) == false) return;
 
 			//DIGITAL_PIN_TOGGLE(23);
-		*p_LED = 1;
+		*p_Tdio1 = 1;
 
 			//static uint32_t Z_position_DAC_ZScannerEngage=0;
 		V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR);
@@ -1951,7 +2112,8 @@ public:
 
 		mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, Z_position_DAC_ZScannerEngage);
 		V18_Dac[PIEZO_Z] = Z_position_DAC_ZScannerEngage;
-		*p_LED = 0;
+		
+		*p_Tdio1 = 0;
 	}
 	//void process_Approach_only_coarse_move()// only coarse move
 	//{
@@ -1959,7 +2121,7 @@ public:
 	//	//step_counter_Approach++;
 	//	//ADC_read_DAC_write(0,&V18_Adc[ADC_PORT_ZlOOP_SENSOR],PIEZO_Z,BIT18MAX);
 	//	int vdf=mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR);
-	//	if (vdf>Vdf_infinite+threshold_approach_delta)// touched
+	//	if (vdf>Vdf_infinite+threshold_approach_delta_B18)// touched
 	//	{
 	//		mAFM_DAC.DAC_write(PIEZO_Z,0);
 	//		sys_state=SS_Idle;
@@ -1991,9 +2153,9 @@ public:
 		uint32_t vdf = V18_Adc[ADC_PORT_ZlOOP_SENSOR];
 
 		if (
-			Math_Abs((double)vdf - (double)Vdf_infinite) > threshold_approach_delta// touched
+			Math_Abs((double)vdf - (double)Vdf_infinite) > threshold_approach_delta_B18// touched
 			|
-			Math_Abs((double)vdf - (double)ADC_sensor_buffer) > threshold_approach_delta)
+			Math_Abs((double)vdf - (double)ADC_sensor_buffer) > threshold_approach_delta_B18)
 		{		
 			console_WithDrawZScanner_SetSystemIdle();
 			//		counter_large_step_approaching++;
@@ -2031,7 +2193,7 @@ public:
 
 		mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, Z_position_DAC_Approach);
 
-		double dv = 5.0*BIT18MAX / MAX_RANGE_Z_NM;// vibration
+		double dv = 5.0*BIT18MAX / SCANNER_RANGE_Z_NM;// vibration
 		for (int k = 0;k < 5;k++)
 		{
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, Z_position_DAC_Approach + dv);
@@ -2115,6 +2277,59 @@ public:
 			//	for(int k=0;k<SIZE_IMAGE_BUFFER_BIT24;k++)
 			//		Serial_write(pImageEB[k][current_image_line][Math_Abs(indx)]);
 			//}
+	}
+	
+	void send_image_package_to_PC_direct(int indx, int indy, double vHeight, double vError)
+	//	vHeight=0:1, vError=-1:1
+	{
+		static int indx_store = -1000;
+		if (indx == indx_store) return;
+		indx_store = indx;
+		
+		
+		byte COM[LENGTH_IMAGE_FRAME_BUFFER] = {0};
+		COM[0]=(COM_HEADER1);
+		COM[1] = (COM_HEADER2);
+		COM[2] = ('I');
+		COM[3] = ('M');
+		byte ind[2] = {0};
+		convert_uint32_to_byte2(indx, ind);
+//		Serial_write(ind, 2);
+		COM[4] = ind[0];
+		COM[5] = ind[1];
+		convert_uint32_to_byte2(indy, ind);
+//		Serial_write(ind, 2);
+		COM[6] = ind[0];
+		COM[7] = ind[1];
+
+		byte valueH3b[SIZE_IMAGE_BUFFER_BIT24] = {0};
+		uint32_t vH24 = (uint32_t)(vHeight*(double)BIT24MAX);
+		convert_uint32_to_byte3(vH24, valueH3b);
+
+		byte valueE3b[SIZE_IMAGE_BUFFER_BIT24] = {0};
+		//uint32_t vE24=(uint32_t)(vError*(double)BIT24MAX);
+		vError += 1;// converet -1:1-->0:2, later divide by 2
+		uint32_t vE24 = (uint32_t)(vError*(double)BIT24MAX);
+		vE24 >>= 1;// divide by 2
+		convert_uint32_to_byte3(vE24, valueE3b);
+
+//		Serial_write(valueH3b, SIZE_IMAGE_BUFFER_BIT24);
+//		Serial_write(valueE3b, SIZE_IMAGE_BUFFER_BIT24);
+		COM[8] = valueH3b[0];
+		COM[9] = valueH3b[1];
+		COM[10] = valueH3b[2];
+		
+		COM[11] = valueE3b[0];
+		COM[12] = valueE3b[1];
+		COM[13] = valueE3b[2];
+
+
+		COM[LENGTH_IMAGE_FRAME_BUFFER-2] = (COM_TAIL1);
+		COM[LENGTH_IMAGE_FRAME_BUFFER-1] = (COM_TAIL2);
+		
+		mUSerial.write(COM, LENGTH_IMAGE_FRAME_BUFFER);
+		mUSerial.write(COM, LENGTH_IMAGE_FRAME_BUFFER);
+
 	}
 	//void prepare_image_package_to_PC_store(int indx,int indy)
 	//{
@@ -2309,18 +2524,50 @@ public:
 	void process_Idle()
 	{
 		//ADC_read_DAC_write(ADC_PORT_ZlOOP_SENSOR,&V18_Adc[PIEZO_Z],PIEZO_Z,V18_Dac[PIEZO_Z]);
-		if (PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(500000) == false) return;//old 1e6
+		if (PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(50000) == false) return;//old 1e6
 		//prepare_system_package_to_PC((uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX),V18_Adc[ADC_PORT_ZlOOP_SENSOR],V18_Dac[PIEZO_Z]);
+//		static byte index = 0;
+//		index++;
+		sys_idle_package_index %=3;
 		
-		int Temperature_SEM = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);
-		int value_cantilever = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);
-		extern CTemperature mCTemperature;
-		uint32_t Temperature_MCU = mCTemperature.Read(false);
-		prepare_system_package_to_PC(value_cantilever, Temperature_SEM, Temperature_MCU);//position_feedforward_output_01[PIEZO_Z]*BIT32MAX)
-		//prepare_system_package_to_PC(BIT_N1(17), 100, 2000);//position_feedforward_output_01[PIEZO_Z]*BIT32MAX)
-		//send_back_debug_infomation();
-	}
+		if (sys_idle_package_index == 0)
+		{
+			int Temperature_SEM = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);
+			int value_cantilever = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);
+			extern CTemperature mCTemperature;
+			uint32_t Temperature_MCU = mCTemperature.Read(false);
+			prepare_system_package_to_PC(sys_idle_package_index, value_cantilever, Temperature_SEM, Temperature_MCU);//position_feedforward_output_01[PIEZO_Z]*BIT32MAX)
+		}
+		if (sys_idle_package_index == 1)
+		{
+			int scsg_y = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
+			int scsg_x = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);
+			int scsg_z = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
 
+			prepare_system_package_to_PC(sys_idle_package_index, scsg_x, scsg_y, scsg_z);
+		}
+		if (sys_idle_package_index == 2)
+		{
+			int value_cali= mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);
+			int value_cantilever = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);
+			int scsg_z = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
+
+			prepare_system_package_to_PC(sys_idle_package_index, value_cantilever, value_cali, scsg_z);
+		}
+		//send_back_debug_infomation();
+		toggle_pin();
+	}
+	void prepare_system_package_to_PC(byte index, uint32_t v1, uint32_t v2, uint32_t v3)
+	{
+		byte com[12] = {0};
+		com[0] = 's';
+		com[1] = 'p';
+		com[2]=index;
+		convert_uint32_to_byte3(v1, &com[3]);// byte3
+		convert_uint32_to_byte3(v2, &com[3+3]);// byte3
+		convert_uint32_to_byte3(v3, &com[3+3 + 3]);//byte3
+		mCPackageToPC_SystemPackage->prepare_package_Byte12_to_PC(com);
+	}
 	void prepare_system_package_to_PC(uint32_t v1, uint32_t v2, uint32_t v3)
 	{
 		byte com[12] = {0};

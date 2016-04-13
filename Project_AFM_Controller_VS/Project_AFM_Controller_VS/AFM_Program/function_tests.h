@@ -44,6 +44,13 @@ void toggle_pin(PinName port = PORT_LED)
 	DigitalOut p(port);
 	p = v;
 }
+void toggle_p_pin(DigitalOut* p)
+{
+	static bool v = 0;
+	v = !v;
+	//DigitalOut p(port);
+	*p = v;
+}
 void blink_IOs(PinName p0 = PA_0, int p_start = 0, int N = 16)
 {
 //	int N = 16;

@@ -261,7 +261,7 @@ namespace NameSpace_AFM_Project
             mThread_SaveImage = new Thread(ThreadFunction_SaveImage);
 
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-            listBox_ScannerAxisZ.SetSelected(0, true);
+            listBox_SelectIdlePackage.SetSelected(0, true);
 
             mDelegateFunction = new DelegateFunction(Function_UpdateUI);
 
@@ -345,7 +345,7 @@ namespace NameSpace_AFM_Project
                 UpdateGUITextBox_Invoke(ref para_YL, textBox_YL);//, 1, MAX_RANGE_Y_NM);
                 UpdateGUITextBox_Invoke(ref para_ScanRate, textBox_ScanRate);//, 0.01, 5);
                 UpdateGUITextBox_Invoke(ref para_Sensitivity, textBox_Sensitivity);//, 0.01, 500);
-                UpdateGUITextBox_Invoke(ref para_SetDeltaVoltage_mV, textBox_SetDeltaVoltage);//, 1);//, 1000);
+                UpdateGUITextBox_Invoke(ref para_SetDeltaVoltage_mV, textBox_SetDeltaValueNm);//, 1);//, 1000);
                 UpdateGUITextBox_Invoke(ref para_NumberOfFrameToScan, textBox_NumberOfFrameToScan);//, 1, 2000);
                 UpdateGUITextBox_Invoke(ref para_TF_DC_Gain, textBox_TF_DC_Gain);//, 1, 2000);
 
@@ -451,8 +451,8 @@ namespace NameSpace_AFM_Project
             // get selected axis number
             //X,Y,Z,T,XY_Plane,All
             int k = 0;
-            for (k = 0; k < listBox_ScannerAxisZ.Items.Count; k++)
-                if (listBox_ScannerAxisZ.GetSelected(k))
+            for (k = 0; k < listBox_SelectIdlePackage.Items.Count; k++)
+                if (listBox_SelectIdlePackage.GetSelected(k))
                     break;
             set_AFM_parameters('a', k);
         }
@@ -591,7 +591,7 @@ namespace NameSpace_AFM_Project
             button_SetParameters.Visible = false;
             MY_DEBUG("set parameters start.");
             //pid
-            set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -500, 500);//0.001, 500)
+            set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -100, 100);//0.001, 500)
             set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0, 100);
             set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0, 100);
             set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0, 100);
@@ -621,7 +621,7 @@ namespace NameSpace_AFM_Project
 
             // for PRC, use VWset_deltaV_input_mV as nm,
             // for tuning fork, use this as delta_voltage
-            set_AFM_parameters('W', ref para_SetDeltaVoltage_mV, textBox_SetDeltaVoltage, 1, 1000);
+            set_AFM_parameters('W', ref para_SetDeltaVoltage_mV, textBox_SetDeltaValueNm, 1, 20);
 
             set_AFM_parameters('N', ref para_NumberOfFrameToScan, textBox_NumberOfFrameToScan, 1, 2000);
 
@@ -764,10 +764,11 @@ namespace NameSpace_AFM_Project
             serialPort_Arduino = new SerialPort(com_number, Convert.ToInt32(textBox_BaudRate.Text), Parity.None, 8, StopBits.One);
             serialPort_Arduino.DataReceived += new SerialDataReceivedEventHandler(on_Received_serialPort_DataReceivedHandler);
             serialPort_Arduino.Encoding = Encoding.GetEncoding("Windows-1252");
-            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC*100;
             serialPort_Arduino.ReadTimeout = 2;
             serialPort_Arduino.WriteTimeout = 2000;
             serialPort_Arduino.DtrEnable = true;
+            serialPort_Arduino.RtsEnable = true;
             // this DtrEnable must be enabled to enable native USB communication on Arduino Due SerialUSB
             // serialPort_Arduino.DtrEnable = true; on programming usb serial will reset mcu
             //serialPort_Arduino.RtsEnable = true;
@@ -897,9 +898,11 @@ namespace NameSpace_AFM_Project
             {
                 try
                 {
-                  while (mB_serialVirtual_Arduino_busy == true)
-                     Thread.Sleep(5);
-
+                    while (mB_serialVirtual_Arduino_busy == true)
+                    {
+                        Thread.Sleep(5);
+                        MY_DEBUG("serial write busy.");
+                    }
                     mB_serialVirtual_Arduino_busy = true;
                     serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
                     mB_serialVirtual_Arduino_busy = false;
@@ -1079,6 +1082,10 @@ namespace NameSpace_AFM_Project
             ////var regex = new Regex(@"UIM..........U");
             ////MatchCollection m=regex.Matches(str_in);
             mCounter_ComReadByte = -1;
+            //int byte_ready=serialPort_Arduino.BytesToRead;
+            //if (byte_ready < LENGTH_COM_BUFFER_MCU2PC)
+            //    return;
+
             byte[] db = new byte[LENGTH_COM_BUFFER_MCU2PC * 2];
             try
             {
@@ -1087,7 +1094,6 @@ namespace NameSpace_AFM_Project
                 mB_serialVirtual_Arduino_busy = true;
                 mCounter_ComReadByte = serialPort_Arduino.Read(db, 0, LENGTH_COM_BUFFER_MCU2PC * 2);
                 mB_serialVirtual_Arduino_busy = false;
-
 
                 //byte[] buffer = Encoding.UTF8.GetBytes(convert);
                 // From byte array to string
@@ -1107,8 +1113,10 @@ namespace NameSpace_AFM_Project
                 serialVirtual_echo.Write(db, 0, mCounter_ComReadByte);
 
             //show received data
-            Updata_UI_Richtext(db);
+            //Updata_UI_Richtext(db);
 
+
+            // must use this method, otherwise may lose data
             //serialPort_Arduino.DiscardInBuffer();
             int ind = on_Received_com_frame_anaysis(db, LENGTH_COM_BUFFER_MCU2PC * 2);
             //MY_DEBUG("ind:",ind);
@@ -1146,22 +1154,24 @@ namespace NameSpace_AFM_Project
                             if (com_buffer[k + 15] == COM_TAIL2)
                             {
                                 ind = k;
-                                break;
+                                //break; do not break, continue to search for multi package;
+                                if (ind >= 0)// frame found
+                                {
+                                    if (com_buffer[ind + 2] == 's' & com_buffer[ind + 3] == 'p')// idle state
+                                        on_Received_Package_SystemState(com_buffer, ind);
+                                    if (com_buffer[ind + 2] == 'I' & com_buffer[ind + 3] == 'D')// indent
+                                        on_Received_Package_Indent(com_buffer, ind);
+                                    if (com_buffer[ind + 2] == 'I' & com_buffer[ind + 3] == 'M')// image package
+                                        on_Received_Package_Image(com_buffer, ind);
+                                    if (com_buffer[ind + 2] == 'C' & com_buffer[ind + 3] == 'A' & com_buffer[ind + 4] == 'P')
+                                        on_Received_Package_Approach(com_buffer, ind);
+                                    if (com_buffer[ind + 2] == 'C' & com_buffer[ind + 3] == 'Z' & com_buffer[ind + 4] == 'E')
+                                        //AA 55 43 5A 45 00 00 00 01 00 00 00 02 ff 55 AA
+                                        on_Received_Package_ZScannerEngage(com_buffer, ind);
+                                }
+
                             }
-            if (ind >= 0)// frame found
-            {
-                if (com_buffer[ind + 2] == 's' & com_buffer[ind + 3] == 'p')// idle state
-                    on_Received_Package_SystemState(com_buffer, ind);
-                if (com_buffer[ind + 2] == 'I' & com_buffer[ind + 3] == 'D')// indent
-                    on_Received_Package_Indent(com_buffer, ind);
-                if (com_buffer[ind + 2] == 'I' & com_buffer[ind + 3] == 'M')// image package
-                    on_Received_Package_Image(com_buffer, ind);
-                if (com_buffer[ind + 2] == 'C' & com_buffer[ind + 3] == 'A' & com_buffer[ind + 4] == 'P')
-                    on_Received_Package_Approach(com_buffer, ind);
-                if (com_buffer[ind + 2] == 'C' & com_buffer[ind + 3] == 'Z' & com_buffer[ind + 4] == 'E')
-                    //AA 55 43 5A 45 00 00 00 01 00 00 00 02 ff 55 AA
-                    on_Received_Package_ZScannerEngage(com_buffer, ind);
-            }
+
 
             //string str = Encoding.UTF8.GetString(com_buffer);
             //var regex = new Regex(@"UCZE");
@@ -1187,9 +1197,9 @@ namespace NameSpace_AFM_Project
         {
             const double VCC = 2.8;
             const double Sensitivity_VperC = 0.02;
-                T = T / 4095.0;//BIT(12);
-                T = T * VCC;//--> Volt	
-                T = (T - 0.5) / Sensitivity_VperC + 25 - 2.4;// degree
+            T = T / 4095.0;//BIT(12);
+            T = T * VCC;//--> Volt	
+            T = (T - 0.5) / Sensitivity_VperC + 25 - 2.4;// degree
             return T;
         }
         double convert_Temperature2Degree_SEM(double T)
@@ -1210,17 +1220,39 @@ namespace NameSpace_AFM_Project
             //value_cantilever, Temperature_SEM, Temperature_MCU
 
             ind += 2;
-            double value_cantilever = convert_byte4_to_uint32(com_buffer, ind + 2);
-            double v_Temperature_SEM = convert_byte3_to_uint32(com_buffer, ind + 2 + 4);
-            double v_Temperature_MCU = convert_byte3_to_uint32(com_buffer, ind + 2 + 4 + 3);
+            int index = com_buffer[ind + 2];
+            double v1 = convert_byte3_to_uint32(com_buffer, ind + 3);
+            double v2 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3);
+            double v3 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3 + 3);
+            if (index == 0)
+            {
 
-            value_cantilever *= 5.0 / BIT18MAX;
-            v_Temperature_SEM = convert_Temperature2Degree_SEM(v_Temperature_SEM);
-            v_Temperature_MCU = convert_Temperature2Degree_MCU(v_Temperature_MCU);
+                double value_cantilever = v1 * 5.0 / BIT18MAX;
+                double v_Temperature_SEM = convert_Temperature2Degree_SEM(v2);
+                double v_Temperature_MCU = convert_Temperature2Degree_MCU(v3);
                 //realtime information of the system
-            MY_DEBUG("PRC:\t" + value_cantilever.ToString("f5")
-                + "\t T_sem:\t" + v_Temperature_SEM.ToString("f2")
-                 + "\t T_mcu:\t" + v_Temperature_MCU.ToString("f2"));
+                MY_DEBUG("PRC:\t" + value_cantilever.ToString("f5")
+                    + "\t T_sem:\t" + v_Temperature_SEM.ToString("f2")
+                     + "\t T_mcu:\t" + v_Temperature_MCU.ToString("f2"));
+            }
+            if (index == 1)
+            {
+                double scsg_x = v1;
+                double scsg_y = v2;
+                double scsg_z = v3;
+                MY_DEBUG("scsg_x:\t" + scsg_x.ToString("f2")
+                    + "\t scsg_y:\t" + scsg_y.ToString("f2")
+                     + "\t scsg_z:\t" + scsg_z.ToString("f2"));
+            }
+            if (index == 2)
+            {
+                double value_cantilever = v1;
+                double value_cali = v2;
+                double scsg_z = v3;
+                MY_DEBUG("value_cantilever:\t" + value_cantilever.ToString("f0")
+                    + "\t value_cali:\t" + value_cali.ToString("f0")
+                     + "\t scsg_z:\t" + scsg_z.ToString("f0"));
+            }
         }
 
         void on_Received_Package_Indent(byte[] com_buffer, int ind)
@@ -1286,10 +1318,18 @@ namespace NameSpace_AFM_Project
             double vH = convert_byte3_to_uint32(com_buffer, ind + 8);
             double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3);
             vE = vE - BIT24MAX / 2;
-            vH = vH / BIT24MAX * MAX_RANGE_Z_NM;
             vE = vE / BIT24MAX * MAX_RANGE_Z_NM;
 
-            vH = MAX_RANGE_Z_NM - vH;
+
+            //vH = vH / BIT24MAX;// *MAX_RANGE_Z_NM;
+            //// Z axis calibration parameter
+            double vH0 = 1.435565217391304e+04;
+            double vh_range = 1.519552569169960e+05;
+
+            vH = (vH - vH0) / vh_range;
+            vH *= MAX_RANGE_Z_NM;
+
+            //vH = MAX_RANGE_Z_NM - vH;
 
             Sys_Inf = (
                 "RX:" + Convert.ToString(mCounter_ComReadByte)
@@ -1363,9 +1403,15 @@ namespace NameSpace_AFM_Project
 
             //MessageBox.Show(inf, "Z Engage");
             if (com_buffer[ind + 2 + 3] == 'd')
+            {
                 System.Media.SystemSounds.Exclamation.Play();// ok
+                MY_DEBUG("Z scanner engage: OK");
+            }
             else
+            {
                 System.Media.SystemSounds.Hand.Play();// fail
+                MY_DEBUG("Z scanner engage: fail");
+            }
         }
         void on_Received_Package_Approach(byte[] com_buffer, int ind)
         {
@@ -1580,7 +1626,7 @@ namespace NameSpace_AFM_Project
             //AFM_coarse_positioner_SetSpeed(10);
 
             send_Data_Frame_To_Arduino('C', 'A', 'P');
-            timer_Approach.Interval = 6000;
+            timer_Approach.Interval = 6512;
             timer_Approach.Start();//trigger function   timerFunction_Appraoch
             mApproach_CoarseStepCounter = 0;
 
@@ -1599,8 +1645,8 @@ namespace NameSpace_AFM_Project
 
         private void button1_Click(object sender, EventArgs e)
         {
-            serialPort_Arduino.DtrEnable = false; //on programming usb serial will reset mcu
-            serialPort_Arduino.DtrEnable = true;// on programming usb serial will reset mcu
+            //serialPort_Arduino.DtrEnable = false; //on programming usb serial will reset mcu
+            //serialPort_Arduino.DtrEnable = true;// on programming usb serial will reset mcu
             //send_Data_Frame_To_Arduino('r', 's', 't');
             //while (true)
             //{
@@ -1659,8 +1705,8 @@ namespace NameSpace_AFM_Project
         {
             MY_DEBUG("reset.");
             mSwitch_ShowComDdata = true;
-            for (int k = 0; k < 10; k++)
-            { send_Data_Frame_To_Arduino('C', 'Z', 'W'); Thread.Sleep(10); }
+            // for (int k = 0; k < 10; k++)
+            { send_Data_Frame_To_Arduino('C', 'Z', 'W'); Thread.Sleep(100); }
         }
         private void checkBox_Y_ScanEnable_CheckedChanged(object sender, EventArgs e)
         {
@@ -1777,7 +1823,7 @@ namespace NameSpace_AFM_Project
             SaveImageToTextFile(mDataPath, t, "ER", mImageArrayER);
             SaveAFMParaToTextFile(t);
 
-            UpdateImageShow_SaveMat(t);
+            //UpdateImageShow_SaveMat(t);
 
             t = null;
             SaveImageToTextFile(mDataPath, t, "HL", mImageArrayHL);

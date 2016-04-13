@@ -116,33 +116,33 @@
 
 
 // calibrated by afm grid 5um on optical microscope
-//#define MAX_RANGE_Z_NM (21.387973775678940*1000.0)
-//#define MAX_RANGE_X_NM (27.067266247186911*1000.0)
-//#define MAX_RANGE_Y_NM (27.209844045785250*1000.0)
+//#define SCANNER_RANGE_Z_NM (21.387973775678940*1000.0)
+//#define SCANNER_RANGE_X_NM (27.067266247186911*1000.0)
+//#define SCANNER_RANGE_Y_NM (27.209844045785250*1000.0)
 // devin's new piezo actuator
-//#define MAX_RANGE_Z_NM ( 7.299788679537674*1000.0)
-//#define MAX_RANGE_X_NM (27.067266247186911*1000.0)
-//#define MAX_RANGE_Y_NM (27.209844045785250*1000.0)
-#define MAX_RANGE_Z_NM ( 14*1000.0)
-#define MAX_RANGE_X_NM (50*1000.0)
-#define MAX_RANGE_Y_NM (50*1000.0)
+//#define SCANNER_RANGE_Z_NM ( 7.299788679537674*1000.0)
+//#define SCANNER_RANGE_X_NM (27.067266247186911*1000.0)
+//#define SCANNER_RANGE_Y_NM (27.209844045785250*1000.0)
+#define SCANNER_RANGE_Z_NM ( 14*1000.0)
+#define SCANNER_RANGE_X_NM (50*1000.0)
+#define SCANNER_RANGE_Y_NM (50*1000.0)
 
 
 
-//#define MAX_RANGE_Z_NM (25000)
-//#define MAX_RANGE_X_NM (22000)
-//#define MAX_RANGE_Y_NM (21000)
+//#define SCANNER_RANGE_Z_NM (25000)
+//#define SCANNER_RANGE_X_NM (22000)
+//#define SCANNER_RANGE_Y_NM (21000)
 
-#define MAX_RANGE_Z_PM (MAX_RANGE_Z_NM*1000)
-#define MAX_RANGE_X_PM (MAX_RANGE_X_NM*1000)
-#define MAX_RANGE_Y_PM (MAX_RANGE_Y_NM*1000)
+#define MAX_RANGE_Z_PM (SCANNER_RANGE_Z_NM*1000)
+#define MAX_RANGE_X_PM (SCANNER_RANGE_X_NM*1000)
+#define MAX_RANGE_Y_PM (SCANNER_RANGE_Y_NM*1000)
 #define CONV_PM2DAC(x)  ((x)*((double)BIT18MAX/(double)MAX_RANGE_Z_PM)) //*0.01048576
 
 
 //#define MAX_STEP_NUMBER (1000000.0/85.0)
 #define EPS (0.000001)
 #define MAX_STEP_SIZE_PIEZO_MODEL_NM (20)// tuning fork(2.0)//(4.0)
-#define MAX_STEP_SIZE_PIEZO_MODEL (MAX_STEP_SIZE_PIEZO_MODEL_NM/MAX_RANGE_Z_NM)//(0.001)//step size=20~27 nm (0.05)
+#define MAX_STEP_SIZE_PIEZO_MODEL (MAX_STEP_SIZE_PIEZO_MODEL_NM/SCANNER_RANGE_Z_NM)//(0.001)//step size=20~27 nm (0.05)
 
 
 
@@ -164,10 +164,10 @@
 
 
 
-# define DAC_PER_NM_Z (BIT18MAX/MAX_RANGE_Z_NM) //10.48572
+# define DAC_PER_NM_Z (BIT18MAX/SCANNER_RANGE_Z_NM) //10.48572
 
-# define DAC_PER_NM_X (BIT18MAX/MAX_RANGE_X_NM) //
-# define DAC_PER_NM_Y (BIT18MAX/MAX_RANGE_Y_NM) //
+# define DAC_PER_NM_X (BIT18MAX/SCANNER_RANGE_X_NM) //
+# define DAC_PER_NM_Y (BIT18MAX/SCANNER_RANGE_Y_NM) //
 
 #define LIMIT_MAX_MIN(x,up,down) (Max(Min(x,up),down))
 
@@ -176,4 +176,7 @@
 //#define PERIOD_TIME_CHECK_EXIT_WITH_VALUE(dt,value) {do{	static unsigned long time_store =0;	unsigned long time_now=millis();	if((time_now - time_store)<(dt)) 	{	return (value);	}		time_store=time_now;	}while(0);}
 //#define DIGITAL_PIN_TOGGLE(pin)	{do{static bool x=true; x=!x;fastDigitalWrite(pin,x);} while(0);}
 //#define MOD(value,range) {do{while(value>=range)value-=range;while(value<0)value+=range;} while(0);}
+#define REGION_LOCK()  static bool mlock = false;if (mlock == true) return;mlock = true; 
+#define REGION_UNLOCK()    mlock = false;
+
 #endif

@@ -3,7 +3,9 @@ close all
 clc
 % function AFM_show_indent_data()
 % data=load('..\bin\IndentData.txt');
-dat=importdata('..\bin\IndentData.txt');
+% dat=importdata('..\bin\IndentData.txt');
+
+dat=importdata('D:\AFMdata\IndentData.txt');
 data=dat.data;
 % data=load('..\bin\pdms_tf\pdms_IndentData_step_size20_start_position6500_depth3000_time408218771_20150528190459.txt');
 

@@ -1,0 +1,5 @@
+20160410
+install nuget for vs2012
+
+https://visualstudiogallery.msdn.microsoft.c
+om/27077b70-9dad-4c64-adcf-c7cf6bc9970c

@@ -34,7 +34,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this.listBox_ScannerAxisZ = new System.Windows.Forms.ListBox();
+            this.listBox_SelectIdlePackage = new System.Windows.Forms.ListBox();
             this.textBox_IC0_R0 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.timer_CheckCOM = new System.Windows.Forms.Timer(this.components);
@@ -58,7 +58,7 @@
             this.textBox_XL = new System.Windows.Forms.TextBox();
             this.textBox_ScanRate = new System.Windows.Forms.TextBox();
             this.textBox_Sensitivity = new System.Windows.Forms.TextBox();
-            this.textBox_SetDeltaVoltage = new System.Windows.Forms.TextBox();
+            this.textBox_SetDeltaValueNm = new System.Windows.Forms.TextBox();
             this.textBox_NumberOfFrameToScan = new System.Windows.Forms.TextBox();
             this.textBox_TF_DC_Gain = new System.Windows.Forms.TextBox();
             this.textBox_TaskTime = new System.Windows.Forms.TextBox();
@@ -142,28 +142,27 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_R01)).BeginInit();
             this.SuspendLayout();
             // 
-            // listBox_ScannerAxisZ
+            // listBox_SelectIdlePackage
             // 
-            this.listBox_ScannerAxisZ.BackColor = System.Drawing.SystemColors.Window;
-            this.listBox_ScannerAxisZ.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBox_ScannerAxisZ.FormattingEnabled = true;
-            this.listBox_ScannerAxisZ.ItemHeight = 20;
-            this.listBox_ScannerAxisZ.Items.AddRange(new object[] {
-            "Zonly",
-            "Z_LPF",
-            "Tonly",
-            "ZT"});
-            this.listBox_ScannerAxisZ.Location = new System.Drawing.Point(623, 449);
-            this.listBox_ScannerAxisZ.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.listBox_ScannerAxisZ.Name = "listBox_ScannerAxisZ";
-            this.listBox_ScannerAxisZ.Size = new System.Drawing.Size(89, 104);
-            this.listBox_ScannerAxisZ.TabIndex = 1;
-            this.toolTip_Help.SetToolTip(this.listBox_ScannerAxisZ, "Select an axis to operate.");
-            this.listBox_ScannerAxisZ.SelectedIndexChanged += new System.EventHandler(this.listBox_Axis_SelectedIndexChanged);
+            this.listBox_SelectIdlePackage.BackColor = System.Drawing.SystemColors.Window;
+            this.listBox_SelectIdlePackage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBox_SelectIdlePackage.FormattingEnabled = true;
+            this.listBox_SelectIdlePackage.ItemHeight = 20;
+            this.listBox_SelectIdlePackage.Items.AddRange(new object[] {
+            "PRC_Tsem_Tmcu",
+            "SCSG_xysz",
+            "calibration"});
+            this.listBox_SelectIdlePackage.Location = new System.Drawing.Point(433, 619);
+            this.listBox_SelectIdlePackage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listBox_SelectIdlePackage.Name = "listBox_SelectIdlePackage";
+            this.listBox_SelectIdlePackage.Size = new System.Drawing.Size(157, 64);
+            this.listBox_SelectIdlePackage.TabIndex = 1;
+            this.toolTip_Help.SetToolTip(this.listBox_SelectIdlePackage, "Select an axis to operate.");
+            this.listBox_SelectIdlePackage.SelectedIndexChanged += new System.EventHandler(this.listBox_Axis_SelectedIndexChanged);
             // 
             // textBox_IC0_R0
             // 
-            this.textBox_IC0_R0.Location = new System.Drawing.Point(106, 582);
+            this.textBox_IC0_R0.Location = new System.Drawing.Point(111, 755);
             this.textBox_IC0_R0.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_IC0_R0.Name = "textBox_IC0_R0";
             this.textBox_IC0_R0.Size = new System.Drawing.Size(64, 26);
@@ -176,7 +175,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.BackColor = System.Drawing.Color.Transparent;
-            this.label2.Location = new System.Drawing.Point(51, 585);
+            this.label2.Location = new System.Drawing.Point(56, 758);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(34, 20);
@@ -263,7 +262,7 @@
             // 
             // textBox_IC0_R1
             // 
-            this.textBox_IC0_R1.Location = new System.Drawing.Point(246, 582);
+            this.textBox_IC0_R1.Location = new System.Drawing.Point(251, 755);
             this.textBox_IC0_R1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_IC0_R1.Name = "textBox_IC0_R1";
             this.textBox_IC0_R1.Size = new System.Drawing.Size(64, 26);
@@ -274,7 +273,7 @@
             // 
             // textBox_IC0_R3
             // 
-            this.textBox_IC0_R3.Location = new System.Drawing.Point(526, 582);
+            this.textBox_IC0_R3.Location = new System.Drawing.Point(531, 755);
             this.textBox_IC0_R3.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_IC0_R3.Name = "textBox_IC0_R3";
             this.textBox_IC0_R3.Size = new System.Drawing.Size(64, 26);
@@ -285,7 +284,7 @@
             // 
             // textBox_IC0_R2
             // 
-            this.textBox_IC0_R2.Location = new System.Drawing.Point(386, 582);
+            this.textBox_IC0_R2.Location = new System.Drawing.Point(391, 755);
             this.textBox_IC0_R2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_IC0_R2.Name = "textBox_IC0_R2";
             this.textBox_IC0_R2.Size = new System.Drawing.Size(64, 26);
@@ -317,7 +316,7 @@
             // 
             // textBox_Nx
             // 
-            this.textBox_Nx.Location = new System.Drawing.Point(143, 173);
+            this.textBox_Nx.Location = new System.Drawing.Point(184, 173);
             this.textBox_Nx.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_Nx.Name = "textBox_Nx";
             this.textBox_Nx.Size = new System.Drawing.Size(55, 26);
@@ -327,7 +326,7 @@
             // 
             // textBox_Ny
             // 
-            this.textBox_Ny.Location = new System.Drawing.Point(143, 209);
+            this.textBox_Ny.Location = new System.Drawing.Point(184, 209);
             this.textBox_Ny.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_Ny.Name = "textBox_Ny";
             this.textBox_Ny.Size = new System.Drawing.Size(55, 26);
@@ -337,7 +336,7 @@
             // 
             // textBox_Dy
             // 
-            this.textBox_Dy.Location = new System.Drawing.Point(143, 281);
+            this.textBox_Dy.Location = new System.Drawing.Point(184, 281);
             this.textBox_Dy.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_Dy.Name = "textBox_Dy";
             this.textBox_Dy.Size = new System.Drawing.Size(55, 26);
@@ -347,7 +346,7 @@
             // 
             // textBox_Dx
             // 
-            this.textBox_Dx.Location = new System.Drawing.Point(143, 245);
+            this.textBox_Dx.Location = new System.Drawing.Point(184, 245);
             this.textBox_Dx.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_Dx.Name = "textBox_Dx";
             this.textBox_Dx.Size = new System.Drawing.Size(55, 26);
@@ -357,7 +356,7 @@
             // 
             // textBox_YL
             // 
-            this.textBox_YL.Location = new System.Drawing.Point(143, 353);
+            this.textBox_YL.Location = new System.Drawing.Point(184, 353);
             this.textBox_YL.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_YL.Name = "textBox_YL";
             this.textBox_YL.Size = new System.Drawing.Size(55, 26);
@@ -367,7 +366,7 @@
             // 
             // textBox_XL
             // 
-            this.textBox_XL.Location = new System.Drawing.Point(143, 317);
+            this.textBox_XL.Location = new System.Drawing.Point(184, 317);
             this.textBox_XL.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_XL.Name = "textBox_XL";
             this.textBox_XL.Size = new System.Drawing.Size(55, 26);
@@ -377,7 +376,7 @@
             // 
             // textBox_ScanRate
             // 
-            this.textBox_ScanRate.Location = new System.Drawing.Point(143, 389);
+            this.textBox_ScanRate.Location = new System.Drawing.Point(184, 389);
             this.textBox_ScanRate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_ScanRate.Name = "textBox_ScanRate";
             this.textBox_ScanRate.Size = new System.Drawing.Size(55, 26);
@@ -387,27 +386,27 @@
             // 
             // textBox_Sensitivity
             // 
-            this.textBox_Sensitivity.Location = new System.Drawing.Point(143, 425);
+            this.textBox_Sensitivity.Location = new System.Drawing.Point(184, 425);
             this.textBox_Sensitivity.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(55, 26);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "1";
+            this.textBox_Sensitivity.Text = "40";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
-            // textBox_SetDeltaVoltage
+            // textBox_SetDeltaValueNm
             // 
-            this.textBox_SetDeltaVoltage.Location = new System.Drawing.Point(143, 461);
-            this.textBox_SetDeltaVoltage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBox_SetDeltaVoltage.Name = "textBox_SetDeltaVoltage";
-            this.textBox_SetDeltaVoltage.Size = new System.Drawing.Size(55, 26);
-            this.textBox_SetDeltaVoltage.TabIndex = 67;
-            this.textBox_SetDeltaVoltage.Text = "100";
-            this.toolTip_Help.SetToolTip(this.textBox_SetDeltaVoltage, "Enter the step length here.");
+            this.textBox_SetDeltaValueNm.Location = new System.Drawing.Point(184, 461);
+            this.textBox_SetDeltaValueNm.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBox_SetDeltaValueNm.Name = "textBox_SetDeltaValueNm";
+            this.textBox_SetDeltaValueNm.Size = new System.Drawing.Size(55, 26);
+            this.textBox_SetDeltaValueNm.TabIndex = 67;
+            this.textBox_SetDeltaValueNm.Text = "2";
+            this.toolTip_Help.SetToolTip(this.textBox_SetDeltaValueNm, "Enter the step length here.");
             // 
             // textBox_NumberOfFrameToScan
             // 
-            this.textBox_NumberOfFrameToScan.Location = new System.Drawing.Point(142, 499);
+            this.textBox_NumberOfFrameToScan.Location = new System.Drawing.Point(183, 499);
             this.textBox_NumberOfFrameToScan.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_NumberOfFrameToScan.Name = "textBox_NumberOfFrameToScan";
             this.textBox_NumberOfFrameToScan.Size = new System.Drawing.Size(55, 26);
@@ -417,7 +416,7 @@
             // 
             // textBox_TF_DC_Gain
             // 
-            this.textBox_TF_DC_Gain.Location = new System.Drawing.Point(246, 425);
+            this.textBox_TF_DC_Gain.Location = new System.Drawing.Point(246, 589);
             this.textBox_TF_DC_Gain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBox_TF_DC_Gain.Name = "textBox_TF_DC_Gain";
             this.textBox_TF_DC_Gain.Size = new System.Drawing.Size(55, 26);
@@ -607,7 +606,7 @@
             // checkBox_IC0_DO1
             // 
             this.checkBox_IC0_DO1.AutoSize = true;
-            this.checkBox_IC0_DO1.Location = new System.Drawing.Point(611, 583);
+            this.checkBox_IC0_DO1.Location = new System.Drawing.Point(616, 756);
             this.checkBox_IC0_DO1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_IC0_DO1.Name = "checkBox_IC0_DO1";
             this.checkBox_IC0_DO1.Size = new System.Drawing.Size(61, 24);
@@ -619,7 +618,7 @@
             // groupBox4
             // 
             this.groupBox4.BackColor = System.Drawing.Color.Transparent;
-            this.groupBox4.Location = new System.Drawing.Point(46, 563);
+            this.groupBox4.Location = new System.Drawing.Point(51, 736);
             this.groupBox4.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -632,7 +631,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.BackColor = System.Drawing.Color.Transparent;
-            this.label3.Location = new System.Drawing.Point(191, 585);
+            this.label3.Location = new System.Drawing.Point(196, 758);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 20);
@@ -643,7 +642,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.BackColor = System.Drawing.Color.Transparent;
-            this.label4.Location = new System.Drawing.Point(471, 585);
+            this.label4.Location = new System.Drawing.Point(476, 758);
             this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(34, 20);
@@ -654,7 +653,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.BackColor = System.Drawing.Color.Transparent;
-            this.label8.Location = new System.Drawing.Point(331, 585);
+            this.label8.Location = new System.Drawing.Point(336, 758);
             this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(34, 20);
@@ -664,7 +663,7 @@
             // checkBox_IC0_DO2
             // 
             this.checkBox_IC0_DO2.AutoSize = true;
-            this.checkBox_IC0_DO2.Location = new System.Drawing.Point(693, 583);
+            this.checkBox_IC0_DO2.Location = new System.Drawing.Point(698, 756);
             this.checkBox_IC0_DO2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.checkBox_IC0_DO2.Name = "checkBox_IC0_DO2";
             this.checkBox_IC0_DO2.Size = new System.Drawing.Size(61, 24);
@@ -679,19 +678,19 @@
             // 
             // richTextBox_serial_read
             // 
-            this.richTextBox_serial_read.Location = new System.Drawing.Point(46, 827);
+            this.richTextBox_serial_read.Location = new System.Drawing.Point(799, 840);
             this.richTextBox_serial_read.Name = "richTextBox_serial_read";
-            this.richTextBox_serial_read.Size = new System.Drawing.Size(787, 72);
+            this.richTextBox_serial_read.Size = new System.Drawing.Size(99, 72);
             this.richTextBox_serial_read.TabIndex = 34;
             this.richTextBox_serial_read.Text = "";
             // 
             // trackBar_R0
             // 
             this.trackBar_R0.LargeChange = 1;
-            this.trackBar_R0.Location = new System.Drawing.Point(46, 690);
+            this.trackBar_R0.Location = new System.Drawing.Point(433, 866);
             this.trackBar_R0.Maximum = 255;
             this.trackBar_R0.Name = "trackBar_R0";
-            this.trackBar_R0.Size = new System.Drawing.Size(787, 42);
+            this.trackBar_R0.Size = new System.Drawing.Size(121, 42);
             this.trackBar_R0.TabIndex = 35;
             this.trackBar_R0.TickFrequency = 2;
             this.trackBar_R0.Scroll += new System.EventHandler(this.trackBar_R0_Scroll);
@@ -700,7 +699,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.BackColor = System.Drawing.Color.Transparent;
-            this.label9.Location = new System.Drawing.Point(9, 701);
+            this.label9.Location = new System.Drawing.Point(396, 877);
             this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(30, 20);
@@ -711,7 +710,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.BackColor = System.Drawing.Color.Transparent;
-            this.label10.Location = new System.Drawing.Point(-5, 786);
+            this.label10.Location = new System.Drawing.Point(582, 876);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(50, 20);
@@ -721,10 +720,10 @@
             // trackBar_IC1R3
             // 
             this.trackBar_IC1R3.LargeChange = 1;
-            this.trackBar_IC1R3.Location = new System.Drawing.Point(46, 776);
+            this.trackBar_IC1R3.Location = new System.Drawing.Point(633, 866);
             this.trackBar_IC1R3.Maximum = 255;
             this.trackBar_IC1R3.Name = "trackBar_IC1R3";
-            this.trackBar_IC1R3.Size = new System.Drawing.Size(787, 42);
+            this.trackBar_IC1R3.Size = new System.Drawing.Size(121, 42);
             this.trackBar_IC1R3.TabIndex = 37;
             this.trackBar_IC1R3.TickFrequency = 2;
             this.trackBar_IC1R3.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -732,10 +731,10 @@
             // trackBar_R1
             // 
             this.trackBar_R1.LargeChange = 1;
-            this.trackBar_R1.Location = new System.Drawing.Point(46, 733);
+            this.trackBar_R1.Location = new System.Drawing.Point(633, 823);
             this.trackBar_R1.Maximum = 255;
             this.trackBar_R1.Name = "trackBar_R1";
-            this.trackBar_R1.Size = new System.Drawing.Size(787, 42);
+            this.trackBar_R1.Size = new System.Drawing.Size(121, 42);
             this.trackBar_R1.TabIndex = 39;
             this.trackBar_R1.TickFrequency = 2;
             this.trackBar_R1.Scroll += new System.EventHandler(this.trackBar_R1_Scroll);
@@ -744,7 +743,7 @@
             // 
             this.label11.AutoSize = true;
             this.label11.BackColor = System.Drawing.Color.Transparent;
-            this.label11.Location = new System.Drawing.Point(9, 743);
+            this.label11.Location = new System.Drawing.Point(596, 833);
             this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(30, 20);
@@ -950,29 +949,29 @@
             // 
             this.label20.AutoSize = true;
             this.label20.BackColor = System.Drawing.Color.Transparent;
-            this.label20.Location = new System.Drawing.Point(34, 425);
+            this.label20.Location = new System.Drawing.Point(33, 431);
             this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(80, 20);
+            this.label20.Size = new System.Drawing.Size(112, 20);
             this.label20.TabIndex = 64;
-            this.label20.Text = "sensitivity:";
+            this.label20.Text = "DTSsensitivity:";
             // 
             // label21
             // 
             this.label21.AutoSize = true;
             this.label21.BackColor = System.Drawing.Color.Transparent;
-            this.label21.Location = new System.Drawing.Point(34, 466);
+            this.label21.Location = new System.Drawing.Point(5, 464);
             this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(89, 20);
+            this.label21.Size = new System.Drawing.Size(162, 20);
             this.label21.TabIndex = 66;
-            this.label21.Text = "set dV(mV)";
+            this.label21.Text = "WorkingDistance(nm)";
             // 
             // label_SystemState
             // 
             this.label_SystemState.AutoSize = true;
             this.label_SystemState.BackColor = System.Drawing.Color.Transparent;
-            this.label_SystemState.Location = new System.Drawing.Point(38, 528);
+            this.label_SystemState.Location = new System.Drawing.Point(19, 619);
             this.label_SystemState.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_SystemState.Name = "label_SystemState";
             this.label_SystemState.Size = new System.Drawing.Size(106, 20);
@@ -1013,7 +1012,7 @@
             // 
             // button_StartSubWindow
             // 
-            this.button_StartSubWindow.Location = new System.Drawing.Point(222, 223);
+            this.button_StartSubWindow.Location = new System.Drawing.Point(246, 221);
             this.button_StartSubWindow.Name = "button_StartSubWindow";
             this.button_StartSubWindow.Size = new System.Drawing.Size(98, 32);
             this.button_StartSubWindow.TabIndex = 73;
@@ -1034,7 +1033,7 @@
             // 
             // button_SetScanROI
             // 
-            this.button_SetScanROI.Location = new System.Drawing.Point(222, 273);
+            this.button_SetScanROI.Location = new System.Drawing.Point(246, 271);
             this.button_SetScanROI.Name = "button_SetScanROI";
             this.button_SetScanROI.Size = new System.Drawing.Size(98, 32);
             this.button_SetScanROI.TabIndex = 76;
@@ -1063,10 +1062,10 @@
             // trackBar_R01
             // 
             this.trackBar_R01.LargeChange = 1;
-            this.trackBar_R01.Location = new System.Drawing.Point(46, 632);
+            this.trackBar_R01.Location = new System.Drawing.Point(433, 818);
             this.trackBar_R01.Maximum = 255;
             this.trackBar_R01.Name = "trackBar_R01";
-            this.trackBar_R01.Size = new System.Drawing.Size(787, 42);
+            this.trackBar_R01.Size = new System.Drawing.Size(121, 42);
             this.trackBar_R01.TabIndex = 79;
             this.trackBar_R01.TickFrequency = 2;
             this.trackBar_R01.Scroll += new System.EventHandler(this.trackBar_R01_Scroll);
@@ -1075,7 +1074,7 @@
             // 
             this.label23.AutoSize = true;
             this.label23.BackColor = System.Drawing.Color.Transparent;
-            this.label23.Location = new System.Drawing.Point(9, 642);
+            this.label23.Location = new System.Drawing.Point(382, 830);
             this.label23.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label23.Name = "label23";
             this.label23.Size = new System.Drawing.Size(39, 20);
@@ -1111,7 +1110,7 @@
             // 
             this.label24.AutoSize = true;
             this.label24.BackColor = System.Drawing.Color.Transparent;
-            this.label24.Location = new System.Drawing.Point(231, 389);
+            this.label24.Location = new System.Drawing.Point(131, 592);
             this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label24.Name = "label24";
             this.label24.Size = new System.Drawing.Size(89, 20);
@@ -1184,7 +1183,7 @@
             // 
             // button_Form_CoarsePositioner
             // 
-            this.button_Form_CoarsePositioner.Location = new System.Drawing.Point(222, 176);
+            this.button_Form_CoarsePositioner.Location = new System.Drawing.Point(246, 174);
             this.button_Form_CoarsePositioner.Name = "button_Form_CoarsePositioner";
             this.button_Form_CoarsePositioner.Size = new System.Drawing.Size(98, 30);
             this.button_Form_CoarsePositioner.TabIndex = 95;
@@ -1229,7 +1228,7 @@
             this.Controls.Add(this.button_SaveImage);
             this.Controls.Add(this.label_SystemState);
             this.Controls.Add(this.label21);
-            this.Controls.Add(this.textBox_SetDeltaVoltage);
+            this.Controls.Add(this.textBox_SetDeltaValueNm);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.textBox_Sensitivity);
             this.Controls.Add(this.label19);
@@ -1274,7 +1273,7 @@
             this.Controls.Add(this.textBox_IC0_R2);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox_IC0_R1);
-            this.Controls.Add(this.listBox_ScannerAxisZ);
+            this.Controls.Add(this.listBox_SelectIdlePackage);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.pictureBox1);
@@ -1309,7 +1308,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBox_ScannerAxisZ;
+        private System.Windows.Forms.ListBox listBox_SelectIdlePackage;
         private System.Windows.Forms.TextBox textBox_IC0_R0;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer timer_CheckCOM;
@@ -1379,7 +1378,7 @@
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.TextBox textBox_Sensitivity;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox textBox_SetDeltaVoltage;
+        private System.Windows.Forms.TextBox textBox_SetDeltaValueNm;
         private System.Windows.Forms.Label label_SystemState;
         private System.Windows.Forms.Button button_SaveImage;
         private System.Windows.Forms.Button button_ClearImage;

@@ -131,11 +131,20 @@ public		void  MoveDistance(uint channel,double distance, uint frequency)
 	{
 		distance*=mDirection[(uint)channel];
 
-		
-		if (moving ==true)
-			return;
+
+        if (moving == true)
+        {
+            MY_DEBUG("Coarse positioner busy.");
+            return;
+        }
 
 		moving =true;
+
+        string str = null;
+        if (channel == 0) str = "x";
+        if (channel == 1) str = "y";
+        if (channel == 2) str = "z";
+        MY_DEBUG("CoarsePositioiner:\t" + str + "\t" + distance.ToString() + "\t" + frequency.ToString());
 
 		distance=NM2STEPS(distance);
 		int	number_of_steps=0,step_left=(int)distance;

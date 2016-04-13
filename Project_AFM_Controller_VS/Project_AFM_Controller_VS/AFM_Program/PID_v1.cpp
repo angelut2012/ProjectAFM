@@ -11,25 +11,43 @@
 *    The parameters specified here are those for for which we can't set up 
 *    reliable defaults, so we need to have the user set them.
 ***************************************************************************/
-PID::PID(double Input, double Output, double Setpoint,
-		 double Kp, double Ki, double Kd,bool Direction_DirectTrue_ReverseFalse)
+PID::PID(bool Direction_DirectTrue_ReverseFalse)
 {
 
-	myOutput = Output;
-	myInput = Input;
-	mySetpoint = Setpoint;
+	myOutput = 0;
+	myInput = 0;
+	mySetpoint = 0;
 	inAuto = false;
 
-	PID::SetOutputLimits(-131072,131071);				//default output limit corresponds to 
+	PID::SetOutputLimits(-131072, 131071);				//default output limit corresponds to 
 	//the arduino pwm limits
 
-	mSampleTimeIn_us = 1000;							//default Controller Sample Time is 1 us
+	mSampleTimeIn_us = 1;							//default Controller Sample Time is 1 us
 
 	//PID::SetControllerDirection(ControllerDirection);
-	PID::SetTunings(Kp, Ki, Kd);
-	mDirection_DirectTrue_ReverseFalse=Direction_DirectTrue_ReverseFalse;
+	//PID::SetTunings(Kp, Ki, Kd);
+	mDirection_DirectTrue_ReverseFalse = Direction_DirectTrue_ReverseFalse;
 	//   lastTime = millis()-mSampleTimeIn_us;				
 }
+//PID::PID(double Input, double Output, double Setpoint,
+//		 double Kp, double Ki, double Kd,bool Direction_DirectTrue_ReverseFalse)
+//{
+//
+//	myOutput = Output;
+//	myInput = Input;
+//	mySetpoint = Setpoint;
+//	inAuto = false;
+//
+//	PID::SetOutputLimits(-131072,131071);				//default output limit corresponds to 
+//	//the arduino pwm limits
+//
+//	mSampleTimeIn_us = 1000;							//default Controller Sample Time is 1 us
+//
+//	//PID::SetControllerDirection(ControllerDirection);
+//	PID::SetTunings(Kp, Ki, Kd);
+//	mDirection_DirectTrue_ReverseFalse=Direction_DirectTrue_ReverseFalse;
+//	//   lastTime = millis()-mSampleTimeIn_us;				
+//}
 
 
 /* Compute() **********************************************************************

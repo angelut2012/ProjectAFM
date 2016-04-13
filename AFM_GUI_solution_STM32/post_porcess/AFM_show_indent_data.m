@@ -2,8 +2,10 @@
 % close all
 % clc
 function AFM_show_indent_data()
+ close all
 % data=load('..\bin\IndentData.txt');
-dat=importdata('..\bin\IndentData.txt');
+% dat=importdata('..\bin\IndentData.txt');
+dat=importdata('D:\AFMdata\IndentData.txt');
 if length(dat)==1
     data=dat.data;
 else
