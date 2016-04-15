@@ -5,8 +5,8 @@ clc
 % data=load('..\bin\IndentData.txt');
 % dat=importdata('..\bin\IndentData.txt');
 
-% dat=importdata('D:\AFMdata\IndentData.txt');
-dat=importdata('D:\AFMdata\IndentData_vibration_si_floating_table_20160409173932.txt');
+dat=importdata('D:\AFMdata\IndentData.txt');
+% dat=importdata('D:\AFMdata\IndentData_vibration_si_floating_table_20160409173932.txt');
 
 
 data=dat.data;

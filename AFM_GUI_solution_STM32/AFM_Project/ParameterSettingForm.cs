@@ -16,6 +16,7 @@ namespace NameSpace_AFM_Project
     {
 
         MainWindow pParent;
+        bool mWaveRun = false;
         public ParameterSettingForm(MainWindow pmain)
         {
             InitializeComponent();
@@ -64,20 +65,31 @@ namespace NameSpace_AFM_Project
             value*=pParent.MAX_RANGE_AXIS_NM[axis];
             textBox_Position_Value.Text = value.ToString();
         }
-
+        Thread mThread_wave_generator;
         private void button_T_debug_Click(object sender, EventArgs e)
         {
-            int N = Convert.ToInt32(textBox_T_Test_cycles.Text);
-            int dt = Convert.ToInt32(textBox_T_test_dt.Text);
-            byte axis = Convert.ToByte(textBox_Position_Axis.Text);
-
-            for (int k = 0;k<N ; k++)
+            mWaveRun = true;
+            mThread_wave_generator = new Thread(function_wave_generator);
+            mThread_wave_generator.Start();
+        }
+           void function_wave_generator()
+        {
+            while (mWaveRun == true)
             {
-                pParent.set_output_DAC_Value_0_5(axis, 5);
-                Thread.Sleep(dt);
-                pParent.set_output_DAC_Value_0_5(axis, 0);
-                Thread.Sleep(dt);
+                int N = Convert.ToInt32(textBox_T_Test_cycles.Text);
+                int dt = Convert.ToInt32(textBox_T_test_dt.Text);
+                byte axis = Convert.ToByte(textBox_Position_Axis.Text);
+
+                //for (int k = 0; k < N; k++)
+                {
+
+                    pParent.set_output_DAC_Value_0_5(axis, 5);
+                    Thread.Sleep(dt);
+                    pParent.set_output_DAC_Value_0_5(axis, 0);
+                    Thread.Sleep(dt);
+                }
             }
+        }
             //for (int k = 50; k > -50; k--)
             //{
             //    pParent.set_output_DAC_Value_0_5(axis, (80.0+k/4.0)*5.0 / 150.0);
@@ -113,6 +125,11 @@ namespace NameSpace_AFM_Project
             //}
             //Thread.Sleep(dt*3);
             //pParent.set_output_DAC_Value_0_5(axis, 80/150*5);
+ 
+
+        private void button_WaveStop_Click(object sender, EventArgs e)
+        {
+            mWaveRun = false;
         }
 
     }

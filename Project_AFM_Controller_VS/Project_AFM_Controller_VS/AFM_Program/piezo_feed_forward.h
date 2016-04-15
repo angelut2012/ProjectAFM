@@ -51,8 +51,8 @@ extern CDAC mAFM_DAC;
 //	double temp_PositionInput=PositionInput;
 //	double model_outputV=0;
 //	uint32_t value_dac[axis]=0;
-//	//double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL,(deltaPosition/MAX_STEPS_PIEZO_MODEL+0.001));
-//	double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL,(deltaPosition/steps+0.001));
+//	//double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL_01,(deltaPosition/MAX_STEPS_PIEZO_MODEL+0.001));
+//	double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL_01,(deltaPosition/steps+0.001));
 //
 //	do
 //	{
@@ -132,8 +132,8 @@ extern CDAC mAFM_DAC;
 //	double temp_PositionInput=PositionInput;
 //	double model_outputV=0;
 //	uint32_t value_dac[axis]=0;
-//	//double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL,(deltaPosition/MAX_STEPS_PIEZO_MODEL+0.001));
-//	double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL,(deltaPosition/steps+0.001));
+//	//double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL_01,(deltaPosition/MAX_STEPS_PIEZO_MODEL+0.001));
+//	double max_step_size=Math_Max(MAX_STEP_SIZE_PIEZO_MODEL_01,(deltaPosition/steps+0.001));
 //
 //	do
 //	{
@@ -219,14 +219,14 @@ extern CDAC mAFM_DAC;
 //	while (Math_Abs(deltaPosition)>EPS)// 85us each round
 //	{
 //		//fastDigitalWrite(23,true);
-//		if (Math_Abs(deltaPosition)<MAX_STEP_SIZE_PIEZO_MODEL)
+//		if (Math_Abs(deltaPosition)<MAX_STEP_SIZE_PIEZO_MODEL_01)
 //			temp_deltaPosition=deltaPosition;// last step
 //		else// equal steps
 //		{
 //			if (deltaPosition>0)// move direction
-//				temp_deltaPosition=MAX_STEP_SIZE_PIEZO_MODEL;
+//				temp_deltaPosition=MAX_STEP_SIZE_PIEZO_MODEL_01;
 //			else
-//				temp_deltaPosition=-MAX_STEP_SIZE_PIEZO_MODEL;
+//				temp_deltaPosition=-MAX_STEP_SIZE_PIEZO_MODEL_01;
 //		}
 //		temp_PositionInput=PositionNow[axis]+temp_deltaPosition;
 //		deltaPosition-=temp_deltaPosition;
@@ -333,14 +333,14 @@ extern CDAC mAFM_DAC;
 ////		while (Math_Abs(deltaPosition)>EPS)// 85us each round
 ////		{
 ////			//fastDigitalWrite(23,true);
-////			if (Math_Abs(deltaPosition)<MAX_STEP_SIZE_PIEZO_MODEL)
+////			if (Math_Abs(deltaPosition)<MAX_STEP_SIZE_PIEZO_MODEL_01)
 ////				temp_deltaPosition=deltaPosition;// last step
 ////			else// equal steps
 ////			{
 ////				if (deltaPosition>0)// move direction
-////					temp_deltaPosition=MAX_STEP_SIZE_PIEZO_MODEL;
+////					temp_deltaPosition=MAX_STEP_SIZE_PIEZO_MODEL_01;
 ////				else
-////					temp_deltaPosition=-MAX_STEP_SIZE_PIEZO_MODEL;
+////					temp_deltaPosition=-MAX_STEP_SIZE_PIEZO_MODEL_01;
 ////			}
 ////			temp_PositionInput=PositionNow[axis]+temp_deltaPosition;
 ////			deltaPosition-=temp_deltaPosition;

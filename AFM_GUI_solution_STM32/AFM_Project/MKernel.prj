@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment-project plugin="plugin.deploytool" plugin-version="1.0">
-  <configuration target="target.com.component" target-name="Generic COM Component" name="MKernel" location="F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project" file="F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\MKernel.prj" build-checksum="3910885767">
-    <param.project.name>F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\MKernel.prj</param.project.name>
+  <configuration target="target.com.component" target-name="Generic COM Component" name="MKernel" location="F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project" file="F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel.prj" build-checksum="3615159864">
+    <param.project.name>F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel.prj</param.project.name>
     <param.target.type>Generic COM Component</param.target.type>
     <param.appname>MKernel</param.appname>
     <param.intermediate>${PROJECT_ROOT}\MKernel\src</param.intermediate>
@@ -63,6 +63,7 @@
           <file>${PROJECT_ROOT}\AFM_DIP_for_show.m</file>
           <file>${PROJECT_ROOT}\AFM_dip_show_image.m</file>
           <file>${PROJECT_ROOT}\AFM_dip_show_image_from_txt.m</file>
+          <file>${PROJECT_ROOT}\AFM_line_for_show.m</file>
           <file>${PROJECT_ROOT}\AFM_scan_set_ROI.m</file>
           <file>${PROJECT_ROOT}\AFM_show_indent_data.m</file>
           <file>${PROJECT_ROOT}\StringEval.m</file>
@@ -72,8 +73,8 @@
     <fileset.resources />
     <fileset.package />
     <build-deliverables>
-      <file name="MKernel_1_0.dll" location="${PROJECT_ROOT}\MKernel\distrib" optional="false">F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\MKernel\distrib\MKernel_1_0.dll</file>
-      <file name="readme.txt" location="${PROJECT_ROOT}\MKernel\distrib" optional="true">F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\MKernel\distrib\readme.txt</file>
+      <file name="readme.txt" location="${PROJECT_ROOT}\MKernel\distrib" optional="true">F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel\distrib\readme.txt</file>
+      <file name="MKernel_1_0.dll" location="${PROJECT_ROOT}\MKernel\distrib" optional="false">F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel\distrib\MKernel_1_0.dll</file>
     </build-deliverables>
     <workflow />
     <matlab>
@@ -82,7 +83,6 @@
         <toolbox name="fixedpoint" />
       </toolboxes>
       <path>
-        <directory>${PROJECT_ROOT}\..\bin</directory>
         <directory>C:\Users\AFM\Documents\MATLAB</directory>
         <directory>D:\Program Files\MATLAB\user_lib</directory>
         <directory>D:\Program Files\MATLAB\user_lib\post_process</directory>
@@ -156,6 +156,22 @@
         <directory>${MATLAB_ROOT}\toolbox\stateflow\stateflow</directory>
         <directory>${MATLAB_ROOT}\toolbox\stateflow\coder</directory>
         <directory>${MATLAB_ROOT}\toolbox\stateflow\sfdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\asap2\asap2\dataclasses</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\asap2\asap2</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\asap2\asap2\user</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\can\blocks\dataclasses</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\can\blocks</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\can\blocks\tlc_c</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\tgtcommon</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\connectivity</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\pil</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\rtw\cgv\api</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\rtw\misra</directory>
+        <directory>${MATLAB_ROOT}\toolbox\simulinkcoder</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\rtwin\rtwin</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\rtwin\rtwindemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\rtwdemos</directory>
+        <directory>${MATLAB_ROOT}\toolbox\rtw\rtwdemos\rsimdemos</directory>
         <directory>${MATLAB_ROOT}\toolbox\aero\aero</directory>
         <directory>${MATLAB_ROOT}\toolbox\aeroblks\aeroblks</directory>
         <directory>${MATLAB_ROOT}\toolbox\aeroblks\aeroblksutilities</directory>
@@ -549,22 +565,6 @@
         <directory>${MATLAB_ROOT}\toolbox\rptgen\rptgendemos</directory>
         <directory>${MATLAB_ROOT}\toolbox\rptgen\xmlcomp</directory>
         <directory>${MATLAB_ROOT}\toolbox\rptgen\xmlcomp\demos</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\asap2\asap2\dataclasses</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\asap2\asap2</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\asap2\asap2\user</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\can\blocks\dataclasses</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\can\blocks</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\can\blocks\tlc_c</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\common\tgtcommon</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\connectivity</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\pil</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\rtw\cgv\api</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\rtw\misra</directory>
-        <directory>${MATLAB_ROOT}\toolbox\simulinkcoder</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\rtwin\rtwin</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\targets\rtwin\rtwindemos</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\rtwdemos</directory>
-        <directory>${MATLAB_ROOT}\toolbox\rtw\rtwdemos\rsimdemos</directory>
         <directory>${MATLAB_ROOT}\toolbox\simulink\blocks\sb2sl</directory>
         <directory>${MATLAB_ROOT}\toolbox\shared\advisor</directory>
         <directory>${MATLAB_ROOT}\toolbox\shared\asynciolib</directory>

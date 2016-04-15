@@ -38,6 +38,21 @@
 
 
 
+//test code
+//			RunningMedian mSortFilter = RunningMedian(6);
+//mSortFilter.clear();
+//
+//mSortFilter.add(8);
+//mSortFilter.add(1);
+//mSortFilter.add(4);
+//mSortFilter.add(6);
+//mSortFilter.add(3);
+//		
+//mSortFilter.add(4.5);
+//
+//double x = mSortFilter.getMedian();
+//x++;
+
 #define LENGTH_SortFilter_Buffer (100)
 #define MEDIAN_MIN_SIZE     (1)
 #define MEDIAN_MAX_SIZE     LENGTH_SortFilter_Buffer          // adjust if needed

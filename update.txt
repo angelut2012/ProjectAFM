@@ -1,3 +1,9 @@
+20160415
+image results get.
+many changes. in GUI, add zedgraph for line show.
+mcu software update
+main_AFM_image_post_process.m for post process
+
 20160413
 scanning OK
 high speed may lose data

@@ -1,7 +1,8 @@
-function AFM_dip_show_image_from_txt()
+% function AFM_dip_show_image_from_txt()
 % while(1)
-
-addpath('..\bin')
+clear
+% addpath('..\bin')
+addpath('D:\AFMdata')
 % while(1)
 %     pause(3)
 AFM_parameter=load('AFM_parameter.txt');
@@ -20,4 +21,4 @@ for k=1:length(F)
     ims{k}=load(f)';
 end
 AFM_dip_show_image(ims{1},ims{2},ims{3},ims{4},point_now_x,point_now_y,'');
-end
+% end

@@ -71,18 +71,6 @@ end
 
 
 
-function    line_now_show=AFM_line_for_show(L,order);
-x=1:length(L);
-cfL=createFit_line_poly(x,L,order);
-v_cfL=feval(cfL,x);
-v_cfL=v_cfL';
-
-sL=sort(L);
-N=length(sL);
-ch=round([0.3 0.7].*N);
-ch=round(ch);
-mL=mean(sL(ch(1):ch(2)));
-line_now_show=L-v_cfL+mL;
 % end
 % figure(2)
 % clf

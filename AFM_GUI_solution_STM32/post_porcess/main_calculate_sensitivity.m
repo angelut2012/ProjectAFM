@@ -17,6 +17,15 @@ nm=data(:,1);
 prc=data(:,2);
 
 
+vH=nm;
+              vH0 = 1.435565217391304e+04;
+              vh_range = 1.519552569169960e+05;
+
+            vH = (vH - vH0) ./ vh_range;
+            MAX_RANGE_Z_NM = (21.04 * 1000.0);
+            vH =vH.* MAX_RANGE_Z_NM;
+nm=vH;
+
 % L=length(nm);
 % Lh=round(L/2);
 Lh=find(nm==max(nm));% asysmetric
@@ -56,8 +65,9 @@ figure(100)
 plot(prc1,'*-')
 % ind=3828:3835;
 % ind=3838:3850
-ind=3504:3516
-ind=3593:3600
+ind=2005:2040;
+% ind=3504:3516
+% ind=3593:3600
 ADC=prc1(ind);
 depth=nm1(ind);
 cf_s=createFit_line_poly_N(depth,ADC,1,1)

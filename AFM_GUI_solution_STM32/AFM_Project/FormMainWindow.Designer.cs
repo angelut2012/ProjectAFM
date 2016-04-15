@@ -132,6 +132,7 @@
             this.label27 = new System.Windows.Forms.Label();
             this.label28 = new System.Windows.Forms.Label();
             this.button_Form_CoarsePositioner = new System.Windows.Forms.Button();
+            this.button_ShowImage = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -197,7 +198,7 @@
             this.textBox_Z_PID_P.Name = "textBox_Z_PID_P";
             this.textBox_Z_PID_P.Size = new System.Drawing.Size(55, 26);
             this.textBox_Z_PID_P.TabIndex = 24;
-            this.textBox_Z_PID_P.Text = "0.05";
+            this.textBox_Z_PID_P.Text = "0.01";
             this.toolTip_Help.SetToolTip(this.textBox_Z_PID_P, "Enter the step length here.");
             // 
             // textBox_Z_PID_I
@@ -207,7 +208,7 @@
             this.textBox_Z_PID_I.Name = "textBox_Z_PID_I";
             this.textBox_Z_PID_I.Size = new System.Drawing.Size(55, 26);
             this.textBox_Z_PID_I.TabIndex = 26;
-            this.textBox_Z_PID_I.Text = "0.02";
+            this.textBox_Z_PID_I.Text = "0.01";
             this.toolTip_Help.SetToolTip(this.textBox_Z_PID_I, "Enter the step length here.");
             // 
             // textBox_Z_PID_D
@@ -217,7 +218,7 @@
             this.textBox_Z_PID_D.Name = "textBox_Z_PID_D";
             this.textBox_Z_PID_D.Size = new System.Drawing.Size(55, 26);
             this.textBox_Z_PID_D.TabIndex = 25;
-            this.textBox_Z_PID_D.Text = "0";
+            this.textBox_Z_PID_D.Text = "0.0001";
             this.toolTip_Help.SetToolTip(this.textBox_Z_PID_D, "Enter the step length here.");
             // 
             // button_SetParameters
@@ -341,7 +342,7 @@
             this.textBox_Dy.Name = "textBox_Dy";
             this.textBox_Dy.Size = new System.Drawing.Size(55, 26);
             this.textBox_Dy.TabIndex = 57;
-            this.textBox_Dy.Text = "6000";
+            this.textBox_Dy.Text = "22000";
             this.toolTip_Help.SetToolTip(this.textBox_Dy, "Enter the step length here.");
             // 
             // textBox_Dx
@@ -351,7 +352,7 @@
             this.textBox_Dx.Name = "textBox_Dx";
             this.textBox_Dx.Size = new System.Drawing.Size(55, 26);
             this.textBox_Dx.TabIndex = 55;
-            this.textBox_Dx.Text = "6000";
+            this.textBox_Dx.Text = "22000";
             this.toolTip_Help.SetToolTip(this.textBox_Dx, "Enter the step length here.");
             // 
             // textBox_YL
@@ -391,7 +392,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(55, 26);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "40";
+            this.textBox_Sensitivity.Text = "35.3";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm
@@ -401,7 +402,7 @@
             this.textBox_SetDeltaValueNm.Name = "textBox_SetDeltaValueNm";
             this.textBox_SetDeltaValueNm.Size = new System.Drawing.Size(55, 26);
             this.textBox_SetDeltaValueNm.TabIndex = 67;
-            this.textBox_SetDeltaValueNm.Text = "2";
+            this.textBox_SetDeltaValueNm.Text = "5";
             this.toolTip_Help.SetToolTip(this.textBox_SetDeltaValueNm, "Enter the step length here.");
             // 
             // textBox_NumberOfFrameToScan
@@ -860,7 +861,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(850, 665);
+            this.button2.Location = new System.Drawing.Point(639, 440);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 47);
             this.button2.TabIndex = 51;
@@ -1035,7 +1036,7 @@
             // 
             this.button_SetScanROI.Location = new System.Drawing.Point(246, 271);
             this.button_SetScanROI.Name = "button_SetScanROI";
-            this.button_SetScanROI.Size = new System.Drawing.Size(98, 32);
+            this.button_SetScanROI.Size = new System.Drawing.Size(94, 32);
             this.button_SetScanROI.TabIndex = 76;
             this.button_SetScanROI.Text = "ROI";
             this.button_SetScanROI.UseVisualStyleBackColor = true;
@@ -1191,6 +1192,16 @@
             this.button_Form_CoarsePositioner.UseVisualStyleBackColor = true;
             this.button_Form_CoarsePositioner.Click += new System.EventHandler(this.button_Form_CoarsePositioner_Click);
             // 
+            // button_ShowImage
+            // 
+            this.button_ShowImage.Location = new System.Drawing.Point(246, 317);
+            this.button_ShowImage.Name = "button_ShowImage";
+            this.button_ShowImage.Size = new System.Drawing.Size(94, 32);
+            this.button_ShowImage.TabIndex = 96;
+            this.button_ShowImage.Text = "show image";
+            this.button_ShowImage.UseVisualStyleBackColor = true;
+            this.button_ShowImage.Click += new System.EventHandler(this.button_ShowImage_Click);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -1200,6 +1211,7 @@
             this.BackgroundImage = global::NameSpace_AFM_Project.Properties.Resources.back_ground_blue;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1196, 902);
+            this.Controls.Add(this.button_ShowImage);
             this.Controls.Add(this.button_Form_CoarsePositioner);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.textBox_T);
@@ -1406,6 +1418,7 @@
         private System.Windows.Forms.TextBox textBox_T;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button button_Form_CoarsePositioner;
+        private System.Windows.Forms.Button button_ShowImage;
     }
 }
 

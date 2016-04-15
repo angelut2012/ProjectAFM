@@ -37,14 +37,15 @@ extern DigitalOut *p_LED;//(PORT_LED);
 
 
 //////////////////////////////////////hardware test functions
-void toggle_pin(PinName port = PORT_LED)
+void toggle_pin(PinName port)
 {
 	static bool v = 0;
 	v = !v;
 	DigitalOut p(port);
 	p = v;
 }
-void toggle_p_pin(DigitalOut* p)
+void toggle_pin_led(){toggle_pin(PORT_LED);};
+void toggle_pin_p(DigitalOut* p)
 {
 	static bool v = 0;
 	v = !v;
@@ -109,7 +110,7 @@ void test_blink_LED()
 	while (1)
 	{
 		
-		toggle_pin();
+		toggle_pin_led();
 		wait(0.6);
 		
 //		p_LED->write(1);
@@ -165,7 +166,7 @@ extern	CDAC mAFM_DAC;
 //		mAFM_DAC.DAC_write(PIEZO_X, BIT18MAX);//4000
 //		mAFM_DAC.DAC_write(PIEZO_Y, BIT18MAX);//4000
 //		wait(2);
-//		toggle_pin();
+//		toggle_pin_led();
 //	}	
 	
 //	while (1)	// 10 kHz, data rate=20k Hz
@@ -178,7 +179,7 @@ extern	CDAC mAFM_DAC;
 //		mAFM_DAC.DAC_write(PIEZO_X, BIT18MAX);//4000
 //		mAFM_DAC.DAC_write(PIEZO_Y, BIT18MAX);//4000
 //		wait(0.5);
-//		toggle_pin();
+//		toggle_pin_led();
 //	}
 	
 	
@@ -191,7 +192,7 @@ extern	CDAC mAFM_DAC;
 	//for (int m = 0;m < 4;m++)	
 	{
 		int m = 0;
-		toggle_pin();
+		toggle_pin_led();
 		
 //		mAFM_DAC.Initialize(m, 18, 500);
 
@@ -237,13 +238,13 @@ void test_SEM_ADC_read()
 //		x++;
 //		if (x == 0) mUSerial.println(value[0]);
 //		mAFM_SEM.ADC_Read_Chain(value, 6);		
-//		toggle_pin();
+//		toggle_pin_led();
 //		mUSerial.process();
 //	}
 	
 	while (1)
 	//for (int m=0;m<4;m++)	
-	{ toggle_pin();
+	{ toggle_pin_led();
 		
 		wait(0.2);
 		int m = 2;

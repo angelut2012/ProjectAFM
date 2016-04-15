@@ -48,6 +48,7 @@
             this.textBox_T_test_dt = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.button_WaveStop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_PositionZ)).BeginInit();
             this.SuspendLayout();
             // 
@@ -194,7 +195,7 @@
             this.textBox_T_Test_cycles.Name = "textBox_T_Test_cycles";
             this.textBox_T_Test_cycles.Size = new System.Drawing.Size(57, 20);
             this.textBox_T_Test_cycles.TabIndex = 15;
-            this.textBox_T_Test_cycles.Text = "20";
+            this.textBox_T_Test_cycles.Text = "0";
             // 
             // label5
             // 
@@ -231,11 +232,22 @@
             this.label7.TabIndex = 19;
             this.label7.Text = "---------------------";
             // 
+            // button_WaveStop
+            // 
+            this.button_WaveStop.Location = new System.Drawing.Point(632, 98);
+            this.button_WaveStop.Name = "button_WaveStop";
+            this.button_WaveStop.Size = new System.Drawing.Size(111, 32);
+            this.button_WaveStop.TabIndex = 20;
+            this.button_WaveStop.Text = "stop";
+            this.button_WaveStop.UseVisualStyleBackColor = true;
+            this.button_WaveStop.Click += new System.EventHandler(this.button_WaveStop_Click);
+            // 
             // ParameterSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1829, 639);
+            this.Controls.Add(this.button_WaveStop);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox_T_test_dt);
@@ -286,5 +298,6 @@
         private System.Windows.Forms.TextBox textBox_T_test_dt;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button button_WaveStop;
     }
 }

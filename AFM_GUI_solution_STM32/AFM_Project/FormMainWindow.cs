@@ -159,9 +159,9 @@ namespace NameSpace_AFM_Project
 
         //#define MAX_RANGE_Z_NM ( 7.299788679537674*1000.0)
 
-        const double MAX_RANGE_Z_NM = (14 * 1000.0);//(21.387973775678940 * 1000.0);
-        const double MAX_RANGE_X_NM = (50 * 1000.0);
-        const double MAX_RANGE_Y_NM = (50 * 1000.0);
+        const double MAX_RANGE_Z_NM = (21.04 * 1000.0);//(21.387973775678940 * 1000.0);
+        const double MAX_RANGE_X_NM = (71.72 * 1000.0);
+        const double MAX_RANGE_Y_NM = (95.18 * 1000.0);
         public double[] MAX_RANGE_AXIS_NM = { MAX_RANGE_Z_NM, MAX_RANGE_X_NM, MAX_RANGE_Y_NM };
         /// <image defines>
         const int max_image_width = 512;
@@ -203,7 +203,7 @@ namespace NameSpace_AFM_Project
         public double[,] mImageArrayHR;//= new double[para_Nx, para_Ny];
         public double[,] mImageArrayER;//= new double[para_Nx, para_Ny];
         int point_now_x = 0;//+-(1~Nx) for MKernel
-        int point_now_y = 0;
+        public int point_now_y = 0;
         Thread mThread_SaveImage;
 
         int mCounter_ComReadByte = 0;
@@ -229,6 +229,7 @@ namespace NameSpace_AFM_Project
 
 
         public double Z_position_now = 0;
+        Form_ImageShow_Realtime mForm_ImageShow_Realtime;
 
         public MainWindow()
         {
@@ -276,6 +277,7 @@ namespace NameSpace_AFM_Project
 
             //mDataPath += GetCurrentTimeString() + "\\";
             System.IO.Directory.CreateDirectory(mDataPath);
+            mForm_ImageShow_Realtime = new Form_ImageShow_Realtime(this);
         }
         public void ThreadFunction_UpdateUI()
         {
@@ -436,7 +438,6 @@ namespace NameSpace_AFM_Project
             if (output.Length > 1) MY_DEBUG(output);
         }
 
-
         public void Function_UpdateUI()
         {
             if (Sys_Inf != null)
@@ -592,9 +593,11 @@ namespace NameSpace_AFM_Project
             MY_DEBUG("set parameters start.");
             //pid
             set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -100, 100);//0.001, 500)
-            set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0, 100);
-            set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0, 100);
-            set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0, 100);
+            set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0.0001, 100);
+            set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0.0001, 100);
+            set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0.00000001, 100);
+
+            //return;
             // XY resolution
 
             //  textBox_Nx.Text.to
@@ -764,7 +767,7 @@ namespace NameSpace_AFM_Project
             serialPort_Arduino = new SerialPort(com_number, Convert.ToInt32(textBox_BaudRate.Text), Parity.None, 8, StopBits.One);
             serialPort_Arduino.DataReceived += new SerialDataReceivedEventHandler(on_Received_serialPort_DataReceivedHandler);
             serialPort_Arduino.Encoding = Encoding.GetEncoding("Windows-1252");
-            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC*100;
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
             serialPort_Arduino.ReadTimeout = 2;
             serialPort_Arduino.WriteTimeout = 2000;
             serialPort_Arduino.DtrEnable = true;
@@ -924,7 +927,7 @@ namespace NameSpace_AFM_Project
 
         private void timerFunction_Appraoch(object sender, EventArgs e)
         {
-            if (mApproach_heat_beat_received == -1)
+           // if (mApproach_heat_beat_received == -1)
             {
                 send_Data_Frame_To_Arduino('C', 'A', 'P');
                 MY_DEBUG("retrigger");
@@ -1115,11 +1118,13 @@ namespace NameSpace_AFM_Project
             //show received data
             //Updata_UI_Richtext(db);
 
+            //string back= System.Text.Encoding.UTF8.GetString(db, 0, db.Length);
+            //MY_DEBUG(back);
 
             // must use this method, otherwise may lose data
             //serialPort_Arduino.DiscardInBuffer();
             int ind = on_Received_com_frame_anaysis(db, LENGTH_COM_BUFFER_MCU2PC * 2);
-            //MY_DEBUG("ind:",ind);
+           
             if (mCounter_ComReadByte >= LENGTH_COM_BUFFER_MCU2PC && ind == 0)
             {
                 for (int k = 0; k < db.Length - LENGTH_COM_BUFFER_MCU2PC; k++)
@@ -1224,6 +1229,7 @@ namespace NameSpace_AFM_Project
             double v1 = convert_byte3_to_uint32(com_buffer, ind + 3);
             double v2 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3);
             double v3 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3 + 3);
+            //return;
             if (index == 0)
             {
 
@@ -1336,7 +1342,7 @@ namespace NameSpace_AFM_Project
                 + " x:" + Convert.ToString(indx)
                 + " y:" + Convert.ToString(indy)
                 + " H:" + String.Format("{0:0.0}", vH)//vH.ToString()//Convert.ToString(vH)
-                + " E:" + String.Format("{0:0.0}", vE)//vE.ToString()//Convert.ToString(vE)
+                + " E:" + vE.ToString()//String.Format("{0:0.0}", vE)//vE.ToString()//Convert.ToString(vE)
                 );
 
 
@@ -1440,7 +1446,11 @@ namespace NameSpace_AFM_Project
                 Thread.Sleep(300);
                 //Thread.Sleep(1000);// add wait
                 if (mApproach_state == true)
+                {
+                    timer_Approach.Stop();
+                    timer_Approach.Start();// to monitor, in dt mcu will send back a signal
                     send_Data_Frame_To_Arduino('C', 'A', 'P');
+                }
                 else
                 {
                     timer_Approach.Stop();
@@ -1616,17 +1626,18 @@ namespace NameSpace_AFM_Project
         public void Apporach_start()
         {
             MY_DEBUG("start approach.");
-
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
             //AFM_coarse_positioner_SetSpeed(250);
             //AFM_coarse_positioner_MoveDistance(2, MAX_RANGE_Z_NM * 1.21);// % for safety reason, first move up 25*1.2 um
 
             mCCoarsePositioner.MoveDistance(mCaxis_z, MAX_RANGE_Z_NM * 1.21, 250);// move away up for safety reason
             //Thread.Sleep(1500);
-            Thread.Sleep(1500);
+            Thread.Sleep(3000);
             //AFM_coarse_positioner_SetSpeed(10);
 
             send_Data_Frame_To_Arduino('C', 'A', 'P');
-            timer_Approach.Interval = 6512;
+            timer_Approach.Interval = 10000; //6512;
+            timer_Approach.Stop();
             timer_Approach.Start();//trigger function   timerFunction_Appraoch
             mApproach_CoarseStepCounter = 0;
 
@@ -1707,6 +1718,7 @@ namespace NameSpace_AFM_Project
             mSwitch_ShowComDdata = true;
             // for (int k = 0; k < 10; k++)
             { send_Data_Frame_To_Arduino('C', 'Z', 'W'); Thread.Sleep(100); }
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
         }
         private void checkBox_Y_ScanEnable_CheckedChanged(object sender, EventArgs e)
         {
@@ -1720,6 +1732,7 @@ namespace NameSpace_AFM_Project
 
         private void button_XY_Scan_Click(object sender, EventArgs e)
         {
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC * 100;
             button_XY_Scan_Function();
             mSwitch_ShowComDdata = false;
         }
@@ -1755,10 +1768,10 @@ namespace NameSpace_AFM_Project
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MY_DEBUG("tres");
-            SpeakVoice("I am test a word");
-            SpeakVoice("you are rate");
-
+            //MY_DEBUG("tres");
+            //SpeakVoice("I am test a word");
+            //SpeakVoice("you are rate");
+            UpdateImageShow_SaveMat("test");
 
 
             //
@@ -2024,6 +2037,17 @@ namespace NameSpace_AFM_Project
         {
             Form_CoarsePositioner mForm_CoarsePositioner = new Form_CoarsePositioner(this);
             mForm_CoarsePositioner.Show();
+        }
+
+
+        private void button_ShowImage_Click(object sender, EventArgs e)
+        {
+
+            if (mForm_ImageShow_Realtime.IsDisposed)
+                mForm_ImageShow_Realtime = new Form_ImageShow_Realtime(this);
+            mForm_ImageShow_Realtime.Show();
+            mForm_ImageShow_Realtime.StartUpdate();
+
         }
     }
 

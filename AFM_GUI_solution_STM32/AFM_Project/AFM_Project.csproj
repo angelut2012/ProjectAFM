@@ -63,6 +63,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Speech" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -71,6 +72,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ZedGraph">
+      <HintPath>C:\ZedGraph.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CCoarseController.cs" />
@@ -95,6 +99,12 @@
     <Compile Include="Form_ImageShow_DrawROI.Designer.cs">
       <DependentUpon>Form_ImageShow_DrawROI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_ImageShow_Realtime.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageShow_Realtime.Designer.cs">
+      <DependentUpon>Form_ImageShow_Realtime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_Indentation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -115,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageShow_DrawROI.resx">
       <DependentUpon>Form_ImageShow_DrawROI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_ImageShow_Realtime.resx">
+      <DependentUpon>Form_ImageShow_Realtime.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterSettingForm.resx">
       <DependentUpon>ParameterSettingForm.cs</DependentUpon>
