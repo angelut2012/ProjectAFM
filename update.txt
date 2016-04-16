@@ -1,3 +1,8 @@
+201604015_2
+ui merge 
+
+pid class add computePI
+
 20160415
 image results get.
 many changes. in GUI, add zedgraph for line show.

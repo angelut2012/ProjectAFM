@@ -96,7 +96,46 @@ double PID::Compute(double mInput)
 	//else return false;
 	return output;
 }
+double PID::ComputePI(double mInput)
+{
+	// if(!inAuto) return false;
+	/*Compute all the working error variables*/
+	double input = mInput;
+	double dInput = (input - lastInput);
 
+	error = mySetpoint - input;
+	ITerm += (ki * error);
+	if (ITerm > outMax) ITerm = outMax;
+	else if (ITerm < outMin) ITerm = outMin;
+
+	/*Compute PID Output*/
+	double output = 0;
+	if (mDirection_DirectTrue_ReverseFalse == false)
+	{//output = kp * error + ITerm- kd * dInput;
+		output += kp * error;
+		output += ITerm;
+		//output -= kd * dInput;
+	}
+	else
+	{//output =-( kp * error + ITerm- kd * dInput;)
+		output -= kp * error;
+		output -= ITerm;
+		//output += kd * dInput;
+	}		
+
+	if (output > outMax) output = outMax;
+	else if (output < outMin) output = outMin;
+	myOutput = output;
+
+	/*Remember some variables for next time*/
+	lastInput = input;
+	// return true;
+	//   lastTime = now;
+	//return true;
+	//}
+	//else return false;
+	return output;
+}
 
 /* SetTunings(...)*************************************************************
 * This function allows the controller's dynamic performance to be adjusted. 

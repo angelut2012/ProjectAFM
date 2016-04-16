@@ -352,10 +352,10 @@ namespace NameSpace_AFM_Project
                 UpdateGUITextBox_Invoke(ref para_TF_DC_Gain, textBox_TF_DC_Gain);//, 1, 2000);
 
 
-                UpdateGUITextBox_Invoke(ref para_IC0_DR[0], textBox_IC0_R0);
-                UpdateGUITextBox_Invoke(ref para_IC0_DR[1], textBox_IC0_R1);
-                UpdateGUITextBox_Invoke(ref para_IC0_DR[2], textBox_IC0_R2);
-                UpdateGUITextBox_Invoke(ref para_IC0_DR[3], textBox_IC0_R3);
+                //UpdateGUITextBox_Invoke(ref para_IC0_DR[0], textBox_IC0_R0);
+                //UpdateGUITextBox_Invoke(ref para_IC0_DR[1], textBox_IC0_R1);
+                //UpdateGUITextBox_Invoke(ref para_IC0_DR[2], textBox_IC0_R2);
+                //UpdateGUITextBox_Invoke(ref para_IC0_DR[3], textBox_IC0_R3);
 
                 ImageArray_SizeReset();// according to para_Nx,para_Ny
                 ImageArray_ValueReset();
@@ -457,10 +457,10 @@ namespace NameSpace_AFM_Project
                     break;
             set_AFM_parameters('a', k);
         }
-        private void button_Stop_Click(object sender, EventArgs e)
-        {
-            //mManipulator.Stop(axis);
-        }
+        //private void button_Stop_Click(object sender, EventArgs e)
+        //{
+        //    //mManipulator.Stop(axis);
+        //}
         private void button_MoveToEnd_Click(object sender, EventArgs e)
         {
             //mManipulator.MoveAtSpeed(axis, Convert.ToDouble(// textBox_Speed.Text) * (1));
@@ -632,14 +632,14 @@ namespace NameSpace_AFM_Project
 
 
             // set channel5, Dout2 last will cause self-oscillation stop on madcity lab probe
-            send_DR_Value(0, 5, Convert.ToByte(checkBox_IC0_DO2.Checked));
+            //send_DR_Value(0, 5, Convert.ToByte(checkBox_IC0_DO2.Checked));
 
-            send_DR_Value(0, 0, (byte)Convert.ToDouble(textBox_IC0_R0.Text));
-            send_DR_Value(0, 1, (byte)Convert.ToDouble(textBox_IC0_R1.Text));
-            send_DR_Value(0, 2, (byte)Convert.ToDouble(textBox_IC0_R2.Text));
-            send_DR_Value(0, 3, (byte)Convert.ToDouble(textBox_IC0_R3.Text));
+            //send_DR_Value(0, 0, (byte)Convert.ToDouble(textBox_IC0_R0.Text));
+            //send_DR_Value(0, 1, (byte)Convert.ToDouble(textBox_IC0_R1.Text));
+            //send_DR_Value(0, 2, (byte)Convert.ToDouble(textBox_IC0_R2.Text));
+            //send_DR_Value(0, 3, (byte)Convert.ToDouble(textBox_IC0_R3.Text));
 
-            trackBar_R01.Value = Convert.ToInt32(para_IC0_DR[0]);
+            //trackBar_R01.Value = Convert.ToInt32(para_IC0_DR[0]);
 
             string t = DateTime.Now.ToString("yyyyMMddHHmmss");
             SaveAFMParaToTextFile(t);
@@ -733,12 +733,12 @@ namespace NameSpace_AFM_Project
         }
 
 
-        private void button_SetStepLength_Click(object sender, EventArgs e)
-        {
-            double sl = Convert.ToDouble(textBox_IC0_R0.Text);
-            sl = Math.Abs(sl);
-            textBox_IC0_R0.Text = Convert.ToString(sl);
-        }
+        //private void button_SetStepLength_Click(object sender, EventArgs e)
+        //{
+        //    double sl = Convert.ToDouble(textBox_IC0_R0.Text);
+        //    sl = Math.Abs(sl);
+        //    textBox_IC0_R0.Text = Convert.ToString(sl);
+        //}
 
 
         //////////////////////////////////////////////////////////////////////
@@ -831,47 +831,47 @@ namespace NameSpace_AFM_Project
             v = v - v % 1;// convert to int
             T.Text = Convert.ToString(v);
         }
-        private void text_CheckKeys_IC0R0(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                CheckRange_TextBox(textBox_IC0_R0, 0, 255);
-                send_DR_Value(0, 0, Convert.ToByte(textBox_IC0_R0.Text));
-            }
-        }
-        private void text_CheckKeys_IC0R1(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                CheckRange_TextBox(textBox_IC0_R1, 0, 255);
-                send_DR_Value(0, 1, Convert.ToByte(textBox_IC0_R1.Text));
-            }
-        }
-        private void text_CheckKeys_IC0R2(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                CheckRange_TextBox(textBox_IC0_R2, 0, 255);
-                send_DR_Value(0, 2, Convert.ToByte(textBox_IC0_R2.Text));
-            }
-        }
-        private void text_CheckKeys_IC0R3(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)13)
-            {
-                CheckRange_TextBox(textBox_IC0_R3, 0, 255);
-                send_DR_Value(0, 3, Convert.ToByte(textBox_IC0_R3.Text));
-            }
-        }
-        private void checkBox_IC0_DO1_CheckedChanged(object sender, EventArgs e)
-        {
-            send_DR_Value(0, 4, Convert.ToByte(checkBox_IC0_DO1.Checked));
-        }
+        //private void text_CheckKeys_IC0R0(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == (char)13)
+        //    {
+        //        CheckRange_TextBox(textBox_IC0_R0, 0, 255);
+        //        send_DR_Value(0, 0, Convert.ToByte(textBox_IC0_R0.Text));
+        //    }
+        //}
+        //private void text_CheckKeys_IC0R1(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == (char)13)
+        //    {
+        //        CheckRange_TextBox(textBox_IC0_R1, 0, 255);
+        //        send_DR_Value(0, 1, Convert.ToByte(textBox_IC0_R1.Text));
+        //    }
+        //}
+        //private void text_CheckKeys_IC0R2(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == (char)13)
+        //    {
+        //        CheckRange_TextBox(textBox_IC0_R2, 0, 255);
+        //        send_DR_Value(0, 2, Convert.ToByte(textBox_IC0_R2.Text));
+        //    }
+        //}
+        //private void text_CheckKeys_IC0R3(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        //{
+        //    if (e.KeyChar == (char)13)
+        //    {
+        //        CheckRange_TextBox(textBox_IC0_R3, 0, 255);
+        //        send_DR_Value(0, 3, Convert.ToByte(textBox_IC0_R3.Text));
+        //    }
+        //}
+        //private void checkBox_IC0_DO1_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    send_DR_Value(0, 4, Convert.ToByte(checkBox_IC0_DO1.Checked));
+        //}
 
-        private void checkBox_IC0_DO2_CheckedChanged(object sender, EventArgs e)
-        {
-            send_DR_Value(0, 5, Convert.ToByte(checkBox_IC0_DO2.Checked));
-        }
+        //private void checkBox_IC0_DO2_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    send_DR_Value(0, 5, Convert.ToByte(checkBox_IC0_DO2.Checked));
+        //}
 
         //AA 55 52 03 f0 55 AA
         //AA 55 52 05 01 55 AA turn on IC0_DO2
@@ -977,19 +977,19 @@ namespace NameSpace_AFM_Project
             {
                 try
                 {
-                    this.richTextBox_serial_read.BeginInvoke((MethodInvoker)delegate()
-                    {
-                        //richTextBox_serial_read.Text = System.Text.Encoding.UTF8.GetString(db);
-                        return;
+                    //this.richTextBox_serial_read.BeginInvoke((MethodInvoker)delegate()
+                    //{
+                    //    //richTextBox_serial_read.Text = System.Text.Encoding.UTF8.GetString(db);
+                    //    return;
 
-                        if (richTextBox_serial_read.Text.Length < 2000)
-                            richTextBox_serial_read.Text += System.Text.Encoding.UTF8.GetString(db);
-                        else
-                            richTextBox_serial_read.Text = null;
-                        // auto roll down
-                        richTextBox_serial_read.SelectionStart = richTextBox_serial_read.Text.Length; //Set the current caret position at the end
-                        richTextBox_serial_read.ScrollToCaret(); //Now scroll it automatically
-                    });
+                    //    if (richTextBox_serial_read.Text.Length < 2000)
+                    //        richTextBox_serial_read.Text += System.Text.Encoding.UTF8.GetString(db);
+                    //    else
+                    //        richTextBox_serial_read.Text = null;
+                    //    // auto roll down
+                    //    richTextBox_serial_read.SelectionStart = richTextBox_serial_read.Text.Length; //Set the current caret position at the end
+                    //    richTextBox_serial_read.ScrollToCaret(); //Now scroll it automatically
+                    //});
                 }
                 catch
                 { MY_DEBUG("Updata_UI_Richtext error"); }
@@ -1564,40 +1564,40 @@ namespace NameSpace_AFM_Project
         //    else
         //        Thread.Sleep(10);
         //}
-        /////////// coarse positioner end
-        private void trackBar_R1_Scroll(object sender, EventArgs e)
-        {
-            byte v = Convert.ToByte(trackBar_R1.Value);
-            textBox_IC0_R1.Text = Convert.ToString(v);
-            send_DR_Value(0, 1, v);
-        }
+        ///////////// coarse positioner end
+        //private void trackBar_R1_Scroll(object sender, EventArgs e)
+        //{
+        //    byte v = Convert.ToByte(trackBar_R1.Value);
+        //    textBox_IC0_R1.Text = Convert.ToString(v);
+        //    send_DR_Value(0, 1, v);
+        //}
 
-        private void trackBar_R0_Scroll(object sender, EventArgs e)
-        {
-            byte v = Convert.ToByte(trackBar_R0.Value);
-            //v= (byte)(255 - v);
-            textBox_IC0_R0.Text = Convert.ToString(v);
-            send_DR_Value(0, 0, v);
-
-
-            /*  byte v = Convert.ToByte(trackBar_R0.Value);
-              byte rv = (byte)(255 - v);
-              textBox_IC0_R0.Text = Convert.ToString(rv);
-              textBox_IC0_R1.Text = Convert.ToString(v);
-              send_DR_Value(0, 0, rv);
-              Thread.Sleep(100);
-              send_DR_Value(0, 1, v);
-              Thread.Sleep(100);*/
+        //private void trackBar_R0_Scroll(object sender, EventArgs e)
+        //{
+        //    byte v = Convert.ToByte(trackBar_R0.Value);
+        //    //v= (byte)(255 - v);
+        //    textBox_IC0_R0.Text = Convert.ToString(v);
+        //    send_DR_Value(0, 0, v);
 
 
-        }
+        //    /*  byte v = Convert.ToByte(trackBar_R0.Value);
+        //      byte rv = (byte)(255 - v);
+        //      textBox_IC0_R0.Text = Convert.ToString(rv);
+        //      textBox_IC0_R1.Text = Convert.ToString(v);
+        //      send_DR_Value(0, 0, rv);
+        //      Thread.Sleep(100);
+        //      send_DR_Value(0, 1, v);
+        //      Thread.Sleep(100);*/
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
-        {
-            byte v = Convert.ToByte(trackBar_IC1R3.Value);
-            textBox_IC0_R3.Text = Convert.ToString(v);
-            send_DR_Value(0, 3, v);
-        }
+
+        //}
+
+        //private void trackBar1_Scroll(object sender, EventArgs e)
+        //{
+        //    byte v = Convert.ToByte(trackBar_IC1R3.Value);
+        //    textBox_IC0_R3.Text = Convert.ToString(v);
+        //    send_DR_Value(0, 3, v);
+        //}
 
 
         private void button_Apporach_Click(object sender, EventArgs e)
@@ -1757,7 +1757,7 @@ namespace NameSpace_AFM_Project
             //with draw Z, stop Zloop PID, and stop xy scan and xy move to XL YL
         }
 
-        private void button_CoarseLiftUp_Click(object sender, EventArgs e)
+        private void button_CoarseLiftUp_Click()
         {
             send_Data_Frame_To_Arduino('C', 'A', 'C');// with draw Z axis
             Thread.Sleep(10);
@@ -1983,24 +1983,24 @@ namespace NameSpace_AFM_Project
 
         }
 
-        private void trackBar_R01_Scroll(object sender, EventArgs e)
-        {
-            byte v = Convert.ToByte(trackBar_R01.Value);
-            textBox_IC0_R0.Text = Convert.ToString(v);
-            textBox_IC0_R1.Text = Convert.ToString(v);
-            send_DR_Value(0, 0, v);
-            send_DR_Value(0, 1, v);
-        }
+        //private void trackBar_R01_Scroll(object sender, EventArgs e)
+        //{
+        //    byte v = Convert.ToByte(trackBar_R01.Value);
+        //    textBox_IC0_R0.Text = Convert.ToString(v);
+        //    textBox_IC0_R1.Text = Convert.ToString(v);
+        //    send_DR_Value(0, 0, v);
+        //    send_DR_Value(0, 1, v);
+        //}
 
-        private void checkBox_T_ScanEnable_CheckedChanged(object sender, EventArgs e)
-        {
-            char ch;
-            if (checkBox_T_ScanEnable.Checked == true)
-                ch = 'E';
-            else
-                ch = 'D';
-            send_Data_Frame_To_Arduino('C', 'T', ch);
-        }
+        //private void checkBox_T_ScanEnable_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    char ch;
+        //    if (checkBox_T_ScanEnable.Checked == true)
+        //        ch = 'E';
+        //    else
+        //        ch = 'D';
+        //    send_Data_Frame_To_Arduino('C', 'T', ch);
+        //}
 
         private void button_MultiTask_Click(object sender, EventArgs e)
         {
@@ -2049,6 +2049,24 @@ namespace NameSpace_AFM_Project
             mForm_ImageShow_Realtime.StartUpdate();
 
         }
+
+        //-------------------------------------------------------------------------UIbutton --------------------
+        private void button_SEM_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button_AutoApproach_Click(object sender, EventArgs e)
+        {
+            Apporach_start_multi();
+        }
+
+        private void button_Coarse_MoveToHomePosition_Click(object sender, EventArgs e)
+        {
+            button_CoarseLiftUp_Click();
+        }
+
+
     }
 
 

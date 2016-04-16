@@ -24,6 +24,7 @@ class PID
 	PID(bool Direction_DirectTrue_ReverseFalse);     //   Setpoint.  Initial tuning parameters are also set here
     //void SetMode(int Mode);               // * sets PID to either Manual (0) or Auto (non-0)
 	//void FastCompute(); 14us
+	double ComputePI(double mInput);
 	double Compute(double mInput);                     // * performs the PID calculation.  it should be
                                           //   called every time loop() cycles. ON/OFF and
                                           //   calculation frequency can be set using SetMode

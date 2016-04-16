@@ -477,7 +477,7 @@ public:
 
 		//mIndentData[3][mI_MaxStep] = {0};
 
-		mZPID_WorkingDistance_nm = 2;// set working voltage;// receive from rs232
+		mZPID_WorkingDistance_nm = 5;// set working voltage;// receive from rs232
 		DTS_Sensitivity_B18_per_nm = 40; //192/2;// nm/V   // receive from rs232
 		VWset_deltaV_ADC_b18 = 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZPID_WorkingDistance_nm
 		mTF_DC_Gain = 1;// gain for tf DC actuation
@@ -1137,7 +1137,7 @@ public:
 		
 #if(ADC_PORT_ZlOOP_SENSOR==ADC_CHANNEL_PRC)
 			// for PRC, use mZPID_WorkingDistance_nm as nm,
-		DSet_01 = VdeltaF_FarAway_01 - (double)(mZPID_WorkingDistance_nm) / DTS_Sensitivity_B18_per_nm / BIT18MAX;
+		DSet_01 = VdeltaF_FarAway_01 - (double)(mZPID_WorkingDistance_nm) * DTS_Sensitivity_B18_per_nm / BIT18MAX;
 #else	// tuning fork
 		DSet_01 = VdeltaF_FarAway_01 - (double)(mZPID_WorkingDistance_nm) / 1000.0 / VADC_Ref_V;
 #endif	
@@ -1146,8 +1146,8 @@ public:
 		mZ_Loop_PID->SetReferenceValue(DSet_01);
 		double zpid_limit = MAX_STEP_SIZE_PIEZO_MODEL_01;
 		mZ_Loop_PID->SetOutputLimits(-zpid_limit, zpid_limit);// limit the change in each period
-		mZ_Loop_PID->SetPID_P(0.01);//0.1
-		mZ_Loop_PID->SetPID_I(0.01);//0.05
+		mZ_Loop_PID->SetPID_P(1);//0.1
+		mZ_Loop_PID->SetPID_I(0.5);//0.05
 		mZ_Loop_PID->SetPID_D(0);
 	}
 
@@ -1363,7 +1363,7 @@ public:
 		Z_sensor_height = Z_sensor_height/BIT24MAX;
 		
 		DInput_01 = (double)V18_Adc[ADC_PORT_ZlOOP_SENSOR]*BIT18MAX_RECIPROCAL;// normalize
-		DOutput_01 = mZ_Loop_PID->Compute(DInput_01);
+		DOutput_01 = mZ_Loop_PID->ComputePI(DInput_01);
 
 		z_output_01 += DOutput_01;
 		z_output_01 = LIMIT_MAX_MIN(z_output_01, 1, 0);
