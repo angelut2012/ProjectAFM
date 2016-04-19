@@ -81,6 +81,7 @@ public:
 		{
 			mUSerial.write(com_image_frame_buffer[pointer_out_frame_buffer]);
 			pointer_out_frame_buffer++;
+			mUSerial.process();
 		}
 		return pointer_out_frame_buffer;
 	};

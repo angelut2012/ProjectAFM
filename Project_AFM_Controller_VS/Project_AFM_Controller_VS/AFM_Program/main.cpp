@@ -13,6 +13,7 @@ DigitalOut p_Power_HV(D_PS_HV);
 
 int  main(void) 
 {	
+
 #ifdef __AFM_test
 		
 	//test_blink_all_IOs();

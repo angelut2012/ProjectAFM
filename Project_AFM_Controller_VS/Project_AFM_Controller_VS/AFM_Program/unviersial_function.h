@@ -53,6 +53,8 @@ template <class T> T MOD_range(T value, T range_max)
 //	return t;
 //}
 //
-
+//
+//double  wave_triangle_0ToMax(double delta, double value_max, bool reset);
+//
 
 #endif

@@ -1,3 +1,14 @@
+20160418
+bug fix in  usb::print(double)
+math: 
+sin(double) speed=4.762 us
+do not try hardware floating x/, not speed increase
+
+
+20160416
+
+PID OK
+
 201604015_2
 ui merge 
 

@@ -64,6 +64,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.button_XY_Scan = new System.Windows.Forms.Button();
+            this.button_XY_pause = new System.Windows.Forms.Button();
+            this.button_ClearImage = new System.Windows.Forms.Button();
+            this.button_Z_Engage = new System.Windows.Forms.Button();
+            this.button_Z_Withdraw = new System.Windows.Forms.Button();
+            this.checkBox_Y_ScanEnable = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.checkBox_COM_Transfer = new System.Windows.Forms.CheckBox();
@@ -72,11 +78,6 @@
             this.button_Apporach = new System.Windows.Forms.Button();
             this.button_CancelApproach = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.button_Z_Withdraw = new System.Windows.Forms.Button();
-            this.button_Z_Engage = new System.Windows.Forms.Button();
-            this.checkBox_Y_ScanEnable = new System.Windows.Forms.CheckBox();
-            this.button_XY_pause = new System.Windows.Forms.Button();
-            this.button_XY_Scan = new System.Windows.Forms.Button();
             this.timer_Approach = new System.Windows.Forms.Timer(this.components);
             this.button2 = new System.Windows.Forms.Button();
             this.label13 = new System.Windows.Forms.Label();
@@ -90,7 +91,6 @@
             this.label21 = new System.Windows.Forms.Label();
             this.label_SystemState = new System.Windows.Forms.Label();
             this.button_SaveImage = new System.Windows.Forms.Button();
-            this.button_ClearImage = new System.Windows.Forms.Button();
             this.checkBox_ShowImage = new System.Windows.Forms.CheckBox();
             this.button_StartSubWindow = new System.Windows.Forms.Button();
             this.label22 = new System.Windows.Forms.Label();
@@ -158,9 +158,9 @@
             this.tabPage_Memory = new System.Windows.Forms.TabPage();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage_DataExport = new System.Windows.Forms.TabPage();
-            this.tabPage_Control = new System.Windows.Forms.TabPage();
-            this.textBox_DataPath = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
+            this.textBox_DataPath = new System.Windows.Forms.TextBox();
+            this.tabPage_Control = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox6.SuspendLayout();
@@ -290,7 +290,7 @@
             // button_XY_Reset
             // 
             this.button_XY_Reset.Location = new System.Drawing.Point(14, 102);
-            this.button_XY_Reset.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_XY_Reset.Margin = new System.Windows.Forms.Padding(2);
             this.button_XY_Reset.Name = "button_XY_Reset";
             this.button_XY_Reset.Size = new System.Drawing.Size(67, 35);
             this.button_XY_Reset.TabIndex = 48;
@@ -498,6 +498,75 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Scanning";
             // 
+            // button_XY_Scan
+            // 
+            this.button_XY_Scan.Location = new System.Drawing.Point(14, 16);
+            this.button_XY_Scan.Margin = new System.Windows.Forms.Padding(2);
+            this.button_XY_Scan.Name = "button_XY_Scan";
+            this.button_XY_Scan.Size = new System.Drawing.Size(67, 35);
+            this.button_XY_Scan.TabIndex = 46;
+            this.button_XY_Scan.Text = "Start";
+            this.button_XY_Scan.UseVisualStyleBackColor = true;
+            this.button_XY_Scan.Click += new System.EventHandler(this.button_XY_Scan_Click);
+            // 
+            // button_XY_pause
+            // 
+            this.button_XY_pause.Location = new System.Drawing.Point(14, 60);
+            this.button_XY_pause.Margin = new System.Windows.Forms.Padding(2);
+            this.button_XY_pause.Name = "button_XY_pause";
+            this.button_XY_pause.Size = new System.Drawing.Size(67, 35);
+            this.button_XY_pause.TabIndex = 47;
+            this.button_XY_pause.Text = "pause";
+            this.button_XY_pause.UseVisualStyleBackColor = true;
+            this.button_XY_pause.Click += new System.EventHandler(this.button_XY_pause_Click);
+            // 
+            // button_ClearImage
+            // 
+            this.button_ClearImage.Location = new System.Drawing.Point(105, 102);
+            this.button_ClearImage.Margin = new System.Windows.Forms.Padding(2);
+            this.button_ClearImage.Name = "button_ClearImage";
+            this.button_ClearImage.Size = new System.Drawing.Size(67, 35);
+            this.button_ClearImage.TabIndex = 70;
+            this.button_ClearImage.Text = "clear image";
+            this.button_ClearImage.UseVisualStyleBackColor = true;
+            this.button_ClearImage.Click += new System.EventHandler(this.button_ClearImage_Click);
+            // 
+            // button_Z_Engage
+            // 
+            this.button_Z_Engage.Location = new System.Drawing.Point(105, 16);
+            this.button_Z_Engage.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Z_Engage.Name = "button_Z_Engage";
+            this.button_Z_Engage.Size = new System.Drawing.Size(67, 35);
+            this.button_Z_Engage.TabIndex = 44;
+            this.button_Z_Engage.Text = "engage";
+            this.button_Z_Engage.UseVisualStyleBackColor = true;
+            this.button_Z_Engage.Click += new System.EventHandler(this.button_Z_Engage_Click);
+            // 
+            // button_Z_Withdraw
+            // 
+            this.button_Z_Withdraw.Location = new System.Drawing.Point(105, 60);
+            this.button_Z_Withdraw.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Z_Withdraw.Name = "button_Z_Withdraw";
+            this.button_Z_Withdraw.Size = new System.Drawing.Size(67, 35);
+            this.button_Z_Withdraw.TabIndex = 45;
+            this.button_Z_Withdraw.Text = "withdraw";
+            this.button_Z_Withdraw.UseVisualStyleBackColor = true;
+            this.button_Z_Withdraw.Click += new System.EventHandler(this.button_Z_Withdraw_Click);
+            // 
+            // checkBox_Y_ScanEnable
+            // 
+            this.checkBox_Y_ScanEnable.AutoSize = true;
+            this.checkBox_Y_ScanEnable.Checked = true;
+            this.checkBox_Y_ScanEnable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_Y_ScanEnable.Location = new System.Drawing.Point(14, 146);
+            this.checkBox_Y_ScanEnable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.checkBox_Y_ScanEnable.Name = "checkBox_Y_ScanEnable";
+            this.checkBox_Y_ScanEnable.Size = new System.Drawing.Size(112, 17);
+            this.checkBox_Y_ScanEnable.TabIndex = 45;
+            this.checkBox_Y_ScanEnable.Text = "Enable Area Scan";
+            this.checkBox_Y_ScanEnable.UseVisualStyleBackColor = true;
+            this.checkBox_Y_ScanEnable.CheckedChanged += new System.EventHandler(this.checkBox_Y_ScanEnable_CheckedChanged);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -554,7 +623,7 @@
             // button_Apporach
             // 
             this.button_Apporach.Location = new System.Drawing.Point(10, 20);
-            this.button_Apporach.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_Apporach.Margin = new System.Windows.Forms.Padding(2);
             this.button_Apporach.Name = "button_Apporach";
             this.button_Apporach.Size = new System.Drawing.Size(90, 35);
             this.button_Apporach.TabIndex = 41;
@@ -565,7 +634,7 @@
             // button_CancelApproach
             // 
             this.button_CancelApproach.Location = new System.Drawing.Point(146, 20);
-            this.button_CancelApproach.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_CancelApproach.Margin = new System.Windows.Forms.Padding(2);
             this.button_CancelApproach.Name = "button_CancelApproach";
             this.button_CancelApproach.Size = new System.Drawing.Size(90, 35);
             this.button_CancelApproach.TabIndex = 42;
@@ -576,71 +645,13 @@
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(46, 197);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(88, 33);
             this.button1.TabIndex = 43;
             this.button1.Text = "reset mcu";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // button_Z_Withdraw
-            // 
-            this.button_Z_Withdraw.Location = new System.Drawing.Point(105, 60);
-            this.button_Z_Withdraw.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button_Z_Withdraw.Name = "button_Z_Withdraw";
-            this.button_Z_Withdraw.Size = new System.Drawing.Size(67, 35);
-            this.button_Z_Withdraw.TabIndex = 45;
-            this.button_Z_Withdraw.Text = "withdraw";
-            this.button_Z_Withdraw.UseVisualStyleBackColor = true;
-            this.button_Z_Withdraw.Click += new System.EventHandler(this.button_Z_Withdraw_Click);
-            // 
-            // button_Z_Engage
-            // 
-            this.button_Z_Engage.Location = new System.Drawing.Point(105, 16);
-            this.button_Z_Engage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button_Z_Engage.Name = "button_Z_Engage";
-            this.button_Z_Engage.Size = new System.Drawing.Size(67, 35);
-            this.button_Z_Engage.TabIndex = 44;
-            this.button_Z_Engage.Text = "engage";
-            this.button_Z_Engage.UseVisualStyleBackColor = true;
-            this.button_Z_Engage.Click += new System.EventHandler(this.button_Z_Engage_Click);
-            // 
-            // checkBox_Y_ScanEnable
-            // 
-            this.checkBox_Y_ScanEnable.AutoSize = true;
-            this.checkBox_Y_ScanEnable.Checked = true;
-            this.checkBox_Y_ScanEnable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_Y_ScanEnable.Location = new System.Drawing.Point(14, 146);
-            this.checkBox_Y_ScanEnable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.checkBox_Y_ScanEnable.Name = "checkBox_Y_ScanEnable";
-            this.checkBox_Y_ScanEnable.Size = new System.Drawing.Size(112, 17);
-            this.checkBox_Y_ScanEnable.TabIndex = 45;
-            this.checkBox_Y_ScanEnable.Text = "Enable Area Scan";
-            this.checkBox_Y_ScanEnable.UseVisualStyleBackColor = true;
-            this.checkBox_Y_ScanEnable.CheckedChanged += new System.EventHandler(this.checkBox_Y_ScanEnable_CheckedChanged);
-            // 
-            // button_XY_pause
-            // 
-            this.button_XY_pause.Location = new System.Drawing.Point(14, 60);
-            this.button_XY_pause.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button_XY_pause.Name = "button_XY_pause";
-            this.button_XY_pause.Size = new System.Drawing.Size(67, 35);
-            this.button_XY_pause.TabIndex = 47;
-            this.button_XY_pause.Text = "pause";
-            this.button_XY_pause.UseVisualStyleBackColor = true;
-            this.button_XY_pause.Click += new System.EventHandler(this.button_XY_pause_Click);
-            // 
-            // button_XY_Scan
-            // 
-            this.button_XY_Scan.Location = new System.Drawing.Point(14, 16);
-            this.button_XY_Scan.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button_XY_Scan.Name = "button_XY_Scan";
-            this.button_XY_Scan.Size = new System.Drawing.Size(67, 35);
-            this.button_XY_Scan.TabIndex = 46;
-            this.button_XY_Scan.Text = "Start";
-            this.button_XY_Scan.UseVisualStyleBackColor = true;
-            this.button_XY_Scan.Click += new System.EventHandler(this.button_XY_Scan_Click);
             // 
             // timer_Approach
             // 
@@ -650,7 +661,7 @@
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(50, 111);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(72, 32);
             this.button2.TabIndex = 51;
@@ -761,24 +772,13 @@
             // button_SaveImage
             // 
             this.button_SaveImage.Location = new System.Drawing.Point(122, 96);
-            this.button_SaveImage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_SaveImage.Margin = new System.Windows.Forms.Padding(2);
             this.button_SaveImage.Name = "button_SaveImage";
             this.button_SaveImage.Size = new System.Drawing.Size(100, 43);
             this.button_SaveImage.TabIndex = 69;
             this.button_SaveImage.Text = "save image";
             this.button_SaveImage.UseVisualStyleBackColor = true;
             this.button_SaveImage.Click += new System.EventHandler(this.button_SaveImage_Click);
-            // 
-            // button_ClearImage
-            // 
-            this.button_ClearImage.Location = new System.Drawing.Point(105, 102);
-            this.button_ClearImage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button_ClearImage.Name = "button_ClearImage";
-            this.button_ClearImage.Size = new System.Drawing.Size(67, 35);
-            this.button_ClearImage.TabIndex = 70;
-            this.button_ClearImage.Text = "clear image";
-            this.button_ClearImage.UseVisualStyleBackColor = true;
-            this.button_ClearImage.Click += new System.EventHandler(this.button_ClearImage_Click);
             // 
             // checkBox_ShowImage
             // 
@@ -795,7 +795,7 @@
             // button_StartSubWindow
             // 
             this.button_StartSubWindow.Location = new System.Drawing.Point(674, 30);
-            this.button_StartSubWindow.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_StartSubWindow.Margin = new System.Windows.Forms.Padding(2);
             this.button_StartSubWindow.Name = "button_StartSubWindow";
             this.button_StartSubWindow.Size = new System.Drawing.Size(60, 65);
             this.button_StartSubWindow.TabIndex = 73;
@@ -816,7 +816,7 @@
             // button_SetScanROI
             // 
             this.button_SetScanROI.Location = new System.Drawing.Point(566, 30);
-            this.button_SetScanROI.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_SetScanROI.Margin = new System.Windows.Forms.Padding(2);
             this.button_SetScanROI.Name = "button_SetScanROI";
             this.button_SetScanROI.Size = new System.Drawing.Size(60, 65);
             this.button_SetScanROI.TabIndex = 76;
@@ -827,7 +827,7 @@
             // button_StartIndent
             // 
             this.button_StartIndent.Location = new System.Drawing.Point(16, 308);
-            this.button_StartIndent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_StartIndent.Margin = new System.Windows.Forms.Padding(2);
             this.button_StartIndent.Name = "button_StartIndent";
             this.button_StartIndent.Size = new System.Drawing.Size(68, 45);
             this.button_StartIndent.TabIndex = 77;
@@ -839,7 +839,7 @@
             // 
             this.propertyGrid_AFM_Parameter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.propertyGrid_AFM_Parameter.Location = new System.Drawing.Point(5, 6);
-            this.propertyGrid_AFM_Parameter.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.propertyGrid_AFM_Parameter.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid_AFM_Parameter.Name = "propertyGrid_AFM_Parameter";
             this.propertyGrid_AFM_Parameter.Size = new System.Drawing.Size(116, 262);
             this.propertyGrid_AFM_Parameter.TabIndex = 78;
@@ -870,7 +870,7 @@
             // button_CancelIndent
             // 
             this.button_CancelIndent.Location = new System.Drawing.Point(18, 367);
-            this.button_CancelIndent.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_CancelIndent.Margin = new System.Windows.Forms.Padding(2);
             this.button_CancelIndent.Name = "button_CancelIndent";
             this.button_CancelIndent.Size = new System.Drawing.Size(68, 43);
             this.button_CancelIndent.TabIndex = 85;
@@ -881,7 +881,7 @@
             // button_MultiTask
             // 
             this.button_MultiTask.Location = new System.Drawing.Point(141, 308);
-            this.button_MultiTask.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_MultiTask.Margin = new System.Windows.Forms.Padding(2);
             this.button_MultiTask.Name = "button_MultiTask";
             this.button_MultiTask.Size = new System.Drawing.Size(68, 45);
             this.button_MultiTask.TabIndex = 86;
@@ -932,7 +932,7 @@
             // button_Form_CoarsePositioner
             // 
             this.button_Form_CoarsePositioner.Location = new System.Drawing.Point(350, 30);
-            this.button_Form_CoarsePositioner.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_Form_CoarsePositioner.Margin = new System.Windows.Forms.Padding(2);
             this.button_Form_CoarsePositioner.Name = "button_Form_CoarsePositioner";
             this.button_Form_CoarsePositioner.Size = new System.Drawing.Size(60, 65);
             this.button_Form_CoarsePositioner.TabIndex = 95;
@@ -943,7 +943,7 @@
             // button_ShowImage
             // 
             this.button_ShowImage.Location = new System.Drawing.Point(458, 30);
-            this.button_ShowImage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button_ShowImage.Margin = new System.Windows.Forms.Padding(2);
             this.button_ShowImage.Name = "button_ShowImage";
             this.button_ShowImage.Size = new System.Drawing.Size(60, 65);
             this.button_ShowImage.TabIndex = 96;
@@ -1033,6 +1033,7 @@
             this.button_Coarse_MoveToHomePosition.TabIndex = 97;
             this.button_Coarse_MoveToHomePosition.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button_Coarse_MoveToHomePosition.UseVisualStyleBackColor = false;
+            this.button_Coarse_MoveToHomePosition.Click += new System.EventHandler(this.button_Coarse_MoveToHomePosition_Click);
             // 
             // label_Speed_Z
             // 
@@ -1154,7 +1155,7 @@
             // 
             this.checkBox_ReferenceMarks.AutoSize = true;
             this.checkBox_ReferenceMarks.Location = new System.Drawing.Point(52, 526);
-            this.checkBox_ReferenceMarks.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.checkBox_ReferenceMarks.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_ReferenceMarks.Name = "checkBox_ReferenceMarks";
             this.checkBox_ReferenceMarks.Size = new System.Drawing.Size(108, 17);
             this.checkBox_ReferenceMarks.TabIndex = 4;
@@ -1566,6 +1567,23 @@
             this.tabPage_DataExport.Text = "Data Export";
             this.tabPage_DataExport.UseVisualStyleBackColor = true;
             // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Location = new System.Drawing.Point(6, 154);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(32, 13);
+            this.label29.TabIndex = 3;
+            this.label29.Text = "Path:";
+            // 
+            // textBox_DataPath
+            // 
+            this.textBox_DataPath.Location = new System.Drawing.Point(3, 180);
+            this.textBox_DataPath.Name = "textBox_DataPath";
+            this.textBox_DataPath.Size = new System.Drawing.Size(242, 20);
+            this.textBox_DataPath.TabIndex = 70;
+            this.textBox_DataPath.Text = "D:\\AFM_Data";
+            // 
             // tabPage_Control
             // 
             this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
@@ -1577,28 +1595,11 @@
             this.tabPage_Control.Controls.Add(this.groupBox7);
             this.tabPage_Control.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Control.Name = "tabPage_Control";
-            this.tabPage_Control.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage_Control.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage_Control.Size = new System.Drawing.Size(252, 448);
             this.tabPage_Control.TabIndex = 4;
             this.tabPage_Control.Text = "Control";
             this.tabPage_Control.UseVisualStyleBackColor = true;
-            // 
-            // textBox_DataPath
-            // 
-            this.textBox_DataPath.Location = new System.Drawing.Point(3, 180);
-            this.textBox_DataPath.Name = "textBox_DataPath";
-            this.textBox_DataPath.Size = new System.Drawing.Size(242, 20);
-            this.textBox_DataPath.TabIndex = 70;
-            this.textBox_DataPath.Text = "D:\\AFM_Data";
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(6, 154);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(32, 13);
-            this.label29.TabIndex = 3;
-            this.label29.Text = "Path:";
             // 
             // groupBox1
             // 

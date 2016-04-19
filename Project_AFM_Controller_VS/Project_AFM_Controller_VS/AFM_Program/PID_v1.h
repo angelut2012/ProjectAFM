@@ -35,10 +35,13 @@ class PID
 										  //the application
 	// set only one parameter
 	void SetReferenceValue(double value){mySetpoint = value;};
-	void SetPID_P(double value){SetTunings(value,ki,kd);};
-	void SetPID_I(double value){SetTunings(kp,value,kd);};
-	void SetPID_D(double value){SetTunings(kp,ki,value);};
-
+//	void SetPID_P(double value){SetTunings(value, dispKi, dispKd);};
+//	void SetPID_I(double value){SetTunings(dispKp, value, dispKd);};
+//	void SetPID_D(double value){SetTunings(dispKp, dispKi, value);};
+	void SetPID_P(double value){kp = value;};
+	void SetPID_I(double value){ki = value *(mSampleTimeIn_us / 1000000.0);};
+	void SetPID_D(double value){kd = value / (mSampleTimeIn_us / 1000000.0);};
+	
 	void SetControllerDirection(int);	  // * Sets the Direction, or "Action" of the controller. DIRECT
 										  //   means the output will increase when error is positive. REVERSE
 										  //   means the opposite.  it's very unlikely that this will be needed
@@ -68,9 +71,29 @@ class PID
 	  double error;
 	void Initialize();
 	  //available but not commonly used functions ********************************************************
-	void SetTunings(double,
-		double,       // * While most users will set the tunings once in the 
-		double);         	  //   constructor, this function gives the user the option
+/* SetTunings(...)*************************************************************
+* This function allows the controller's dynamic performance to be adjusted. 
+* it's called automatically from the constructor, but tunings can also
+* be adjusted on the fly during normal operation
+******************************************************************************/ 
+	void SetTunings(double Kp, double Ki, double Kd)
+	{
+		if (Kp < 0 || Ki < 0 || Kd < 0) return;
+
+		dispKp = Kp; dispKi = Ki; dispKd = Kd;
+
+		kp = Kp;
+		ki = Ki * (mSampleTimeIn_us / 1000000);// convert second
+		kd = Kd / (mSampleTimeIn_us / 1000000);
+
+			/*	if(controllerDirection ==REVERSE)
+			{
+			kp = (0 - kp);
+			ki = (0 - ki);
+			kd = (0 - kd);
+			}
+			*/
+	};
 		                      //   of changing tunings during runtime for Adaptive control
 	double dispKp;				// * we'll hold on to the tuning parameters in user-entered 
 	double dispKi;				//   format for display purposes

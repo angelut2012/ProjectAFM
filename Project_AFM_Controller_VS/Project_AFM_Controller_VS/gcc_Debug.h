@@ -27,7 +27,7 @@
 #define __FLT_MIN__ 1.1754943508222875e-38F
 #endif
 #ifndef __GCC_IEC_559_COMPLEX
-#define __GCC_IEC_559_COMPLEX 2
+#define __GCC_IEC_559_COMPLEX 0
 #endif
 #ifndef __UFRACT_MAX__
 #define __UFRACT_MAX__ 0XFFFFP-16UR
@@ -93,7 +93,7 @@
 #define __GCC_ATOMIC_CHAR_LOCK_FREE 2
 #endif
 #ifndef __GCC_IEC_559
-#define __GCC_IEC_559 2
+#define __GCC_IEC_559 0
 #endif
 #ifndef __FLT_EVAL_METHOD__
 #define __FLT_EVAL_METHOD__ 0
@@ -178,9 +178,6 @@
 #endif
 #ifndef __UFRACT_FBIT__
 #define __UFRACT_FBIT__ 16
-#endif
-#ifndef __ARM_FP
-#define __ARM_FP 14
 #endif
 #ifndef __UFRACT_MIN__
 #define __UFRACT_MIN__ 0.0UR
@@ -468,6 +465,9 @@
 #ifndef __UTA_FBIT__
 #define __UTA_FBIT__ 64
 #endif
+#ifndef __SOFTFP__
+#define __SOFTFP__ 1
+#endif
 #ifndef __FLT_MIN_EXP__
 #define __FLT_MIN_EXP__ (-125)
 #endif
@@ -482,12 +482,6 @@
 #endif
 #ifndef __INT_FAST64_TYPE__
 #define __INT_FAST64_TYPE__ long long int
-#endif
-#ifndef __FP_FAST_FMAF
-#define __FP_FAST_FMAF 1
-#endif
-#ifndef __FP_FAST_FMAL
-#define __FP_FAST_FMAL 1
 #endif
 #ifndef __DBL_MIN__
 #define __DBL_MIN__ double(2.2250738585072014e-308L)
@@ -620,6 +614,9 @@
 #endif
 #ifndef __UDQ_FBIT__
 #define __UDQ_FBIT__ 64
+#endif
+#ifndef DEBUG
+#define DEBUG 1
 #endif
 #ifndef __INT8_TYPE__
 #define __INT8_TYPE__ signed char
@@ -984,9 +981,6 @@
 #ifndef __FLT_MAX__
 #define __FLT_MAX__ 3.4028234663852886e+38F
 #endif
-#ifndef __FP_FAST_FMA
-#define __FP_FAST_FMA 1
-#endif
 #ifndef __USACCUM_FBIT__
 #define __USACCUM_FBIT__ 8
 #endif
@@ -1119,9 +1113,6 @@
 #ifndef __ATOMIC_RELEASE
 #define __ATOMIC_RELEASE 3
 #endif
-#ifndef DEBUG
-#define DEBUG 1
-#endif
 #endif
 
 // --- Include directories begin --- //
@@ -1147,6 +1138,8 @@
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/include-fixed
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/sys-include
 //c:\sysgcc\arm-eabi\bin\../lib/gcc/arm-eabi/5.3.0/../../../../arm-eabi/include
+//HAL_USB_driver
+//AFM_Program
 // --- Include directories end --- //
 
 

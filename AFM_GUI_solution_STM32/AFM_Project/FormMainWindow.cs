@@ -593,9 +593,9 @@ namespace NameSpace_AFM_Project
             MY_DEBUG("set parameters start.");
             //pid
             set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -100, 100);//0.001, 500)
-            set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0.0001, 100);
-            set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0.0001, 100);
-            set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0.00000001, 100);
+            set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0.00001, 100);
+            set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0.00001, 100);
+            //set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0.00000001, 100);
 
             //return;
             // XY resolution
@@ -2065,7 +2065,6 @@ namespace NameSpace_AFM_Project
         {
             button_CoarseLiftUp_Click();
         }
-
 
     }
 

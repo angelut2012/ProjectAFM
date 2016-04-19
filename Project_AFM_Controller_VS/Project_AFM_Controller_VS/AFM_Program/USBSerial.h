@@ -69,6 +69,12 @@ public:
 
 	size_t print(double num, int length = 5)
 	{	
+		
+		if (num < 0)
+		{
+			write('-');
+			num = -num;
+		}				
 		int x=(int)num;
 		uint8_t L = convertNum2String(x);
 		write(mStr);
@@ -79,6 +85,19 @@ public:
 
 		//x=(int)(num*1000000000.0);
 
+		
+		for(int k=0;k<9;k++)
+		{
+			double temp=num*10;
+			if (temp<1)
+			{
+				num=temp;
+				length--;
+				write('0');	
+			}
+			else
+				break;
+		}
 		length=LIMIT_MAX_MIN(length,9,1);// Math_Max is 10^9;
 		x=(int)(num*Math_powX_Y(10,length));
 		convertNum2String(x);

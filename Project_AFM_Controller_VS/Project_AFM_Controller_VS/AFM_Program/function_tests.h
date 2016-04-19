@@ -33,7 +33,19 @@ extern USBSerial mUSerial;
 
 extern DigitalOut *p_LED;//(PORT_LED);
 
-
+double  wave_triangle_0ToMax(double delta, double value_max, bool reset)
+{
+	static double v = 0;
+	static bool direction = true;
+	if (reset = true) {v = 0;direction = true;}
+	if (direction == true)
+		v += delta;
+	else
+		v -= delta;
+	if (v >= value_max | v <= 0)
+		direction = !value_max;
+	return v;
+}
 
 
 //////////////////////////////////////hardware test functions
@@ -275,6 +287,54 @@ void test_SEM_ADC_read()
 
 }
 
+
+void test_usb_print()
+{
+	mUSerial.begin();  
+
+	while (1)
+	{
+		toggle_pin_led();
+//		toggle_pin_p(p_Tdio2);
+		float x = 0.3333333;
+		float y = 0.5;
+		for (int k = 0;k < 1000000;k++)
+			y = x*x;//sin(x);
+		   //			MY_Debug(x);
+		   //			MY_Debug("\t");
+		
+	}
+
+
+	//		while (1)
+	//		{
+	//			toggle_pin_led();
+	//			toggle_pin_p(p_Tdio2);
+	//		AFM_Communication_Process();
+	////		static double x = 0;
+	////		x += 0.01;
+	//		
+	//			double x = 0.3333333;
+	//			double y = 0.5;
+	//			//for (int k = 0;k < 1000000;k++)
+	//				 y =x*x;//sin(x);
+	//				//			MY_Debug(x);
+	//				//			MY_Debug("\t");
+	//				//		
+	//						wait(0.2);
+	//			MY_Debug_LN(y);
+	////			MY_Debug_LN(1000000.000123456);
+	////			MY_Debug_LN(-1000000.000123456);
+	////			MY_Debug_LN(0.0123456789123456789);
+	////MY_Debug_LN(-0.000123456789123456789);
+	////MY_Debug_LN("");
+	//		}
+
+
+
+
+
+}
 //
 //char cha[30];
 //

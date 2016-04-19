@@ -137,29 +137,7 @@ double PID::ComputePI(double mInput)
 	return output;
 }
 
-/* SetTunings(...)*************************************************************
-* This function allows the controller's dynamic performance to be adjusted. 
-* it's called automatically from the constructor, but tunings can also
-* be adjusted on the fly during normal operation
-******************************************************************************/ 
-void PID::SetTunings(double Kp, double Ki, double Kd)
-{
-	if (Kp<0 || Ki<0 || Kd<0) return;
 
-	dispKp = Kp; dispKi = Ki; dispKd = Kd;
-
-	kp = Kp;
-	ki = Ki * mSampleTimeIn_us/1000000;// convert second
-	kd = Kd / mSampleTimeIn_us/1000000;
-
-	/*	if(controllerDirection ==REVERSE)
-	{
-	kp = (0 - kp);
-	ki = (0 - ki);
-	kd = (0 - kd);
-	}
-	*/
-}
 
 /* SetSampleTime(...) *********************************************************
 * sets the period, in micro seconds, at which the calculation is performed	
@@ -248,9 +226,12 @@ controllerDirection = Direction;
 * functions query the internal state of the PID.  they're here for display 
 * purposes.  this are the functions the PID Front-end uses for example
 ******************************************************************************/
-double PID::GetKp(){ return  dispKp; }
-double PID::GetKi(){ return  dispKi;}
-double PID::GetKd(){ return  dispKd;}
+//double PID::GetKp(){ return  dispKp; }
+//double PID::GetKi(){ return  dispKi;}
+//double PID::GetKd(){ return  dispKd;}
+double PID::GetKp(){ return  kp; }
+double PID::GetKi(){ return  ki;}
+double PID::GetKd(){ return  kd;}
 int PID::GetMode(){ return  inAuto ? AUTOMATIC : MANUAL;}
 
 

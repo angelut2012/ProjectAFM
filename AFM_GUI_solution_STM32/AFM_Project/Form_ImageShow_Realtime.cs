@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 using System.IO;
 using ZedGraph;
+//using System.Windows.Media;
 namespace NameSpace_AFM_Project
 {
     public partial class Form_ImageShow_Realtime : Form
@@ -27,28 +28,62 @@ namespace NameSpace_AFM_Project
         {
             timer_UpdateUI_Show.Start();
         }
-        //Image ConvertArray2Image(double[,]mImageArray)
-        //{
-        //    //Get image data from gridview column.
-        //    byte[] imageData = new byte[512 * 512];
-        //    //for (int k = 0; k < mImageArray.Length; k++)
-        //    //    imageData[k] = (byte)mImageArray[k,1];
-        //    //Initialize image variable
-        //    Image newImage;
-        //    //Read image data into a memory stream
-        //    using (MemoryStream ms = new MemoryStream(imageData, 0, imageData.Length))
-        //    {
-        //        ms.Write(imageData, 0, imageData.Length);
+        Image ConvertArray2Image(double[,] mImageArray)
+        {
+            //Get image data from gridview column.
+            //byte[] imageData = new byte[512 * 512];
+            ////for (int k = 0; k < mImageArray.Length; k++)
+            ////    imageData[k] = (byte)mImageArray[k,1];
+            ////Initialize image variable
+            //Image newImage;
+            ////Read image data into a memory stream
+            //using (MemoryStream ms = new MemoryStream(imageData, 0, imageData.Length))
+            //{
+            //    ms.Write(imageData, 0, imageData.Length);
 
-        //        //Set image variable value using memory stream.
-        //        newImage = Image.FromStream(ms, true);
-        //    }
+            //    //Set image variable value using memory stream.
+            //    newImage = Image.FromStream(ms, true);
+            //}
+            //Bitmap myBitmap = new Bitmap("SetScanROI.bmp");
+            Bitmap myBitmap = new Bitmap(mImageArray.GetLength(0), mImageArray.GetLength(1));
+            for (int x = 0; x < myBitmap.Width; x++)
+            {
+                for (int y = 0; y < myBitmap.Height; y++)
+                {
+                    //myBitmap.SetPixel(x, y, Color.Black);
+                    Color myRgbColor = new Color();
+                    int v = (int)mImageArray[x, y];
+                    v = Math.Abs(v);
+                    //v = x + y;
+                    int r = v % 255;
+                    int g = v % 100;
+                    int b = v % 50;
+                    myRgbColor = Color.FromArgb(r, g, b);
+                    myBitmap.SetPixel(x, y, myRgbColor);
+                }
+            }
 
-        //    return newImage;
-        //}
+            if (pictureBox_Height.Image != null)
+                pictureBox_Height.Image.Dispose();
+            Image newImage = myBitmap.Clone(new Rectangle(0, 0, myBitmap.Width, myBitmap.Height), System.Drawing.Imaging.PixelFormat.DontCare);
+
+            return newImage;
+        }
 
         private void button1_Click(object sender, EventArgs e)
-        { UpdateUI_ShowImageLine(); }
+        { 
+           // UpdateUI_ShowImageLine(); 
+            int x = 100;
+            pParent.MY_DEBUG("st");
+            while(x-->0)
+            pictureBox_Height.Image = ConvertArray2Image(pParent.mImageArrayHR);// time =170 ms
+
+            pParent.MY_DEBUG("end");
+
+        }
+
+
+
         public void UpdateUI_ShowImageLine()
         {
             try
@@ -60,7 +95,7 @@ namespace NameSpace_AFM_Project
             ShowLine(pParent.mImageArrayEL, pParent.point_now_y, zedGraphControl_Error, true, Color.Red);
             ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error2, true, Color.Blue);
 
-            //pictureBox_Height.Image = ConvertArray2Image(pParent.mImageArrayHR);
+            
 
              }
             catch

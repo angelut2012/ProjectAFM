@@ -350,11 +350,11 @@ public:
 	
 	
 	
-#define MY_Debug_LN(x) mUSerial.println(x)
+#define MY_Debug_LN(x) {mUSerial.println(x);mUSerial.process();}
 #define MY_Debug_LN2(x,y) mUSerial.println(x,y)
-#define MY_Debug(x) mUSerial.print(x)
+#define MY_Debug(x) {mUSerial.print(x);mUSerial.process();}
 //#define MY_Debug2(x,y) mUSerial.print(x,y)
-#define MY_Debug_StringValue_LN(str,value)  do{mUSerial.print(str);mUSerial.println(value);}while(0)
+#define MY_Debug_StringValue_LN(str,value)  do{mUSerial.print(str);mUSerial.println(value);mUSerial.process();}while(0)
 
 	void Initial_parameters()
 	{		
@@ -1093,6 +1093,7 @@ public:
 		{
 			mUSerial.write(com_image_frame_buffer[pointer_out_frame_buffer]);
 			pointer_out_frame_buffer++;
+			mUSerial.process();
 		}
 		return pointer_out_frame_buffer;
 	}
@@ -1146,8 +1147,11 @@ public:
 		mZ_Loop_PID->SetReferenceValue(DSet_01);
 		double zpid_limit = MAX_STEP_SIZE_PIEZO_MODEL_01;
 		mZ_Loop_PID->SetOutputLimits(-zpid_limit, zpid_limit);// limit the change in each period
-		mZ_Loop_PID->SetPID_P(1);//0.1
-		mZ_Loop_PID->SetPID_I(0.5);//0.05
+//		mZ_Loop_PID->SetPID_P(0.004);//(0.001
+//		mZ_Loop_PID->SetPID_I(0.001);//(0.0001
+		
+		mZ_Loop_PID->SetPID_P(0.01);//use P=0.01, I=0.002 OK, 20160416
+		mZ_Loop_PID->SetPID_I(0.002);//(0.0001
 		mZ_Loop_PID->SetPID_D(0);
 	}
 
@@ -1718,7 +1722,10 @@ public:
 	{
 		console_ResetScannerModel(PIEZO_Z);
 		wait_ms(100);
-		Vdf_infinite = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100);
+//		Vdf_infinite = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100);
+		
+		Vdf_infinite = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100)-1000;
+#warning "Vdf_infinite = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100)-1000; for remote debug only"
 		sys_state = SS_Engage;
 		Z_position_DAC_ZScannerEngage = 0;
 	}
@@ -2643,7 +2650,7 @@ public:
 		
 	}
 	void AFM_main_setup() 
-	{		
+	{	
 		mTimerGlobal.start();
 		mUSerial.begin();  
 
@@ -2657,6 +2664,7 @@ public:
 			int x = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC);//ADC_PORT_ZlOOP_SENSOR
 			MY_Debug_LN(x);
 			//Software_Reset();
+			toggle_pin_led();
 		}
 		
 
@@ -2694,6 +2702,12 @@ public:
 		mTicker_AFM_Realtime.attach_us(&AFM_ProcessScheduler_Realtime, mPeriod_Realtime_us);
 		
 		//test_usb_show(0,"setup");
+//		double x = mZ_Loop_PID->GetKp();
+//		
+//		double y = mZ_Loop_PID->GetKi();
+//		
+//		double z = mZ_Loop_PID->GetKd();
+
 	}
 
 	void read_SG_data_temp();
@@ -2756,6 +2770,8 @@ public:
 		rtos_send_image_frame_to_PC();	
 		
 		//test_usb_show(0,"Loop");
+
+		
 	}
 	
 	void piezo_predict_Position01_To_Voltage_DAC18(int axis, double PositionInput)//,int steps
