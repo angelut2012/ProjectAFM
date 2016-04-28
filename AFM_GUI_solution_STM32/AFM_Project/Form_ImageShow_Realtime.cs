@@ -86,8 +86,11 @@ namespace NameSpace_AFM_Project
 
         public void UpdateUI_ShowImageLine()
         {
+
+            timer_UpdateUI_Show.Stop();
             try
              {
+                 pParent.MY_DEBUG("show line:", pParent.point_now_y);
             ShowLine(pParent.mImageArrayHL, pParent.point_now_y, zedGraphControl_Height, true, Color.Red);
             ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height2, true, Color.Blue);
 
@@ -95,13 +98,17 @@ namespace NameSpace_AFM_Project
             ShowLine(pParent.mImageArrayEL, pParent.point_now_y, zedGraphControl_Error, true, Color.Red);
             ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error2, true, Color.Blue);
 
-            
+            //pictureBox_Height.Image = ConvertArray2Image(pParent.mImageArrayHL);// time =170 ms
+            //pictureBox_Error.Image = ConvertArray2Image(pParent.mImageArrayEL);// time =170 ms
 
              }
             catch
             {
-                return;
+                //return;
+                pParent.MY_DEBUG("show line error.");
             }
+
+            timer_UpdateUI_Show.Start();
 
         }
         public double[,] Calculate_Line(double[,] mImageArray, int point_now_y, int fit_order = 1, int index_base_point = 1)
@@ -109,16 +116,14 @@ namespace NameSpace_AFM_Project
             //ref double[,] line_show, 
             try
             {
-                int L = mImageArray.GetLength(1);
+                int L = mImageArray.GetLength(0);
                 double[,] line_in = new double[1, L];
-                if (point_now_y > 1) point_now_y--;
+                if (point_now_y > 1) point_now_y--;// show last line 
 
-                if (point_now_y > 1) point_now_y--;// twice
 
-                if (point_now_y < 1) point_now_y = 0;
-                point_now_y = Math.Min(point_now_y, mImageArray.GetLength(1));
+                point_now_y = pParent.MIN_MAX(point_now_y,1, mImageArray.GetLength(1));
                 for (int k = 0; k < L; k++)
-                    line_in[0, k] = mImageArray[k, point_now_y];
+                    line_in[0, k] = mImageArray[ k,point_now_y-1];
 
 
 

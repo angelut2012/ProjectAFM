@@ -1,6 +1,19 @@
 20160428_1
-close loop image OK
-AFM image post process: main_post_process_PRC_AFM_images
+close imaging OK
+
+20160426
+close imaging
+to slow
+20160425_3
+sensor range 2 OK
+20160425_2
+
+PID XYZ OK
+20160425_1
+communication OK
+ADC DAC  ok
+
+
 
 20160423
 new usb,

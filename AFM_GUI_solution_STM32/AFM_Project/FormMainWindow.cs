@@ -113,6 +113,7 @@ namespace NameSpace_AFM_Project
             //}
         }
         public void MY_DEBUG(string inf, int x) { MY_DEBUG(inf + Convert.ToString(x)); }
+        public void MY_DEBUG(string inf, double x) { MY_DEBUG(inf + Convert.ToString(x)); }
         public void MY_DEBUG(int x) { MY_DEBUG(Convert.ToString(x)); }
 
         public string GetCurrentTimeString() { return DateTime.Now.ToString("yyyyMMddHHmmss"); }
@@ -132,7 +133,7 @@ namespace NameSpace_AFM_Project
 
         // variable
         //  public Manipulator //mManipulator=new Manipulator();
-        Thread mThread_ResteHome;
+       
 
         public delegate void DelegateFunction();
         public DelegateFunction mDelegateFunction;
@@ -163,6 +164,10 @@ namespace NameSpace_AFM_Project
         const double MAX_RANGE_X_NM = (71.72 * 1000.0);
         const double MAX_RANGE_Y_NM = (95.18 * 1000.0);
         public double[] MAX_RANGE_AXIS_NM = { MAX_RANGE_Z_NM, MAX_RANGE_X_NM, MAX_RANGE_Y_NM };
+
+        double[] mSensorADC18_Min = new double[3] {6719,35349,211968};//{ 4561, 35500, 231916 };// {8164, 34928, 232626};
+        double[] mSensorADC18_Max = new double[3] {233590,243630,51845};//{ 241554, 244873, 61734 };//{241802, 244504, 62131};
+
         /// <image defines>
         const int max_image_width = 512;
 
@@ -205,6 +210,7 @@ namespace NameSpace_AFM_Project
         int point_now_x = 0;//+-(1~Nx) for MKernel
         public int point_now_y = 0;
         Thread mThread_SaveImage;
+        Thread mThread_WriteSerialData;
 
         int mCounter_ComReadByte = 0;
         int mApproach_heat_beat_received = -1;
@@ -228,7 +234,7 @@ namespace NameSpace_AFM_Project
         bool mSwitch_ShowComDdata = true;
 
 
-        public double Z_position_now = 0;
+        
         Form_ImageShow_Realtime mForm_ImageShow_Realtime;
 
         public MainWindow()
@@ -268,6 +274,10 @@ namespace NameSpace_AFM_Project
 
             mThread_UI_Update = new Thread(ThreadFunction_UpdateUI);
             mThread_UI_Update.Start();
+
+            //mThread_WriteSerialData = new Thread(ThreadFunction_WriteSerialData);
+            //mThread_WriteSerialData.Start();
+
 
             propertyGrid_AFM_Parameter.SelectedObject = mCParameter;
 
@@ -593,9 +603,15 @@ namespace NameSpace_AFM_Project
             MY_DEBUG("set parameters start.");
             //pid
             set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -100, 100);//0.001, 500)
-            set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0.00001, 100);
-            set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0.00001, 100);
-            //set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0.00000001, 100);
+            //set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0.00001, 100);
+            //set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0.00001, 100);
+            ////set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0.00000001, 100);
+            //set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, -100, 100);
+            //set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, -100, 100);
+            //set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, -100, 100);
+
+
+
 
             //return;
             // XY resolution
@@ -888,46 +904,79 @@ namespace NameSpace_AFM_Project
         { send_Data_Frame_To_Arduino((byte)d0, (byte)d1, (byte)d2, d3, d4, d5); }
         public void send_Data_Frame_To_Arduino(char d0, char d1, byte[] db4)
         { send_Data_Frame_To_Arduino((byte)d0, (byte)d1, db4[0], db4[1], db4[2], db4[3]); }
+
+
+        byte[] mDataBuffer_ThreadWriteSerial=new byte[LENGTH_COM_BUFFER_PC2MCU];
         public void send_Data_Frame_To_Arduino
             (byte d0, byte d1 = 0, byte d2 = 0, byte d3 = 0, byte d4 = 0, byte d5 = 0)
         {
             //AA 55 52 00 03 aa 00 00 55 AA 
-            byte[] com = new byte[LENGTH_COM_BUFFER_PC2MCU] 
+            //byte[]
+            mDataBuffer_ThreadWriteSerial = new byte[LENGTH_COM_BUFFER_PC2MCU] 
                         { COM_HEADER1, COM_HEADER2, 
                          d0,d1,d2,d3,d4,d5,
                             // (byte)'R', 0, 0, 0,0,0,// 6 byte
-                         COM_TAIL1, COM_TAIL2 };
+                         COM_TAIL1, COM_TAIL2 };    
+            while (mB_serialVirtual_Arduino_busy == true)
+                {
+                    Thread.Sleep(5);
+                    MY_DEBUG("serial write busy.");
+                }
+  
+                {
+                    mThread_WriteSerialData = new Thread(ThreadFunction_WriteSerialData);
+                    mThread_WriteSerialData.Start();
+                }
+            //if (serialPort_Arduino.IsOpen == true)
+            //{
+                //try
+                //{
+     
+                //mB_serialVirtual_Arduino_busy = true;
+                //serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
+
+               // mThread_WriteSerialData.;// do not block the main thread
+                //mB_serialVirtual_Arduino_busy = false;
+
+                //Thread.Sleep(15);
+                //}
+                //catch
+                //{
+                //    //Thread.Sleep(100);
+                //    //serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
+                //    MY_DEBUG("serialPort_Arduino.Write time out");
+                //}
+
+            //MessageBox.Show("MCU port is not connected.", "Error");
+
+        }
+        void ThreadFunction_WriteSerialData()
+        {
+            //MY_DEBUG("Thread Write Serial Data: start");
             if (serialPort_Arduino.IsOpen == true)
             {
                 try
                 {
-                    while (mB_serialVirtual_Arduino_busy == true)
-                    {
-                        Thread.Sleep(5);
-                        MY_DEBUG("serial write busy.");
-                    }
                     mB_serialVirtual_Arduino_busy = true;
-                    serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
+                    serialPort_Arduino.Write(mDataBuffer_ThreadWriteSerial, 0, LENGTH_COM_BUFFER_PC2MCU);
                     mB_serialVirtual_Arduino_busy = false;
-
-                    Thread.Sleep(15);
                 }
                 catch
                 {
                     //Thread.Sleep(100);
                     //serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
-                    MY_DEBUG("serialPort_Arduino.Write time out");
+                    MY_DEBUG("Thread serialPort_Arduino.Write time out");
                 }
             }
             else
-                MY_DEBUG("MCU port is not connected.");
-            //MessageBox.Show("MCU port is not connected.", "Error");
+                MY_DEBUG("Thread, MCU port is not connected.");
 
+          //  MY_DEBUG("Thread Write Serial Data: end");
         }
 
         private void timerFunction_Appraoch(object sender, EventArgs e)
         {
-           // if (mApproach_heat_beat_received == -1)
+            // if (mApproach_heat_beat_received == -1)
             {
                 send_Data_Frame_To_Arduino('C', 'A', 'P');
                 MY_DEBUG("retrigger");
@@ -1124,7 +1173,7 @@ namespace NameSpace_AFM_Project
             // must use this method, otherwise may lose data
             //serialPort_Arduino.DiscardInBuffer();
             int ind = on_Received_com_frame_anaysis(db, LENGTH_COM_BUFFER_MCU2PC * 2);
-           
+
             if (mCounter_ComReadByte >= LENGTH_COM_BUFFER_MCU2PC && ind == 0)
             {
                 for (int k = 0; k < db.Length - LENGTH_COM_BUFFER_MCU2PC; k++)
@@ -1243,12 +1292,17 @@ namespace NameSpace_AFM_Project
             }
             if (index == 1)
             {
-                double scsg_x = v1;
-                double scsg_y = v2;
-                double scsg_z = v3;
-                MY_DEBUG("scsg_x:\t" + scsg_x.ToString("f2")
-                    + "\t scsg_y:\t" + scsg_y.ToString("f2")
-                     + "\t scsg_z:\t" + scsg_z.ToString("f2"));
+                //double scsg_x = v1;
+                //double scsg_y = v2;
+                //double scsg_z = v3;
+                double V = 1;// 5 / BIT18MAX;
+                double scsg_x = v1*V;
+                double scsg_y = v2*V;
+                double scsg_z = v3*V;
+
+                MY_DEBUG("scsg_x:\t" + scsg_x.ToString("f3")
+                    + "\t scsg_y:\t" + scsg_y.ToString("f3")
+                     + "\t scsg_z:\t" + scsg_z.ToString("f3"));
             }
             if (index == 2)
             {
@@ -1258,6 +1312,30 @@ namespace NameSpace_AFM_Project
                 MY_DEBUG("value_cantilever:\t" + value_cantilever.ToString("f0")
                     + "\t value_cali:\t" + value_cali.ToString("f0")
                      + "\t scsg_z:\t" + scsg_z.ToString("f0"));
+            }
+            if (index == 3)
+            {
+                //double[] mSensorADC18_Min = new double[3] { 4561, 35500, 231916 };// {8164, 34928, 232626};
+                //double[] mSensorADC18_Max = new double[3] { 241554, 244873, 61734 };//{241802, 244504, 62131};
+                mSensorADC18_Min[PIEZO_X] = v1;
+                mSensorADC18_Min[PIEZO_Y] = v2;
+                mSensorADC18_Min[PIEZO_Z] = v3;
+                MY_DEBUG("SCSG min:",v1);
+                MY_DEBUG("SCSG min:", v2);
+                MY_DEBUG("SCSG min:", v3);
+            }
+            if (index == 4)
+            {
+                mSensorADC18_Max[PIEZO_X] = v1;
+                mSensorADC18_Max[PIEZO_Y] = v2;
+                mSensorADC18_Max[PIEZO_Z] = v3;
+                MY_DEBUG("SCSG max:", v1);
+                MY_DEBUG("SCSG max:", v2);
+                MY_DEBUG("SCSG max:", v3);
+
+                MY_DEBUG("SCSG range x:", mSensorADC18_Max[PIEZO_X] - mSensorADC18_Min[PIEZO_X]);
+                MY_DEBUG("SCSG range y:", mSensorADC18_Max[PIEZO_Y] - mSensorADC18_Min[PIEZO_Y]);
+                MY_DEBUG("SCSG range z:", mSensorADC18_Max[PIEZO_Z] - mSensorADC18_Min[PIEZO_Z]);
             }
         }
 
@@ -1324,16 +1402,11 @@ namespace NameSpace_AFM_Project
             double vH = convert_byte3_to_uint32(com_buffer, ind + 8);
             double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3);
             vE = vE - BIT24MAX / 2;
-            vE = vE / BIT24MAX * MAX_RANGE_Z_NM;
+            vE = vE / BIT24MAX;
+            vE*=MAX_RANGE_Z_NM;
 
-
-            //vH = vH / BIT24MAX;// *MAX_RANGE_Z_NM;
-            //// Z axis calibration parameter
-            double vH0 = 1.435565217391304e+04;
-            double vh_range = 1.519552569169960e+05;
-
-            vH = (vH - vH0) / vh_range;
-            vH *= MAX_RANGE_Z_NM;
+            vH = vH / BIT24MAX;// convert back to 01
+            vH *= MAX_RANGE_Z_NM;// convert to full range nm
 
             //vH = MAX_RANGE_Z_NM - vH;
 
@@ -1346,10 +1419,10 @@ namespace NameSpace_AFM_Project
                 );
 
 
-            Z_position_now = vH;
+            //Z_position_now = vH;
 
             //  if (Math.Abs(Math.Abs(indx) - Math.Abs(xold)) != 1) 
-            //MY_DEBUG( Sys_Inf);
+            MY_DEBUG(Sys_Inf);
             //update_UI_label(inf);
 
             //MY_DEBUG(indx.ToString() + "\t" + indx_store_for_save_image.ToString() + "\t" + indy.ToString() + "\t" + indy_store_for_save_image.ToString());
@@ -1376,7 +1449,13 @@ namespace NameSpace_AFM_Project
             if (indy < 0)
                 indy = -indy - 1;
 
-            if (Math.Abs(indx) >= para_Nx || Math.Abs(indy) >= para_Ny)
+            if (
+                (indx) >= para_Nx 
+                ||
+                (indx) < -(para_Nx +1)
+                || 
+                Math.Abs(indy) >= para_Ny                
+                )
             {
                 MY_DEBUG("indx", indx);
                 MY_DEBUG("indy", indy);
@@ -2053,7 +2132,7 @@ namespace NameSpace_AFM_Project
         //-------------------------------------------------------------------------UIbutton --------------------
         private void button_SEM_Click(object sender, EventArgs e)
         {
-
+            MY_DEBUG("");
         }
 
         private void button_AutoApproach_Click(object sender, EventArgs e)
