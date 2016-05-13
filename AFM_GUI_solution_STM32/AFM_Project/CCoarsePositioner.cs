@@ -92,7 +92,11 @@ namespace NameSpace_AFM_Project
 		SetSpeedCloseLoop(X_CP_AXIS, 0);
 		SetSpeedCloseLoop(Y_CP_AXIS, 0);
 		SetSpeedCloseLoop(Z_CP_AXIS, 0);
-		SetSensorModeDisable();
+        SetSensorModeDisable();
+
+        SetChannelVoltage(X_CP_AXIS, 0);
+        SetChannelVoltage(Y_CP_AXIS, 0);
+        SetChannelVoltage(Z_CP_AXIS, 0); 
 		return 0;
 	}
 	void SetSpeedCloseLoop(uint channel, uint speed)
@@ -182,6 +186,8 @@ public		void  MoveDistance(uint channel,double distance, uint frequency)
 			// here sleep time must be long enough, otherwise the previous command will be ignored.
 			MoveFineSteps((uint)channel,2*dir,(uint)step_left,frequency);
 		}
+
+        SetChannelVoltage((uint)channel, 0);
 		moving =false;
 	}
 	void  MoveToPosition(double x,double y,double z,double t)
@@ -389,6 +395,22 @@ public		void  MoveDistance(uint channel,double distance, uint frequency)
 	// 	return p;
 	// }
 	// 
+
+    public void SetChannelVoltage(uint channelIndex,uint V_0_150)
+    {
+        // minimum step size=100, otherwise will mResult in error,
+        // step=0-4095  SA_StepMove_S
+        //mResult = CCoarseController.SA_GotoGripperOpeningRelative_S((uint)(uint)mSystemIndex, (uint)(uint)channelIndex, V_0_4095, 1);
+        if (V_0_150 > 150) V_0_150 = 150;
+        V_0_150 *= (uint)(4095.0/150.0);
+
+        mResult = CCoarseController.SA_ScanMoveAbsolute_S((uint)mSystemIndex, (uint)(uint)channelIndex, V_0_150, 100000);
+        if (mResult != CCoarseController.SA_OK)
+        {
+            //Initialize();
+            MY_DEBUG("SetChannelVoltage error!\n");
+        }
+    }
 
     }
 }

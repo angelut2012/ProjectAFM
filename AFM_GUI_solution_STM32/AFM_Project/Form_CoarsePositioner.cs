@@ -131,6 +131,7 @@ namespace NameSpace_AFM_Project
         private void button_CoarsePositioner_Connect_Click(object sender, EventArgs e)
         {
             pParent.mCCoarsePositioner.Initialize();
+            //pParent.mCCoarsePositioner.SetChannelVoltage(0, 150);
         }
 
     }

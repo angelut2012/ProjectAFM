@@ -67,7 +67,7 @@
 #include "DigitalOut.h"
 #include "DigitalIn.h"
 
-//#define SPI_WAIT
+#define SPI_WAIT
 
 class SWSPI
 {

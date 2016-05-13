@@ -59,8 +59,8 @@ AFM_Core mAFM_Core;
 
 	// non realtime process			
 			case  AFM_Core::SS_Approach:		mAFM_Core.process_Approach();break;//		
-			case  AFM_Core::SS_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
-//			case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen_data_capture(); break;		
+//			case  AFM_Core::SS_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
+			case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen_data_capture(); break;		
 			//	case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;		
 			case  AFM_Core::SS_Idle:			mAFM_Core.process_Idle(); 			break;
 				break;
@@ -68,11 +68,7 @@ AFM_Core mAFM_Core;
 				;
 			}
 			
-			if (mHoldXYScanner == false)			
-			{
-				mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true)));
-				mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
-			}
+
 			
 			if (mAFM_Core.sys_state < SS_Engage)
 				// in approach and indent, Mdirectly use DAC value, do not use pid to control the piezo positions

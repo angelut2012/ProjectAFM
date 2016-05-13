@@ -64,7 +64,7 @@ void Initialize(int clock_Hz = 2000000)
 	//To change clock phase [Math_Max: Change on rising edge] and polarity [Math_Max: Idles low] (see SPI Lib reference)
 }
 //////////////////////////////////
-void FinePositioner_MoveToPositionB18(byte channel, uint32_t value)
+void FinePositioner_MoveToPositionB18(byte channel, uint32_t value)// real move , write dac
 {
 	int32_t position=value;
 	if (channel == PIEZO_Z)
@@ -83,6 +83,12 @@ void FinePositioner_MoveToPositionB18(byte channel, uint32_t value)
 		DAC_write(channel,position);
 }
 
+int  DAC_write_all(uint32_t value) 
+{
+	DAC_write(PIEZO_Y, value);
+	DAC_write(PIEZO_X, value);
+	DAC_write(PIEZO_Z, value);
+}
 int  DAC_write(byte channel, uint32_t value) // long is 4 bytes for ARM32bit
 //		data rate = 20k Hz
 {

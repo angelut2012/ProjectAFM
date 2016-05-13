@@ -29,118 +29,20 @@ namespace NameSpace_AFM_Project
         public uint mCaxis_z = 2;
         public uint[] mCaxis = { 0, 1, 2 };
 
-        //-------
-        public void DOS_Command(string cmdstr)
-        { System.Diagnostics.Process.Start("cmd.exe", cmdstr); }
-        public void SpeakVoice(string words)
-        {
-            //C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0
-            System.Speech.Synthesis.SpeechSynthesizer mVoiceSpeaker = new System.Speech.Synthesis.SpeechSynthesizer();
-            mVoiceSpeaker.SpeakAsync(words);
-            //mVoiceSpeaker.Speak(words);
-        }
-
-        public void PlaySimpleSound(string file_name)
-        {//@"c:\Windows\Media\chimes.wav"
-            System.Media.SoundPlayer simpleSound = new System.Media.SoundPlayer(file_name);
-            simpleSound.Play();
-        }
-        public void SoundNotice(int k, int sleep_ms)
-        { SoundNotice(k); Thread.Sleep(sleep_ms); }
-        public void SoundNotice(int k)
-        {
-            if (k == 0) System.Media.SystemSounds.Exclamation.Play();// ok
-            if (k == 1) System.Media.SystemSounds.Hand.Play();// fail
-            if (k == 2) System.Media.SystemSounds.Beep.Play();
-            if (k == 3) System.Media.SystemSounds.Asterisk.Play();
-            if (k == 4) System.Media.SystemSounds.Question.Play();
-            if (k == 5) PlaySimpleSound(@"camera.wav");
-            if (k == 6) PlaySimpleSound(@"chimes.wav");
-
-        }
-
-
-        static T Swap<T>(ref T lhs, ref T rhs) where T : System.IComparable<T>
-        {
-            T temp;
-            temp = lhs;
-            lhs = rhs;
-            rhs = temp;
-            return temp;
-        }
-
-        public uint MIN_MAX(uint v, uint down, uint up)
-        {
-            //v = Math.Max(v, down);
-            //v = Math.Min(v, up);
-            if (v > up) v = up;
-            if (v < down) v = down;
-            return v;
-        }
-        public int MIN_MAX(int v, int down, int up)
-        {
-            //v = Math.Max(v, down);
-            //v = Math.Min(v, up);
-            if (v > up) v = up;
-            if (v < down) v = down;
-            return v;
-        }
-        public double MIN_MAX(double v, double down, double up)
-        {
-            //v = Math.Max(v, down);
-            //v = Math.Min(v, up);
-            if (v > up) v = up;
-            if (v < down) v = down;
-            return v;
-        }
-        public void MY_DEBUG(string inf)
-        {
-            if (string.IsNullOrEmpty(inf) == false)
-                System.Diagnostics.Debug.WriteLine(inf);
-            //string str = "The quick brown fox jumped over the gentleman.";
-            //{
-            //    byte[] bytes = Encoding.ASCII.GetBytes(inf);
-            //    unsafe
-            //    {
-            //        fixed (byte* p = bytes)
-            //        {
-            //            sbyte* sp = (sbyte*)p;
-            //            //SP is now what you want
-            //            mCCoarsePositioner.MY_DEBUG_CLR(sp);
-            //        }
-            //    }
-
-            //}
-        }
-        public void MY_DEBUG(string inf, int x) { MY_DEBUG(inf + Convert.ToString(x)); }
-        public void MY_DEBUG(string inf, double x) { MY_DEBUG(inf + Convert.ToString(x)); }
-        public void MY_DEBUG(int x) { MY_DEBUG(Convert.ToString(x)); }
-
-        public string GetCurrentTimeString() { return DateTime.Now.ToString("yyyyMMddHHmmss"); }
-        public long GetCurrentTimeLong() { return DateTime.Now.ToFileTimeUtc(); }
-        public long TIC() { return TIC_TOC(0); }
-        public long TOC() { return TIC_TOC(1); }// 1e-7 S
-        private long TIC_TOC_t;
-        private long TIC_TOC(int s)
-        {
-            long t = 0;
-            if (s == 0)
-                t = TIC_TOC_t = GetCurrentTimeLong();// tic
-            else
-                t = GetCurrentTimeLong() - TIC_TOC_t;
-            return t;
-        }
-
         // variable
         //  public Manipulator //mManipulator=new Manipulator();
-       
+
 
         public delegate void DelegateFunction();
         public DelegateFunction mDelegateFunction;
 
 
-        const int LENGTH_COM_BUFFER_PC2MCU = 10;
-        const int LENGTH_COM_BUFFER_MCU2PC = 16;
+        const int LENGTH_COM_DATA_PC2MCU = (6);
+        const int LENGTH_COM_FRAME_PC2MCU = (2 + LENGTH_COM_DATA_PC2MCU + 2);
+
+
+        const int LENGTH_COM_DATA_MCU2PC = (12 + 3 * 4);
+        const int LENGTH_COM_FRAME_MCU2PC = (2 + LENGTH_COM_DATA_MCU2PC + 2);
 
         const int COM_HEADER1 = (0xAA);//170
         const int COM_HEADER2 = (0x55);//85
@@ -156,17 +58,23 @@ namespace NameSpace_AFM_Project
         public const int PIEZO_Z = (0);
         public const int PIEZO_X = (1);
         public const int PIEZO_Y = (2);
-        public const int PIEZO_T = (3);
+        //public const int PIEZO_T = (3);
 
         //#define MAX_RANGE_Z_NM ( 7.299788679537674*1000.0)
 
-        const double MAX_RANGE_Z_NM = (21.04 * 1000.0);//(21.387973775678940 * 1000.0);
-        const double MAX_RANGE_X_NM = (71.72 * 1000.0);
-        const double MAX_RANGE_Y_NM = (95.18 * 1000.0);
+        //const double MAX_RANGE_Z_NM = (21.04 * 1000.0);//(21.387973775678940 * 1000.0);
+        //const double MAX_RANGE_X_NM = (71.72 * 1000.0);
+        //const double MAX_RANGE_Y_NM = (95.18 * 1000.0);
+        const double MAX_RANGE_Z_NM = (21.514 * 1000.0);//(21.387973775678940 * 1000.0);
+        const double MAX_RANGE_X_NM = (92.509 * 1000.0);
+        const double MAX_RANGE_Y_NM = (71.816 * 1000.0);
+        //        #define SCANNER_RANGE_Z_NM ( *1000.0)
+        //#define SCANNER_RANGE_X_NM (92.509*1000.0)
+        //#define SCANNER_RANGE_Y_NM (71.816*1000.0)
         public double[] MAX_RANGE_AXIS_NM = { MAX_RANGE_Z_NM, MAX_RANGE_X_NM, MAX_RANGE_Y_NM };
 
-        double[] mSensorADC18_Min = new double[3] {6719,35349,211968};//{ 4561, 35500, 231916 };// {8164, 34928, 232626};
-        double[] mSensorADC18_Max = new double[3] {233590,243630,51845};//{ 241554, 244873, 61734 };//{241802, 244504, 62131};
+        double[] mSensorADC18_Min = new double[3] { 6719, 35349, 211968 };//{ 4561, 35500, 231916 };// {8164, 34928, 232626};
+        double[] mSensorADC18_Max = new double[3] { 233590, 243630, 51845 };//{ 241554, 244873, 61734 };//{241802, 244504, 62131};
 
         /// <image defines>
         const int max_image_width = 512;
@@ -234,16 +142,17 @@ namespace NameSpace_AFM_Project
         bool mSwitch_ShowComDdata = true;
 
 
-        
+
         Form_ImageShow_Realtime mForm_ImageShow_Realtime;
 
         public MainWindow()
         {
-            //TIC();
-            //Thread.Sleep(10);
-            //long x = TOC();
-            InitializeComponent();
+            DialogResult result = DialogResult.Cancel;
+            while (result != DialogResult.Yes)
+                result = MessageBox.Show("Make sure the SEM is ready in high vacuum state before you start to use the AFM.\nOtherwise, the system might be damaged!", "Conformation", MessageBoxButtons.YesNo);
 
+
+            InitializeComponent();
             mCCoarsePositioner = new CCoarsePositioner();
             mCCoarsePositioner.Initialize();
 
@@ -255,7 +164,7 @@ namespace NameSpace_AFM_Project
             serialVirtual_echo = new SerialPort(sPortName, 115200, Parity.None, 8, StopBits.One);
             serialVirtual_echo.DataReceived += new SerialDataReceivedEventHandler(serialPort_DataReceivedHandler_com2com);
             serialVirtual_echo.Encoding = Encoding.GetEncoding("Windows-1252");
-            serialVirtual_echo.ReceivedBytesThreshold = 1;// LENGTH_COM_BUFFER_MCU2PC;
+            serialVirtual_echo.ReceivedBytesThreshold = 1;// LENGTH_COM_FRAME_MCU2PC;
             serialVirtual_echo.ReadTimeout = 1;
             //serialVirtual_echo.Open();
 
@@ -269,6 +178,7 @@ namespace NameSpace_AFM_Project
 
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             listBox_SelectIdlePackage.SetSelected(0, true);
+
 
             mDelegateFunction = new DelegateFunction(Function_UpdateUI);
 
@@ -709,27 +619,10 @@ namespace NameSpace_AFM_Project
 
             set_AFM_parameters(parameter_name, ref para_store, T);
         }
-        public void set_output_Position_Value_01(byte axis, double value_01)
+        public void set_output_Position_Value_01(int in_axis, double value_01)
         {
-            double value_nm = value_01 * MAX_RANGE_AXIS_NM[axis];
-            if (value_nm > MAX_RANGE_AXIS_NM[axis])
-            {
-                value_nm = MAX_RANGE_AXIS_NM[axis];
-                MY_DEBUG("set_output_Position_Value_01 input exceed upper limit");
-            }
-            UInt32 value_position_FF32 = 0;
-            if (axis > 2)
-                for (axis = 0; axis < 3; axis++)
-                {
-                    value_position_FF32 = (UInt32)(value_nm * (BIT32MAX / MAX_RANGE_AXIS_NM[axis]));
-                    set_output_parameters('F', axis, value_position_FF32);
-                    Thread.Sleep(800);
-                }
-            else// one axis
-            {
-                value_position_FF32 = (UInt32)(value_nm * (BIT32MAX / MAX_RANGE_AXIS_NM[axis]));
-                set_output_parameters('F', axis, value_position_FF32);
-            }
+            UInt32 value_position_FF32 = (UInt32)(value_01 * BIT32MAX);
+            set_output_parameters('F', in_axis, value_position_FF32);
 
         }
         public void set_output_DAC_Value_0_5(byte axis, double value0_5)
@@ -738,7 +631,7 @@ namespace NameSpace_AFM_Project
             value0_5 = value0_5 * BIT18MAX / 5.0;
             set_output_parameters('D', axis, (UInt32)value0_5);
         }
-        public void set_output_parameters(char parameter_name, byte axis, UInt32 value)//,double  low_limit,double up_limit)
+        public void set_output_parameters(char parameter_name, int axis, UInt32 value)//,double  low_limit,double up_limit)
         {
             // double data = Math.Abs(Convert.ToDouble(T.Text));
             //double Ggain = 1000.0;// keep 3 decimal
@@ -762,6 +655,10 @@ namespace NameSpace_AFM_Project
 
         private void button_ConnetComPort_Click(object sender, EventArgs e)
         {
+            Function_ConnetComPort_Click();
+        }
+        public void Function_ConnetComPort_Click()
+        {
             if (button_ConnetComPort.Text == "disconnect")
                 if (serialPort_Arduino.IsOpen == true)
                 {
@@ -783,7 +680,7 @@ namespace NameSpace_AFM_Project
             serialPort_Arduino = new SerialPort(com_number, Convert.ToInt32(textBox_BaudRate.Text), Parity.None, 8, StopBits.One);
             serialPort_Arduino.DataReceived += new SerialDataReceivedEventHandler(on_Received_serialPort_DataReceivedHandler);
             serialPort_Arduino.Encoding = Encoding.GetEncoding("Windows-1252");
-            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC;
             serialPort_Arduino.ReadTimeout = 2;
             serialPort_Arduino.WriteTimeout = 2000;
             serialPort_Arduino.DtrEnable = true;
@@ -906,46 +803,46 @@ namespace NameSpace_AFM_Project
         { send_Data_Frame_To_Arduino((byte)d0, (byte)d1, db4[0], db4[1], db4[2], db4[3]); }
 
 
-        byte[] mDataBuffer_ThreadWriteSerial=new byte[LENGTH_COM_BUFFER_PC2MCU];
+        byte[] mDataBuffer_ThreadWriteSerial = new byte[LENGTH_COM_FRAME_PC2MCU];
         public void send_Data_Frame_To_Arduino
             (byte d0, byte d1 = 0, byte d2 = 0, byte d3 = 0, byte d4 = 0, byte d5 = 0)
         {
             //AA 55 52 00 03 aa 00 00 55 AA 
             //byte[]
-            mDataBuffer_ThreadWriteSerial = new byte[LENGTH_COM_BUFFER_PC2MCU] 
+            mDataBuffer_ThreadWriteSerial = new byte[LENGTH_COM_FRAME_PC2MCU] 
                         { COM_HEADER1, COM_HEADER2, 
                          d0,d1,d2,d3,d4,d5,
                             // (byte)'R', 0, 0, 0,0,0,// 6 byte
-                         COM_TAIL1, COM_TAIL2 };    
+                         COM_TAIL1, COM_TAIL2 };
             while (mB_serialVirtual_Arduino_busy == true)
-                {
-                    Thread.Sleep(5);
-                    MY_DEBUG("serial write busy.");
-                }
-  
-                {
-                    mThread_WriteSerialData = new Thread(ThreadFunction_WriteSerialData);
-                    mThread_WriteSerialData.Start();
-                }
+            {
+                Thread.Sleep(5);
+                MY_DEBUG("serial write busy.");
+            }
+
+            {
+                mThread_WriteSerialData = new Thread(ThreadFunction_WriteSerialData);
+                mThread_WriteSerialData.Start();
+            }
             //if (serialPort_Arduino.IsOpen == true)
             //{
-                //try
-                //{
-     
-                //mB_serialVirtual_Arduino_busy = true;
-                //serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
+            //try
+            //{
 
-               // mThread_WriteSerialData.;// do not block the main thread
-                //mB_serialVirtual_Arduino_busy = false;
+            //mB_serialVirtual_Arduino_busy = true;
+            //serialPort_Arduino.Write(com, 0, LENGTH_COM_FRAME_PC2MCU);
 
-                //Thread.Sleep(15);
-                //}
-                //catch
-                //{
-                //    //Thread.Sleep(100);
-                //    //serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
-                //    MY_DEBUG("serialPort_Arduino.Write time out");
-                //}
+            // mThread_WriteSerialData.;// do not block the main thread
+            //mB_serialVirtual_Arduino_busy = false;
+
+            //Thread.Sleep(15);
+            //}
+            //catch
+            //{
+            //    //Thread.Sleep(100);
+            //    //serialPort_Arduino.Write(com, 0, LENGTH_COM_FRAME_PC2MCU);
+            //    MY_DEBUG("serialPort_Arduino.Write time out");
+            //}
 
             //MessageBox.Show("MCU port is not connected.", "Error");
 
@@ -958,20 +855,20 @@ namespace NameSpace_AFM_Project
                 try
                 {
                     mB_serialVirtual_Arduino_busy = true;
-                    serialPort_Arduino.Write(mDataBuffer_ThreadWriteSerial, 0, LENGTH_COM_BUFFER_PC2MCU);
+                    serialPort_Arduino.Write(mDataBuffer_ThreadWriteSerial, 0, LENGTH_COM_FRAME_PC2MCU);
                     mB_serialVirtual_Arduino_busy = false;
                 }
                 catch
                 {
                     //Thread.Sleep(100);
-                    //serialPort_Arduino.Write(com, 0, LENGTH_COM_BUFFER_PC2MCU);
+                    //serialPort_Arduino.Write(com, 0, LENGTH_COM_FRAME_PC2MCU);
                     MY_DEBUG("Thread serialPort_Arduino.Write time out");
                 }
             }
             else
                 MY_DEBUG("Thread, MCU port is not connected.");
 
-          //  MY_DEBUG("Thread Write Serial Data: end");
+            //  MY_DEBUG("Thread Write Serial Data: end");
         }
 
         private void timerFunction_Appraoch(object sender, EventArgs e)
@@ -992,16 +889,16 @@ namespace NameSpace_AFM_Project
             ////serialPort_Arduino.DiscardInBuffer();
             ////MY_DEBUG(str_in);
             //int c = (str_in.Length);
-            //if (c < LENGTH_COM_BUFFER_PC2MCU) return; // ignore error
+            //if (c < LENGTH_COM_FRAME_PC2MCU) return; // ignore error
 
             //byte[] dbx = Encoding.UTF8.GetBytes(str_in);
             ////var regex = new Regex(@"UIM..........U");
             ////MatchCollection m=regex.Matches(str_in);
             int c = -1;
-            byte[] db = new byte[LENGTH_COM_BUFFER_MCU2PC];
+            byte[] db = new byte[LENGTH_COM_FRAME_MCU2PC];
             try
             {
-                c = serialPort_echo.Read(db, 0, LENGTH_COM_BUFFER_MCU2PC);
+                c = serialPort_echo.Read(db, 0, LENGTH_COM_FRAME_MCU2PC);
             }
             catch
             {
@@ -1092,7 +989,7 @@ namespace NameSpace_AFM_Project
         //        if (checkBox_COM_Transfer.Checked == true)
         //            serialVirtual_echo.Write(db, 0, mCounter_ComReadByte);
 
-        //        on_Received_com_frame_anaysis(db, LENGTH_COM_BUFFER_MCU2PC);
+        //        on_Received_com_frame_anaysis(db, LENGTH_COM_FRAME_MCU2PC);
 
 
         //        //richTextBox_serial_read.Text = "";
@@ -1128,23 +1025,23 @@ namespace NameSpace_AFM_Project
             ////serialPort_Arduino.DiscardInBuffer();
             ////MY_DEBUG(str_in);
             //int c = (str_in.Length);
-            //if (c < LENGTH_COM_BUFFER_PC2MCU) return; // ignore error
+            //if (c < LENGTH_COM_FRAME_PC2MCU) return; // ignore error
 
             //byte[] dbx = Encoding.UTF8.GetBytes(str_in);
             ////var regex = new Regex(@"UIM..........U");
             ////MatchCollection m=regex.Matches(str_in);
             mCounter_ComReadByte = -1;
             //int byte_ready=serialPort_Arduino.BytesToRead;
-            //if (byte_ready < LENGTH_COM_BUFFER_MCU2PC)
+            //if (byte_ready < LENGTH_COM_FRAME_MCU2PC)
             //    return;
 
-            byte[] db = new byte[LENGTH_COM_BUFFER_MCU2PC * 2];
+            byte[] db = new byte[LENGTH_COM_FRAME_MCU2PC * 2];
             try
             {
                 //while (mB_serialVirtual_Arduino_busy == true)
                 //    Thread.Sleep(1);
                 mB_serialVirtual_Arduino_busy = true;
-                mCounter_ComReadByte = serialPort_Arduino.Read(db, 0, LENGTH_COM_BUFFER_MCU2PC * 2);
+                mCounter_ComReadByte = serialPort_Arduino.Read(db, 0, LENGTH_COM_FRAME_MCU2PC * 2);
                 mB_serialVirtual_Arduino_busy = false;
 
                 //byte[] buffer = Encoding.UTF8.GetBytes(convert);
@@ -1158,7 +1055,7 @@ namespace NameSpace_AFM_Project
             }
             catch
             {
-                if (mCounter_ComReadByte < LENGTH_COM_BUFFER_MCU2PC) return; // ignore error
+                if (mCounter_ComReadByte < LENGTH_COM_FRAME_MCU2PC) return; // ignore error
             }
             // whatever received, transfer
             if (checkBox_COM_Transfer.Checked == true)
@@ -1172,13 +1069,13 @@ namespace NameSpace_AFM_Project
 
             // must use this method, otherwise may lose data
             //serialPort_Arduino.DiscardInBuffer();
-            int ind = on_Received_com_frame_anaysis(db, LENGTH_COM_BUFFER_MCU2PC * 2);
+            int ind = on_Received_com_frame_anaysis(db, LENGTH_COM_FRAME_MCU2PC * 2);
 
-            if (mCounter_ComReadByte >= LENGTH_COM_BUFFER_MCU2PC && ind == 0)
+            if (mCounter_ComReadByte >= LENGTH_COM_FRAME_MCU2PC && ind == 0)
             {
-                for (int k = 0; k < db.Length - LENGTH_COM_BUFFER_MCU2PC; k++)
+                for (int k = 0; k < db.Length - LENGTH_COM_FRAME_MCU2PC; k++)
                     db[k] = db[k + 16];
-                int ind2 = on_Received_com_frame_anaysis(db, LENGTH_COM_BUFFER_MCU2PC * 2);
+                int ind2 = on_Received_com_frame_anaysis(db, LENGTH_COM_FRAME_MCU2PC * 2);
                 //MY_DEBUG("ind2:", ind2);
             }
             //mB_serialPort_DataReceivedHandler_busy = false;
@@ -1201,11 +1098,13 @@ namespace NameSpace_AFM_Project
         int on_Received_com_frame_anaysis(byte[] com_buffer, int length)
         {
             int ind = -1;
-            for (int k = 0; k < length - 15; k++)
+            for (int k = 0; k < length - (LENGTH_COM_FRAME_MCU2PC - 1); k++)
                 if (com_buffer[k] == COM_HEADER1)
                     if (com_buffer[k + 1] == COM_HEADER2)
-                        if (com_buffer[k + 14] == COM_TAIL1)
-                            if (com_buffer[k + 15] == COM_TAIL2)
+                        if (com_buffer[k + LENGTH_COM_DATA_MCU2PC + 2] == COM_TAIL1)
+                            if (com_buffer[k + LENGTH_COM_DATA_MCU2PC + 2 + 1] == COM_TAIL2)
+                            //if (com_buffer[k + 14] == COM_TAIL1)
+                            //    if (com_buffer[k + 15] == COM_TAIL2)
                             {
                                 ind = k;
                                 //break; do not break, continue to search for multi package;
@@ -1267,6 +1166,9 @@ namespace NameSpace_AFM_Project
             return T;
         }
 
+
+        double[] sys_data = { 1, 2, 3, 4, 5, 6 };
+
         void on_Received_Package_SystemState(byte[] com_buffer, int ind)
         {
             // AA 55 73 70 00   05 1E B8    00 FF E0    01 20 41    55 AA
@@ -1275,9 +1177,18 @@ namespace NameSpace_AFM_Project
 
             ind += 2;
             int index = com_buffer[ind + 2];
-            double v1 = convert_byte3_to_uint32(com_buffer, ind + 3);
-            double v2 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3);
-            double v3 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3 + 3);
+            int q = 3;
+
+            double v1 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double v2 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double v3 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double v4 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double v5 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double v6 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double v7 = convert_byte3_to_uint32(com_buffer, ind + q); q += 3;
+            double[] v = new double[7] { v1, v2, v3, v4, v5, v6, v7 };
+            //double v2 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3);
+            //double v3 = convert_byte3_to_uint32(com_buffer, ind + 3 + 3 + 3);
             //return;
             if (index == 0)
             {
@@ -1296,9 +1207,9 @@ namespace NameSpace_AFM_Project
                 //double scsg_y = v2;
                 //double scsg_z = v3;
                 double V = 1;// 5 / BIT18MAX;
-                double scsg_x = v1*V;
-                double scsg_y = v2*V;
-                double scsg_z = v3*V;
+                double scsg_x = v1 * V;
+                double scsg_y = v2 * V;
+                double scsg_z = v3 * V;
 
                 MY_DEBUG("scsg_x:\t" + scsg_x.ToString("f3")
                     + "\t scsg_y:\t" + scsg_y.ToString("f3")
@@ -1315,16 +1226,30 @@ namespace NameSpace_AFM_Project
             }
             if (index == 3)
             {
+
+                double scsg_x = v1;
+                double p = v2;
+                double scsg_z = v3;
+
+                MY_DEBUG("scsg_x:\t" + scsg_x.ToString("f3")
+                    + ":\t p:\t" + p.ToString("f3")
+                     + ":\t scsg_z:\t" + scsg_z.ToString("f3"));
+            }
+
+
+
+            if (index == 13)
+            {
                 //double[] mSensorADC18_Min = new double[3] { 4561, 35500, 231916 };// {8164, 34928, 232626};
                 //double[] mSensorADC18_Max = new double[3] { 241554, 244873, 61734 };//{241802, 244504, 62131};
                 mSensorADC18_Min[PIEZO_X] = v1;
                 mSensorADC18_Min[PIEZO_Y] = v2;
                 mSensorADC18_Min[PIEZO_Z] = v3;
-                MY_DEBUG("SCSG min:",v1);
+                MY_DEBUG("SCSG min:", v1);
                 MY_DEBUG("SCSG min:", v2);
                 MY_DEBUG("SCSG min:", v3);
             }
-            if (index == 4)
+            if (index == 14)
             {
                 mSensorADC18_Max[PIEZO_X] = v1;
                 mSensorADC18_Max[PIEZO_Y] = v2;
@@ -1337,6 +1262,63 @@ namespace NameSpace_AFM_Project
                 MY_DEBUG("SCSG range y:", mSensorADC18_Max[PIEZO_Y] - mSensorADC18_Min[PIEZO_Y]);
                 MY_DEBUG("SCSG range z:", mSensorADC18_Max[PIEZO_Z] - mSensorADC18_Min[PIEZO_Z]);
             }
+
+
+            //------------------drift 
+
+            if (index == 10)
+            {
+                //double[] mSensorADC18_Min = new double[3] { 4561, 35500, 231916 };// {8164, 34928, 232626};
+                //double[] mSensorADC18_Max = new double[3] { 241554, 244873, 61734 };//{241802, 244504, 62131};
+                sys_data[0] = v1;
+                sys_data[1] = v2;
+                sys_data[2] = v3;
+            }
+            if (index == 11)
+            {
+                //double[] mSensorADC18_Min = new double[3] { 4561, 35500, 231916 };// {8164, 34928, 232626};
+                //double[] mSensorADC18_Max = new double[3] { 241554, 244873, 61734 };//{241802, 244504, 62131};
+                sys_data[3] = v1;
+                sys_data[4] = v2;
+                sys_data[5] = v3;
+
+                double v_Temperature_SEM = convert_Temperature2Degree_SEM(sys_data[1]);
+                int k = 0;
+                MY_DEBUG("sys_data:"
+                    + sys_data[k++].ToString() + ":"
+                    + sys_data[k++].ToString() + ":"
+                    + sys_data[k++].ToString() + ":"
+                    + sys_data[k++].ToString() + ":"
+                    + sys_data[k++].ToString() + ":"
+                    + sys_data[k++].ToString() + ":"
+                    + v_Temperature_SEM.ToString("f3")
+                    );
+            }
+
+            // test_scanner_wave_output
+            if (index == 20)
+            {
+
+                // 0               Temperature_MCU,
+                //1     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true),
+                //2     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+                //3     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
+                //4     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+                //5     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
+                //6     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+                double v_Temperature_SEM = convert_Temperature2Degree_SEM(v[2]);
+                double v_Temperature_MCU = convert_Temperature2Degree_MCU(v[0]);
+                string s = "data:";
+                for (int j = 0; j < 7; j++)
+                    s += v[j].ToString() + "\t:\t";
+
+                double PRC5 = v[5] / BIT18MAX * 5;
+                s += "PRC:" + PRC5.ToString("f4") + ":";
+                s += "T_SEM:" + v_Temperature_SEM.ToString("f3") + ":";
+                s += "T_MCU:" + v_Temperature_MCU.ToString("f3") + ":";
+                MY_DEBUG(s);
+            }
+
         }
 
         void on_Received_Package_Indent(byte[] com_buffer, int ind)
@@ -1403,7 +1385,7 @@ namespace NameSpace_AFM_Project
             double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3);
             vE = vE - BIT24MAX / 2;
             vE = vE / BIT24MAX;
-            vE*=MAX_RANGE_Z_NM;
+            vE *= MAX_RANGE_Z_NM;
 
             vH = vH / BIT24MAX;// convert back to 01
             vH *= MAX_RANGE_Z_NM;// convert to full range nm
@@ -1450,11 +1432,11 @@ namespace NameSpace_AFM_Project
                 indy = -indy - 1;
 
             if (
-                (indx) >= para_Nx 
+                (indx) >= para_Nx
                 ||
-                (indx) < -(para_Nx +1)
-                || 
-                Math.Abs(indy) >= para_Ny                
+                (indx) < -(para_Nx + 1)
+                ||
+                Math.Abs(indy) >= para_Ny
                 )
             {
                 MY_DEBUG("indx", indx);
@@ -1705,7 +1687,7 @@ namespace NameSpace_AFM_Project
         public void Apporach_start()
         {
             MY_DEBUG("start approach.");
-            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC;
             //AFM_coarse_positioner_SetSpeed(250);
             //AFM_coarse_positioner_MoveDistance(2, MAX_RANGE_Z_NM * 1.21);// % for safety reason, first move up 25*1.2 um
 
@@ -1737,7 +1719,9 @@ namespace NameSpace_AFM_Project
         {
             //serialPort_Arduino.DtrEnable = false; //on programming usb serial will reset mcu
             //serialPort_Arduino.DtrEnable = true;// on programming usb serial will reset mcu
-            //send_Data_Frame_To_Arduino('r', 's', 't');
+            send_Data_Frame_To_Arduino('r', 's', 't');
+            //serialPort_Arduino.Close();
+            Function_ConnetComPort_Click();
             //while (true)
             //{
             //    send_DR_Value(0, 5, 1);
@@ -1797,7 +1781,7 @@ namespace NameSpace_AFM_Project
             mSwitch_ShowComDdata = true;
             // for (int k = 0; k < 10; k++)
             { send_Data_Frame_To_Arduino('C', 'Z', 'W'); Thread.Sleep(100); }
-            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC;
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC;
         }
         private void checkBox_Y_ScanEnable_CheckedChanged(object sender, EventArgs e)
         {
@@ -1811,7 +1795,7 @@ namespace NameSpace_AFM_Project
 
         private void button_XY_Scan_Click(object sender, EventArgs e)
         {
-            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_BUFFER_MCU2PC * 100;
+            serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC * 40;// 100;
             button_XY_Scan_Function();
             mSwitch_ShowComDdata = false;
         }
@@ -1874,7 +1858,7 @@ namespace NameSpace_AFM_Project
             //float x = 10000.5654296875f;
             //byte[] b=BitConverter.GetBytes(x);
 
-            //byte[] db = new byte[LENGTH_COM_BUFFER_MCU2PC * 2];
+            //byte[] db = new byte[LENGTH_COM_FRAME_MCU2PC * 2];
 
             //string X = serialPort_Arduino.ReadExisting();
 

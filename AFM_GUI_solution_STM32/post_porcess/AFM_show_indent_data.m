@@ -1,8 +1,9 @@
 % clear
 % close all
 % clc
-function AFM_show_indent_data()
+% function AFM_show_indent_data()
  close all
+ clear
 % data=load('..\bin\IndentData.txt');
 % dat=importdata('..\bin\IndentData.txt');
 dat=importdata('D:\AFMdata\IndentData.txt');
@@ -51,4 +52,4 @@ hold on
 plot(prc,'b.-')
 grid on
 legend('z piezo (nm)','sensor readout')
-end
+% end

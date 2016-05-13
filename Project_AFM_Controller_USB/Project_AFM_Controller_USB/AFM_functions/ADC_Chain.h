@@ -145,6 +145,7 @@ public:
 	int ADC_Read_N(int axis, bool update=true)
 			// true read PRC=154 us, true read Y, 264 us
 			// new read only, true read Y  207us
+			// new clock 78.5 us
 	{
 		if (axis <= NUM_OF_ADC)
 		{
@@ -180,7 +181,8 @@ public:
 		mSPI_SEM->transfer_read(1);// send one clock pulse
 		
 		for (int k=0;k<number_of_ADC;k++)
-			value_array[k]=mSPI_SEM->transfer_read(ADC_DATA_LENGTH);// data readout at the next clock
+//			value_array[k]=mSPI_SEM->transfer(0xaa55,ADC_DATA_LENGTH);// data readout at the next clock
+		value_array[k] = mSPI_SEM->transfer_read(ADC_DATA_LENGTH);// data readout at the next clock
 
 		mSPI_CS_AFM->write(1);
 

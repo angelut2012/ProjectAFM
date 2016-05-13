@@ -70,7 +70,7 @@ namespace NameSpace_AFM_Project
             pParent.set_AFM_parameters('g', pParent.mCParameter.NumberOfSamplingPoints);
 
 
-            pParent.mIndentData = new double[3,  6000];
+            pParent.mIndentData = new double[3, 6000];//25*1024
             pParent.mIndentData_index = -1;
             mSwitch_CancelIndent = false;
             pParent.mSwitch_IndentTrue_FinishFalse = true;

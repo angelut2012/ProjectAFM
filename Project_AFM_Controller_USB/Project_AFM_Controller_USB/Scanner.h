@@ -57,6 +57,8 @@ class CScanner
 		return outputDAC18;		
 	}
 	;
+	
+	// MoveToPosition01 only set reference position, let main cloop do PID 
 	void MoveToPosition01(float position01)
 	{
 		mScannerPosition01 = position01;

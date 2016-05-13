@@ -110,15 +110,17 @@
 #define NUM_OF_PIEZO_MODEL (3)
 #define NUM_OF_SCANNER (NUM_OF_PIEZO_MODEL)
 #define PIEZO_Z (0)
+//#define PIEZO_X (2)
+//#define PIEZO_Y (1)
 #define PIEZO_X (1)
 #define PIEZO_Y (2)
-#define PIEZO_T (3)
-#define PIEZO_ALL (255)
+//#define PIEZO_T (3)
+#define PIEZO_ALL (3)
 
-#define SCANNER_Z_ONLY (0)
-#define SCANNER_Z_LPF (1)
-#define SCANNER_T_ONLY (2)
-#define SCANNER_ZT (3)
+//#define SCANNER_Z_ONLY (0)
+//#define SCANNER_Z_LPF (1)
+//#define SCANNER_T_ONLY (2)
+//#define SCANNER_ZT (3)
 //"Zonly",
 //"Z_LPF",
 //"Tonly",
@@ -137,9 +139,15 @@
 //#define SCANNER_RANGE_Z_NM ( 14*1000.0)
 //#define SCANNER_RANGE_X_NM (50*1000.0)
 //#define SCANNER_RANGE_Y_NM (50*1000.0)
-#define SCANNER_RANGE_Z_NM ( 21.04*1000.0)
-#define SCANNER_RANGE_X_NM (71.72*1000.0)
-#define SCANNER_RANGE_Y_NM (95.18*1000.0)
+
+//// by optical microscope
+//#define SCANNER_RANGE_Z_NM ( 21.04*1000.0)
+//#define SCANNER_RANGE_X_NM (71.72*1000.0)
+//#define SCANNER_RANGE_Y_NM (95.18*1000.0)
+// by SEM
+#define SCANNER_RANGE_Z_NM (21.514*1000.0)
+#define SCANNER_RANGE_X_NM (92.509*1000.0)
+#define SCANNER_RANGE_Y_NM (71.816*1000.0)
 
 
 

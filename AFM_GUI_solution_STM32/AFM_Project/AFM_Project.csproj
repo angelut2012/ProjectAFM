@@ -82,6 +82,9 @@
     <Compile Include="CCoarseController.cs" />
     <Compile Include="CCoarsePositioner.cs" />
     <Compile Include="CIniFile.cs" />
+    <Compile Include="FormMainWindow_GerneralFunction.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="CParameter.cs" />
     <Compile Include="FormMainWindow.cs">
       <SubType>Form</SubType>

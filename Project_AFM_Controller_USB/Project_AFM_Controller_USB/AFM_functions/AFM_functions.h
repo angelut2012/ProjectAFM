@@ -43,6 +43,7 @@ typedef  uint8_t byte;
 
 #include "Scanner.h"
 
+#include "AFM_ClockDefine.h"
 
 /////////////////////////////////////////AFM global members///////////////////////////////////////////////////////////////////////
 extern DigitalOut* p_LED;
@@ -244,26 +245,26 @@ public:
 //	mCTickTimer_RealTime
 	
 //	static 
-		void AFM_ProcessScheduler_Realtime();
-//	static 
-		void AFM_ProcessScheduler_NonRealtime();
-//////////////////////////////////////hardware test functions
+	void AFM_ProcessScheduler_Realtime();
+	//	static 
+	void AFM_ProcessScheduler_NonRealtime();
+	//////////////////////////////////////hardware test functions
 
 
-	/////////////////////////////////////////AFM global members///////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////AFM global members///////////////////////////////////////////////////////////////////////
 
-	//the port use for PIEZO_Z and PIEZO_T(tuning fork)
-	byte Z_scanner_port;// SCANNER_Z_ONLY;
+			//the port use for PIEZO_Z and PIEZO_T(tuning fork)
+			//	byte Z_scanner_port;// SCANNER_Z_ONLY;
 #define PIEZO_T_CenterBit18 (140581.0) //80.441/150*2^18
 #define PIEZO_T_Center01 (PIEZO_T_CenterBit18/BIT18MAX) //80.441/150*2^18
 
-	/////////////////////----------------------------------
-	// send package16 to PC via RTOS
-//	CPackageToPC* mCPackageToPC_SystemPackage;// new CPackageToPC(2);
-	////////////////////////// median filter
+				/////////////////////----------------------------------
+				// send package16 to PC via RTOS
+				//	CPackageToPC* mCPackageToPC_SystemPackage;// new CPackageToPC(2);
+					////////////////////////// median filter
 
-	int rtos_buffer_in_index;
-	// strain gauge global switch ON_OFF
+					//	int rtos_buffer_in_index;
+						// strain gauge global switch ON_OFF
 	int switch_read_SG;// -1;// >0: read; ==1, read only once; ==2 continuously read
 	///////////////// approaching
 	int mPeriod_Realtime_us;
@@ -303,7 +304,7 @@ public:
 #define  sampling_period_us_of_ZScannerEngage_Process (1000.0)
 #define  sampling_frequency_of_ZScannerEngage_Process ( 1000000.0/ sampling_period_us_of_ZScannerEngage_Process)	
 	//// Zloop
-#define SamplingTime_ZLoop_us  (500)// measured
+#define SamplingTime_ZLoop_us (200) //(500)// measured
 #define SamplingFrequency_ZLoop_Hz  (1000000.0/SamplingTime_ZLoop_us)// Hz
 
 	////////////////////////// input for  xy scan
@@ -374,7 +375,7 @@ public:
 #define mI_Withdraw_Done_Threshold_nm (1)// should not be smaller than noise level
 	float mI_Withdraw_Done_Threshold_ADC;// mI_PRC_ADCValue_per_nm*mI_Withdraw_Done_Threshold_nm;
 
-#define mI_MaxStep (4096)
+#define mI_MaxStep (4096)//(25*1024) is max
 	uint32_t mIndentData[3][mI_MaxStep];// {0};
 
 	uint32_t mZLoopPID_WorkingDistance_nm;// 500 / 4;// set working voltage;// receive from rs232
@@ -382,9 +383,9 @@ public:
 	bool mHoldXYScanner;// hold XY scanner if dts error is too high
 	float DTS_Sensitivity_B18_per_nm;//
 	int32_t VWset_deltaV_ADC_b18;// 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZLoopPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZLoopPID_WorkingDistance_nm
-	float mTF_DC_Gain;// 1;// gain for tf DC actuation
+//	float mTF_DC_Gain;// 1;// gain for tf DC actuation
 
-	float TF_SensorRange;// nm, assumed range, or Zmax
+//	float TF_SensorRange;// nm, assumed range, or Zmax
 
 	//
 	//float DSet_01=(-(float)mZLoopPID_WorkingDistance_nm/1000.0/4.0+2.5)// voltage 0~5 //2.375V
@@ -394,20 +395,22 @@ public:
 
 	//////////// send image package back tp PC///////////////////
 	///////send one byte each time
-	byte com_image_frame_buffer[LENGTH_IMAGE_FRAME_BUFFER];// {0};// 
-	int pointer_out_frame_buffer;// LENGTH_IMAGE_FRAME_BUFFER;
+//	byte com_image_frame_buffer[LENGTH_IMAGE_FRAME_BUFFER];// {0};// 
+//	int pointer_out_frame_buffer;// LENGTH_IMAGE_FRAME_BUFFER;
 
 	CPID *mPID_ZLOOP;// new PID(DInput_01, DOutput_01, DSet_01, 0.05, 0.02, 0, true);// use true for PRC imagining scanning
 
 	//float z_output_01;// 0;
-#define LENGTH_COM_BUFFER_PC2MCU_CONSOLE (LENGTH_COM_BUFFER_PC2MCU * 4)
+#define LENGTH_COM_BUFFER_PC2MCU_CONSOLE (LENGTH_COM_FRAME_PC2MCU * 4)
 	byte com_buffer[LENGTH_COM_BUFFER_PC2MCU_CONSOLE];// {0};
-	byte com_buffer_frame[LENGTH_COM_BUFFER_PC2MCU - 4];// {0};
+	byte com_buffer_frame[LENGTH_COM_FRAME_PC2MCU - 4];// {0};
 
 	float measured_sampling_frequency_of_system;// 0;
 	
 	float mStepSize_Appoach;
 	byte sys_idle_package_index;
+	
+	int mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2;// = 0;
 	
 	//-----------------------------------------------------------------------------------------
 	
@@ -438,7 +441,7 @@ public:
 //	//// Zloop
 //#define SamplingTime_us_Zloop  (400)// (330)//1000 
 //#define SamplingFrequency_ZLoop_Hz  (1000000.0/SamplingTime_us_Zloop)// Hz
-//
+		mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 = 0;
 		sys_idle_package_index = 0;
 		mPeriod_RealtimePID_us = SamplingTime_ZLoop_us;//__TICK_PERIOD_US__ * 0.9;//200;
 		mPeriod_Realtime_us = SamplingTime_ZLoop_us;// mPeriod_RealtimePID_us * TIMES_PID_LOOP;//501;//200;
@@ -458,10 +461,10 @@ public:
 		
 
 			//-------------------------------------------------------------------		
-		rtos_buffer_in_index = 0;
-		TF_SensorRange = 1000;
+//		rtos_buffer_in_index = 0;
+//		TF_SensorRange = 1000;
 //the port use for PIEZO_Z and PIEZO_T(tuning fork)
-		Z_scanner_port = SCANNER_Z_ONLY;
+//		Z_scanner_port = SCANNER_Z_ONLY;
 	   /////////////////////----------------------------------
 	   // send package16 to PC via RTOS
 //		mCPackageToPC_SystemPackage = new CPackageToPC(2);
@@ -553,9 +556,9 @@ public:
 		mZLoopPID_WorkingDistance_nm = 5;// set working voltage;// receive from rs232
 		DTS_Sensitivity_B18_per_nm = 40; //192/2;// nm/V   // receive from rs232
 		VWset_deltaV_ADC_b18 = 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZLoopPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZLoopPID_WorkingDistance_nm
-		mTF_DC_Gain = 1;// gain for tf DC actuation
+//		mTF_DC_Gain = 1;// gain for tf DC actuation
 
-		TF_SensorRange = 1000;// nm, assumed range, or Zmax
+//		TF_SensorRange = 1000;// nm, assumed range, or Zmax
 	   // pid_input_Gain_adjust=0;//5.0*DTS_Sensitivity_B18_per_nm/BIT18MAX/TF_SensorRange;
 
 	   	//
@@ -569,12 +572,12 @@ public:
 			//////////// send image package back tp PC///////////////////
 			///////send one  each time
 		//com_image_frame_buffer[LENGTH_IMAGE_FRAME_BUFFER] = {0};// 
-		pointer_out_frame_buffer = LENGTH_IMAGE_FRAME_BUFFER;
+//		pointer_out_frame_buffer = LENGTH_IMAGE_FRAME_BUFFER;
 
 		mPID_ZLOOP = new CPID(true);//DInput_01, DOutput_01, DSet_01, 0.05, 0.02, 0, use true for PRC imagining scanning
 		//z_output_01 = 0;
-		//com_buffer[LENGTH_COM_BUFFER_PC2MCU * 2] = {0};
-		//com_buffer_frame[LENGTH_COM_BUFFER_PC2MCU - 4] = {0};
+		//com_buffer[LENGTH_COM_FRAME_PC2MCU * 2] = {0};
+		//com_buffer_frame[LENGTH_COM_FRAME_PC2MCU - 4] = {0};
 
 		measured_sampling_frequency_of_system = 0;
 		
@@ -660,7 +663,7 @@ public:
 		convert_uint32_to_byte3(v2, &com[2 + 4]);// byte3
 		convert_uint32_to_byte3(v3, &com[2 + 4 + 3]);//byte3
 //		mCPackageToPC_SystemPackage->prepare_package_Byte12_to_PC(com);
-		send_COM_DATA12_In_Frame_To_PC(com);
+		send_Data_In_Frame_To_PC(com);
 		
 	}
 	//
@@ -936,7 +939,7 @@ public:
 		// withdraw Z piezo, and continue to send data in SS_Indent state
 		console_ResetScannerModel(PIEZO_Z);//console_WithDrawZScanner_SetSystemIdle();
 		int index_send = 0;
-		for (int k=0;k<mI_MaxStep;k++)
+		for (int k = 0;k < mI_MaxStep;k++)
 		//for (int k = (index_store_at_max_point - mI_HalfNumberOfSamplingPoints);k < (index_store_at_max_point + mI_HalfNumberOfSamplingPoints);k++)	
 		{
 			if (sys_state != SS_Indent) return;// to interrupt during indentation
@@ -1102,25 +1105,28 @@ public:
 			if (sys_state != SS_Indent) return;// to interrupt during indentation
 			//*p_Tdio4 = 1;
 			toggle_pin_p(p_Tdio4);
-			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);// 7.84 kHz
-			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);
-			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);// 7.84 kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
 
-			//mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);//4.78 kHz
-			//mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
-			//mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);	
-			 
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);//4.78 kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);	
+			
+			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);//4.78 kHz
+			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
+			mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);			 
 			//*p_Tdio4 = 0;
 			
 		}
 		int index_send = 0;
-		for (int k=0;k<mI_MaxStep;k++)
+		for (int k = 0;k < mI_MaxStep;k++)
 		{
 			*p_Tdio5 = 1;
 			if (sys_state != SS_Indent) return;// to interrupt during indentation
 			index_send = MOD_range(k, mI_MaxStep); //here % operator has problem with int
 			send_IndentData_Package_To_PC(mIndentData[0][index_send], mIndentData[1][index_send], mIndentData[2][index_send]);
-			wait_ms(7);//old delay=4 , but lose point sometimes
+			wait_us(1000);//7ms old delay=4 , but lose point sometimes
 			*p_Tdio5 = 0;
 		}
 		for (int m = 0;m < 4;m++)// send finish signal multi times, to make sure PC receive it
@@ -1226,7 +1232,7 @@ public:
 		
 #if(ADC_PORT_ZlOOP_SENSOR==ADC_CHANNEL_PRC)
 			// for PRC, use mZLoopPID_WorkingDistance_nm as nm,
-		float mZLoopPID_WorkingDistance_01=(float)(mZLoopPID_WorkingDistance_nm) * DTS_Sensitivity_B18_per_nm / BIT18MAX;
+		float mZLoopPID_WorkingDistance_01 = (float)(mZLoopPID_WorkingDistance_nm) * DTS_Sensitivity_B18_per_nm / BIT18MAX;
 		mZLoopPID_WorkingDistance_Threshold_01 = mZLoopPID_WorkingDistance_01 * 10;
 		float DSet_01 = VdeltaF_FarAway_01 - mZLoopPID_WorkingDistance_01;
 #else	// tuning fork
@@ -1420,6 +1426,13 @@ public:
 		mCScanner[PIEZO_X].MoveToPosition01((_Float_)VDACy / (_Float_)BIT18MAX);	// only set position reference, real move be be done in AFM_ProcessScheduler_Realtime while calculate PID
 		mCScanner[PIEZO_Y].MoveToPosition01((_Float_)VDACx / (_Float_)BIT18MAX);	
 
+		// pid update and DAC move for XY scanner
+		if (mHoldXYScanner == false)			
+		{
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true)));
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
+		}	
+		
 		return mDDS_XY_Scanner_State;
 	}
 	void XYscanning_Initialize()
@@ -1468,16 +1481,16 @@ public:
 //		bool mHoldXYScanner = false;
 		bool mHoldXYScanner = Math_Abs(distance_tip_sample_error) > mZLoopPID_WorkingDistance_Threshold_01;
 		int	xy_state = 0;
-		if (mHoldXYScanner==false)
-			xy_state= XYscanning();
+		if (mHoldXYScanner == false)
+			xy_state = XYscanning();
 
 		float Z_sensor_height01 = mCScanner[PIEZO_Z].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));		
 		
 //		if (xy_state == (int)DDS_XY_Scan)
-			send_image_package_to_PC(indx, indy, Z_sensor_height01, distance_tip_sample_error);//z_output_01
-			//send_image_package_to_PC_direct(indx, indy, Z_sensor_height, mPID_ZLOOP->GetError());//z_output_01
-//		else// after engage send out (0,0) point continuously
-//			send_engaged_package_to_PC(0, 0,Z_sensor_height01,z_actuation_position_01); // mPID_ZLOOP->GetError()
+		send_image_package_to_PC(indx, indy, Z_sensor_height01, distance_tip_sample_error);//z_output_01
+		//send_image_package_to_PC_direct(indx, indy, Z_sensor_height, mPID_ZLOOP->GetError());//z_output_01
+		//		else// after engage send out (0,0) point continuously
+		//			send_engaged_package_to_PC(0, 0,Z_sensor_height01,z_actuation_position_01); // mPID_ZLOOP->GetError()
 
 		*p_Tdio2 = 0;		
 	}
@@ -1642,7 +1655,7 @@ public:
 
 			//if(para=='t') mTF_DC_Gain=vf;
 
-		if(para=='a') {sys_idle_package_index = vf;}
+		if (para == 'a') {sys_idle_package_index = vf;}
 				//mUSerial.write(&para,1);
 				//mUSerial.println(v,DEC);
 	}
@@ -1678,23 +1691,40 @@ public:
 		//value=Max(value,0);
 
 		float position_output_01 = (float)value / BIT32MAX;	
-
-		if (channel < 4)
+		
+		mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 = 1;
+		if (channel < NUM_OF_SCANNER)
 		{
-			//V18_Dac[channel]=
-			//piezo_predict_Position01_To_Voltage_DAC18(channel, position_output_01);
-			//position_feedforward_output_01[channel] = position_output_01;
-			
-			mCScanner[channel].MoveToPosition01(position_output_01);
+			piezo_predict_Position01_To_Voltage_DAC18(channel, position_output_01);
+			position_feedforward_output_01[channel] = position_output_01;
 		}
-		if (channel == 0xff)// set value for all channel
-			for (int i = 0; i < 4; i++)
+		if (channel == NUM_OF_SCANNER)// set value for all channel
+			for (int i = 0; i < NUM_OF_SCANNER; i++)
 			{
 				//V18_Dac[i]=
 				piezo_predict_Position01_To_Voltage_DAC18(i, position_output_01);
 				position_feedforward_output_01[i] = position_output_01;
 			}
+		else
+		/////////////////////////////////////////////////////
+		if (channel >= 100)// set value for all channel
+		{
+			mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 = 2;
+			channel -= 100;
+			channel %= NUM_OF_SCANNER+1;// for safety
+			
+			
+			if (channel < NUM_OF_SCANNER)
+				mCScanner[channel].MoveToPosition01(position_output_01);
+			if (channel == NUM_OF_SCANNER)// set value for all channel
+				for (int i = 0; i < NUM_OF_SCANNER; i++)
+				{
+					mCScanner[i].MoveToPosition01(position_output_01);
+				}
+		}
 
+		
+		
 	}
 
 	void console_DAC_output(byte* com_buffer_frame)
@@ -1710,20 +1740,19 @@ public:
 		value = Min(value, BIT18MAX);
 		value = Max(value, 0);
 
-		if (channel == PIEZO_Z)
-			V18_Dac[PIEZO_Z] = value;// hold the value in Z axis
-		if (channel < 4)
+//		if (channel == PIEZO_Z)
+//			V18_Dac[PIEZO_Z] = value;// hold the value in Z axis
+		if (channel < NUM_OF_SCANNER)
 			mAFM_DAC.DAC_write(channel, value);
-		if (channel == 0xff)// set value for all channel
+		if (channel == NUM_OF_SCANNER)// set value for all channel
 		{
-			V18_Dac[PIEZO_Z] = value;// hold the value in Z axis
 			mAFM_DAC.DAC_write(0, value);
 			mAFM_DAC.DAC_write(1, value);
 			mAFM_DAC.DAC_write(2, value);
-			mAFM_DAC.DAC_write(3, value);
+//			mAFM_DAC.DAC_write(3, value);
 		}
-		//static byte x = 0;
-		//send_image_package_to_PC_direct(x++, 0, 0.5,0.6);
+
+		mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 = 0;
 	}
 	//void console_StartApproach_only_coarse_move()
 	//{
@@ -1782,7 +1811,7 @@ public:
 		wait_ms(50);
 		//ADC_sensor_buffer = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR);
 		Vdf_infinite = ADC_read_MedianFilter(ADC_PORT_ZlOOP_SENSOR, 5, 10);// ADC_read_average(ADC_PORT_ZlOOP_SENSOR,10,50);
-		ADC_sensor_buffer=Vdf_infinite;
+		ADC_sensor_buffer = Vdf_infinite;
 		//ADC_read_MedianFilter(ADC_PORT_ZlOOP_SENSOR,20,100);// coarse positioner could vibrate
 		//ADC_read_average(ADC_PORT_ZlOOP_SENSOR,100,100);;
 
@@ -1869,7 +1898,8 @@ public:
 		if (com[1] == 'A')// read ADC  & com[2]=='P') 
 			;
 		if (com[1] == 'S' & com[2] == 'P') 
-			send_back_debug_infomation();
+			;
+//			send_back_debug_infomation();
 		if (com[1] == 's' & com[2] == 'g') 
 			console_ReadStrainGaugeData(com[3]);
 	}
@@ -1940,7 +1970,7 @@ public:
 		//int byte_ready = 0;// mUSerial.available();// time consumption= 84 us
 		//if (byte_ready == 0) return 0;
 		//Rval = mUSerial.read();
-		memset(com_buffer, 0,LENGTH_COM_BUFFER_PC2MCU_CONSOLE);//sizeof(com_buffer)
+		memset(com_buffer, 0, LENGTH_COM_BUFFER_PC2MCU_CONSOLE);//sizeof(com_buffer)
 		
 		int byte_ready = mUSerial.readBytes(com_buffer, LENGTH_COM_BUFFER_PC2MCU_CONSOLE);
 		
@@ -1954,18 +1984,18 @@ public:
 		
 
 		// if there are multi frames , the progrma can still detect it
-		for (int k = 0; k < LENGTH_COM_BUFFER_PC2MCU_CONSOLE-LENGTH_COM_BUFFER_PC2MCU; k++)
-			//for (int k = 0; k < LENGTH_COM_BUFFER_PC2MCU + 1; k++)
+		for (int k = 0; k < LENGTH_COM_BUFFER_PC2MCU_CONSOLE - LENGTH_COM_FRAME_PC2MCU; k++)
+			//for (int k = 0; k < LENGTH_COM_FRAME_PC2MCU + 1; k++)
 			if (com_buffer[k] == COM_HEADER1)
 				if (com_buffer[k + 1] == COM_HEADER2)
-					if (com_buffer[k + LENGTH_COM_BUFFER_PC2MCU - 2] == COM_TAIL1)
-						if (com_buffer[k + LENGTH_COM_BUFFER_PC2MCU - 1] == COM_TAIL2)
+					if (com_buffer[k + LENGTH_COM_FRAME_PC2MCU - 2] == COM_TAIL1)
+						if (com_buffer[k + LENGTH_COM_FRAME_PC2MCU - 1] == COM_TAIL2)
 						{
-							if (echo_b == true) mUSerial.write(com_buffer, LENGTH_COM_BUFFER_PC2MCU); //echo
-							for (byte ind = 0; ind < LENGTH_COM_BUFFER_FRAME; ind++)
+							if (echo_b == true) mUSerial.write(com_buffer, LENGTH_COM_FRAME_PC2MCU); //echo
+							for (byte ind = 0; ind < LENGTH_COM_DATA_PC2MCU; ind++)
 								com_buffer_frame[ind] = com_buffer[k + ind + 2];
 							memset(com_buffer, 0, sizeof(com_buffer));
-							if (echo_b == true) mUSerial.write(com_buffer_frame, LENGTH_COM_BUFFER_FRAME); //echo
+							if (echo_b == true) mUSerial.write(com_buffer_frame, LENGTH_COM_DATA_PC2MCU); //echo
 
 													//AA 55,52 03 f0 00 00 00, 55 AA
 							if (com_buffer_frame[0] == 'R')//'R'=0x52
@@ -1985,7 +2015,10 @@ public:
 							if (com_buffer_frame[0] == 'r' 
 								& com_buffer_frame[1] == 's' 
 								& com_buffer_frame[2] == 't') 
+							{
+								wait(3);// wait for PC software to disconnect serial port
 								Software_Reset();
+							}
 							;
 
 
@@ -2066,7 +2099,7 @@ public:
 //				com[2] = 9;
 //				memcpy(&com[3], &Buffer_SG_data[1], 9);
 //				if (*pSwitch_read_SG > 0)
-//					send_system_package16_char_to_PC((char*)com);
+//					send_system_package_string_to_PC((char*)com);
 //				if (*pSwitch_read_SG == 1) *pSwitch_read_SG = 0;// read only once
 //				//for (int k=0;k<LENGTH_I2C_DATA_SG;k++)
 //				//{mUSerial.print(Buffer_SG_data[k],DEC);         // print the character
@@ -2143,42 +2176,50 @@ public:
 		//	if (step%1000==0)
 		//for (int k=0;k<5;k++)
 		{
-			byte com [] = {
-				COM_HEADER1,
-				COM_HEADER2,
-				'C',
-				'A',
-				'P',
+//			byte com [] = {
+//				COM_HEADER1,
+//				COM_HEADER2,
+//				'C',
+//				'A',
+//				'P',
+//				0,
+//				0,
+//				0,
+//				0,//5
+//				0,
+//				0, 
+//				0, 
+//				0,//9
+//				(byte)done,
+//				COM_TAIL1,
+//				COM_TAIL2
+//			};
+//			convert_uint32_to_byte4(v, &com[5]);
+//			convert_uint32_to_byte4(step, &com[9]);
+			byte com[LENGTH_COM_DATA_MCU2PC] = {
+				'C',//0
+				'A',//1
+				'P',//2
+				0,//---data from 3
 				0,
 				0,
 				0,
-				0,//5
-				0,
+				0,//7
 				0, 
 				0, 
-				0,//9
+				0,
 				(byte)done,
-				COM_TAIL1,
-				COM_TAIL2
 			};
-			convert_uint32_to_byte4(v, &com[5]);
-			convert_uint32_to_byte4(step, &com[9]);
-			mUSerial.write(com, sizeof(com) / sizeof(com[0]));
-			wait_ms(2);
+			convert_uint32_to_byte4(v, &com[3]);
+			convert_uint32_to_byte4(step, &com[3+4]);
+			send_Data_In_Frame_To_PC(com);
+//			wait_ms(2);
 		}
 	}
-	//void send_system_package16_char_to_PC()
-	void send_system_package16_char_to_PC(const char*inf)
+	
+	void send_system_package_string_to_PC(const char*inf)
 	{
-		//mUSerial.println(inf);
-
-		byte com[LENGTH_COM_FRAME_MCU2PC] = {0};
-		com[0] = COM_HEADER1;
-		com[1] = COM_HEADER2,
-			com[LENGTH_COM_FRAME_MCU2PC - 2] = COM_TAIL1;
-		com[LENGTH_COM_FRAME_MCU2PC - 1] = COM_TAIL2;
-		memcpy(&com[2], inf, Min(strlen(inf), LENGTH_COM_FRAME_MCU2PC - 4));
-		mUSerial.write(com, LENGTH_COM_FRAME_MCU2PC); 
+		send_Data_In_Frame_To_PC((byte*)inf);
 	}
 	//void send_system_package16_to_PC(float Z_position01,uint32_t adc18,uint32_t dac18)
 	//{
@@ -2234,11 +2275,11 @@ public:
 		//////////////////////////
 		mPID_ZLOOP->Reset();
 		//mUSerial.println(VWset_deltaV_ADC_b18,DEC);
-		if (Math_Abs((int32_t)Vdf_infinite - (int32_t)V18_Adc[ADC_PORT_ZlOOP_SENSOR]) > VWset_deltaV_ADC_b18<<1)// reach working woltage
+		if (Math_Abs((int32_t)Vdf_infinite - (int32_t)V18_Adc[ADC_PORT_ZlOOP_SENSOR]) > VWset_deltaV_ADC_b18 << 1)// reach working woltage
 		{	
 
 			sys_state = SS_Scan;
-			send_system_package16_char_to_PC("CZEdone");
+			send_system_package_string_to_PC("CZEdone");
 			if (mode_pause0_scan1_pending2 == 2)// pending for scan
 			{
 				mode_pause0_scan1_pending2 = 1;
@@ -2259,7 +2300,7 @@ public:
 		{
 			console_WithDrawZScanner_SetSystemIdle();
 			Z_position_DAC_ZScannerEngage = 0;
-			send_system_package16_char_to_PC("CZEfail");
+			send_system_package_string_to_PC("CZEfail");
 			return;
 		}
 
@@ -2315,7 +2356,7 @@ public:
 		//static uint32_t Z_position_DAC_Approach=0;
 		step_counter_Approach++;
 		//V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR); ADC_read_MedianFilter(ADC_PORT_ZlOOP_SENSOR, 5, 10);
-		V18_Adc[ADC_PORT_ZlOOP_SENSOR] =ADC_read_MedianFilter(ADC_PORT_ZlOOP_SENSOR, 5, 10);
+		V18_Adc[ADC_PORT_ZlOOP_SENSOR] = ADC_read_MedianFilter(ADC_PORT_ZlOOP_SENSOR, 5, 10);
 		//ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 5, 10);//20_10-->1.97 kHz, 40_10-->1.13 kHz
 		uint32_t vdf = V18_Adc[ADC_PORT_ZlOOP_SENSOR];
 //---------------------------------------------------------------------------------------------------
@@ -2336,7 +2377,7 @@ public:
 		ADC_sensor_buffer = vdf;// update
 
 		if (step_size_increament_Appraoch < mStepSize_Appoach)// step size increase slowly to avoid vibration in the beginning
-			step_size_increament_Appraoch+=2;
+			step_size_increament_Appraoch += 2;
 		Z_position_DAC_Approach += step_size_increament_Appraoch;//(mStepSize_Appoach);
 		
 //------------------- one big step finished without touch
@@ -2388,8 +2429,8 @@ public:
 //			Serial_write_reset_input_output();
 //			send_image_package_to_PC_sub(indx, indy, vHeight, vError);
 //			send_image_package_to_PC_sub(indx, indy, vHeight, vError);
-			send_image_package_to_PC_sub(indx, indy, vHeight, vError);
-//		}
+		send_image_package_to_PC_sub(indx, indy, vHeight, vError);
+		//		}
 	}
 	void send_image_package_to_PC(int indx, int indy, float vHeight_01, float vError_pn1)
 	{
@@ -2430,7 +2471,7 @@ public:
 		byte valueE3b[SIZE_IMAGE_BUFFER_BIT24] = {0};
 		//uint32_t vE24=(uint32_t)(vError*(float)BIT24MAX);
 		// converet -1:1-->0:2, later divide by 2
-		uint32_t vE24 = (uint32_t)((vError_pn1 +1)*(float)BIT24MAX);
+		uint32_t vE24 = (uint32_t)((vError_pn1 + 1)*(float)BIT24MAX);
 		vE24 >>= 1;// divide by 2
 		convert_uint32_to_byte3(vE24, valueE3b);
 
@@ -2443,7 +2484,7 @@ public:
 		com[10] = valueE3b[1];
 		com[11] = valueE3b[2];
 		
-		send_COM_DATA12_In_Frame_To_PC(com);
+		send_Data_In_Frame_To_PC(com);
 	}
 	
 //	void send_image_package_to_PC_direct(int indx, int indy, float vHeight, float vError)
@@ -2612,75 +2653,75 @@ public:
 	//	mUSerial.write(COM_TAIL2);
 	//}
 
-	void send_back_debug_infomation()
-		// should send each byte and then give cpu to others
-	{
-//		static int c = 0;
-//		c++;
-//		if (c < 100000)
-//			return;
-//		c = 0;
-
-
-			//PERIOD_TIME_CHECK_EXIT();
-			//	int dt=500000;
-			///*	{
-			//		do
-			//		{*/	
-			//			static unsigned long time_store =millis();	
-			//			unsigned long time_now=millis();	
-			//			if((time_now - time_store)<(dt))
-			//				return;	
-			//			else 
-			//				time_store=time_now;
-			//	//	}
-			//	//	while(0);
-			//	//}
-
-				//		mUSerial.print("F ");
-				//		mUSerial.println(measured_sampling_frequency_of_system,DEC);
-				//mUSerial.print("DSet_01 ");
-				//mUSerial.println(DSet_01,DEC);
-				//mUSerial.print("DInput_01 ");
-				//mUSerial.println(DInput_01,DEC);
-		mUSerial.print("sys_state ");
-		mUSerial.print(sys_state, DEC);
-		mUSerial.print("*XY_state: ");	
-		mUSerial.print(mDDS_XY_Scanner_State, DEC);	
-
-		mUSerial.print("*ADC_inf: ");	
-		mUSerial.print(Vdf_infinite, DEC);	
-		mUSerial.print("*ADC: ");	
-		mUSerial.print(V18_Adc[ADC_PORT_ZlOOP_SENSOR], DEC);
-		mUSerial.print("*vdf mV: ");
-		mUSerial.print((int)((float)V18_Adc[ADC_PORT_ZlOOP_SENSOR] * 5.0 / (float)BIT18MAX * 1000), DEC);
-//		mUSerial.print("*Set: ");
-//		mUSerial.print((int)(DSet_01 * 100000), DEC);
-//		mUSerial.print("*IN: ");
+//	void send_back_debug_infomation()
+//		// should send each byte and then give cpu to others
+//	{
+////		static int c = 0;
+////		c++;
+////		if (c < 100000)
+////			return;
+////		c = 0;
 //
-//		mUSerial.print((int)(DInput_01 * 100000), DEC);
-//		//mUSerial.println(DInput_01,DEC);
-//		mUSerial.print("*Out: ");
 //
-//		mUSerial.print((int)(DOutput_01 * 100000), DEC);
-
-
-		//mUSerial.print("*Vout: ");
-		//mUSerial.print((int)(z_output_01 * 100000), DEC);
-
-		mUSerial.print("*X: ");
-		mUSerial.print(VDACx, DEC);
-		mUSerial.print("*Y: ");
-		mUSerial.print(VDACy, DEC);
-
-		mUSerial.print("*switch_read_SG: ");
-		mUSerial.print(switch_read_SG, DEC);
-
-		mUSerial.println('\n', DEC);
-
-			//mUSerial.println(DOutput_01,DEC);
-
-	}
+//			//PERIOD_TIME_CHECK_EXIT();
+//			//	int dt=500000;
+//			///*	{
+//			//		do
+//			//		{*/	
+//			//			static unsigned long time_store =millis();	
+//			//			unsigned long time_now=millis();	
+//			//			if((time_now - time_store)<(dt))
+//			//				return;	
+//			//			else 
+//			//				time_store=time_now;
+//			//	//	}
+//			//	//	while(0);
+//			//	//}
+//
+//				//		mUSerial.print("F ");
+//				//		mUSerial.println(measured_sampling_frequency_of_system,DEC);
+//				//mUSerial.print("DSet_01 ");
+//				//mUSerial.println(DSet_01,DEC);
+//				//mUSerial.print("DInput_01 ");
+//				//mUSerial.println(DInput_01,DEC);
+//		mUSerial.print("sys_state ");
+//		mUSerial.print(sys_state, DEC);
+//		mUSerial.print("*XY_state: ");	
+//		mUSerial.print(mDDS_XY_Scanner_State, DEC);	
+//
+//		mUSerial.print("*ADC_inf: ");	
+//		mUSerial.print(Vdf_infinite, DEC);	
+//		mUSerial.print("*ADC: ");	
+//		mUSerial.print(V18_Adc[ADC_PORT_ZlOOP_SENSOR], DEC);
+//		mUSerial.print("*vdf mV: ");
+//		mUSerial.print((int)((float)V18_Adc[ADC_PORT_ZlOOP_SENSOR] * 5.0 / (float)BIT18MAX * 1000), DEC);
+////		mUSerial.print("*Set: ");
+////		mUSerial.print((int)(DSet_01 * 100000), DEC);
+////		mUSerial.print("*IN: ");
+////
+////		mUSerial.print((int)(DInput_01 * 100000), DEC);
+////		//mUSerial.println(DInput_01,DEC);
+////		mUSerial.print("*Out: ");
+////
+////		mUSerial.print((int)(DOutput_01 * 100000), DEC);
+//
+//
+//		//mUSerial.print("*Vout: ");
+//		//mUSerial.print((int)(z_output_01 * 100000), DEC);
+//
+//		mUSerial.print("*X: ");
+//		mUSerial.print(VDACx, DEC);
+//		mUSerial.print("*Y: ");
+//		mUSerial.print(VDACy, DEC);
+//
+//		mUSerial.print("*switch_read_SG: ");
+//		mUSerial.print(switch_read_SG, DEC);
+//
+//		mUSerial.println('\n', DEC);
+//
+//			//mUSerial.println(DOutput_01,DEC);
+//
+//	}
 
 
 	void process_ScanRealTimeLoop_Initialize(float position_01)
@@ -2691,20 +2732,98 @@ public:
 		//z_output_01 = position_01;//0.5;
 	}
 	
+	void test_scanner_wave_output_DAC()
+	{
+		int value = wave_triangle_0ToMax(512, BIT18MAX, false);
+		static int v_last = 0;		
+//		read back
+//		send_system_package_to_PC(20,
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true),
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+		send_system_package_to_PC(20,
+			v_last,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+		// next step
+		mAFM_DAC.DAC_write_all(value);
+
+		v_last = value;
+	}
+	void test_scanner_wave_output_CloseLoopPosition()
+	{
+		mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 =2;
+		int value = wave_triangle_0ToMax(8192, BIT18MAX, false);
+		static int v_last = 0;		
+//		read back
+//		send_system_package_to_PC(20,
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true),
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+		send_system_package_to_PC(20,
+			v_last,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+		// next step
+		mCScanner[PIEZO_X].MoveToPosition01(value / BIT18MAX);
+
+		v_last = value;
+	}	
+	void test_sensor_drift()
+	{
+		send_system_package_to_PC(10,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false));
+		
+		send_system_package_to_PC(11,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+	}
 	void process_Idle()
 	{
 		//ADC_read_DAC_write(ADC_PORT_ZlOOP_SENSOR,&V18_Adc[PIEZO_Z],PIEZO_Z,V18_Dac[PIEZO_Z]);
 		//if (PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(300000) == false) return;//old 1e6
 		//send_system_package_to_PC((uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX),V18_Adc[ADC_PORT_ZlOOP_SENSOR],V18_Dac[PIEZO_Z]);
 
-//		CHECK_COUNT_DUE(50000);
-		CHECK_COUNT_DUE(100);
-//		byte x[12] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12};
-//		send_COM_DATA12_In_Frame_To_PC(x);
+		int wait_count = 50000;
+		if (mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 == 2)
+		{
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true)));
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false)));
+			wait_count = 100;
+		}
+
+		CHECK_COUNT_DUE(wait_count);
+//		test_sensor_drift();		
+//		test_scanner_wave_output_CloseLoopPosition();
 //		return;
+		extern CTemperature mCTemperature;
+		uint32_t Temperature_MCU = mCTemperature.Read(false);
 		
-		sys_idle_package_index %=3;
+		Temperature_MCU = mCScanner[PIEZO_Z].mScannerPosition01*BIT18MAX;
+		send_system_package_to_PC(20,
+			Temperature_MCU,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
 		
+		return;
+		
+//-------------------------------------------------------
 		if (sys_idle_package_index == 0)
 		{
 			int Temperature_SEM = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);
@@ -2723,26 +2842,54 @@ public:
 		}
 		if (sys_idle_package_index == 2)
 		{
-			int value_cali= mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);
+			int value_cali = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);
 			int value_cantilever = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);
 			int scsg_z = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
 
 			send_system_package_to_PC(sys_idle_package_index, value_cantilever, value_cali, scsg_z);
 		}
+		if (sys_idle_package_index == 3)
+		{
+			int x = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);
+			int p = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);
+			int scsg_z = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
+
+			send_system_package_to_PC(sys_idle_package_index, x, p, scsg_z);
+		}
 		//send_back_debug_infomation();
 		toggle_pin_led();
 	}
+	void send_system_package_to_PC(byte index, uint32_t v1, uint32_t v2, uint32_t v3, uint32_t v4, uint32_t v5, uint32_t v6=0, uint32_t v7=0)
+	{
+		byte com[LENGTH_COM_DATA_MCU2PC] = {0};
+		com[0] = 's';
+		com[1] = 'p';
+		com[2] = index;
+		int k = 3;
+		convert_uint32_to_byte3(v1, &com[k]);k += 3;
+		convert_uint32_to_byte3(v2, &com[k]);k += 3;
+		convert_uint32_to_byte3(v3, &com[k]);k += 3;
+		convert_uint32_to_byte3(v4, &com[k]);k += 3;
+		convert_uint32_to_byte3(v5, &com[k]);k += 3;
+		convert_uint32_to_byte3(v6, &com[k]);k += 3;
+		convert_uint32_to_byte3(v7, &com[k]);k += 3;
+//		convert_uint32_to_byte3(v2, &com[3 + 3]);// byte3
+//		convert_uint32_to_byte3(v3, &com[3 + 3 + 3]);//byte3
+//		mCPackageToPC_SystemPackage->prepare_package_Byte12_to_PC(com);
+		send_Data_In_Frame_To_PC(com);
+	}
+	
 	void send_system_package_to_PC(byte index, uint32_t v1, uint32_t v2, uint32_t v3)
 	{
 		byte com[LENGTH_COM_DATA_MCU2PC] = {0};
 		com[0] = 's';
 		com[1] = 'p';
-		com[2]=index;
+		com[2] = index;
 		convert_uint32_to_byte3(v1, &com[3]);// byte3
-		convert_uint32_to_byte3(v2, &com[3+3]);// byte3
-		convert_uint32_to_byte3(v3, &com[3+3 + 3]);//byte3
+		convert_uint32_to_byte3(v2, &com[3 + 3]);// byte3
+		convert_uint32_to_byte3(v3, &com[3 + 3 + 3]);//byte3
 //		mCPackageToPC_SystemPackage->prepare_package_Byte12_to_PC(com);
-		send_COM_DATA12_In_Frame_To_PC(com);
+		send_Data_In_Frame_To_PC(com);
 	}
 	void send_system_package_to_PC(uint32_t v1, uint32_t v2, uint32_t v3)
 	{
@@ -2754,15 +2901,16 @@ public:
 		convert_uint32_to_byte3(v2, &com[2 + 4]);// byte3
 		convert_uint32_to_byte3(v3, &com[2 + 4 + 3]);//byte3
 //		mCPackageToPC_SystemPackage->prepare_package_Byte12_to_PC(com);
-		send_COM_DATA12_In_Frame_To_PC(com);
+		send_Data_In_Frame_To_PC(com);
 	}
 
-	void send_COM_DATA12_In_Frame_To_PC(byte* data, int length = LENGTH_COM_DATA_MCU2PC)
+	void send_Data_In_Frame_To_PC(byte* data, int length = LENGTH_COM_DATA_MCU2PC)
 	{
+		length = Min(length, LENGTH_COM_DATA_MCU2PC);
 		byte COM[LENGTH_COM_FRAME_MCU2PC] = {0};
 		COM[0] = (COM_HEADER1);
 		COM[1] = (COM_HEADER2);
-		memcpy(COM+2, data, length);
+		memcpy(COM + 2, data, length);
 		COM[LENGTH_COM_FRAME_MCU2PC - 2] = (COM_TAIL1);
 		COM[LENGTH_COM_FRAME_MCU2PC - 1] = (COM_TAIL2);
 		mUSerial.write(COM, LENGTH_COM_FRAME_MCU2PC);
@@ -2783,57 +2931,114 @@ public:
 		
 	}
 	
-
-	void AFM_main_setup() 
-	{	
-//		HAL_Init();
-//		SystemClock_Config();		
-//
+	void test_system_time_consumption()
+	{
+		//		time test:
+		
+//		mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false));// 3.87 us
+//		mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false))); // 86us-->29.18us
+//		mAFM_DAC.DAC_write(0, BIT18MAX);	// 71 us-->25.76us
+		
+		
+		
+		
+//		sys_state = SS_Scan;
+//////		DigitalIn* u = new DigitalIn(PE_10);
 //		while (1)
 //		{
-//			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1, GPIO_PIN_SET);
-//	//HAL_Delay(500);
-//			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1, GPIO_PIN_RESET);
+//			p_Tdio2->write_hal(1);	
+//				
+//			for (int k = 0;k < 500;k++)
+////				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
+////				mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
+////				mAFM_DAC.DAC_write(0, BIT18MAX);
+//			
+//			
+//			p_Tdio2->write_hal(0);	
+//			for (int k = 0;k < 500;k++)
+////				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
+////				mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
+////				mAFM_DAC.DAC_write(0, BIT18MAX);
+//			
 //		}
-//				{
+//		{
 //			p_Tdio2->write_hal(1);
 //				
-////				AFM_ProcessScheduler_Realtime();
+//				AFM_ProcessScheduler_Realtime();
 //				
 //				
 //				p_Tdio2->write_hal(0);
 //			}
-//		
-			mUSerial.begin();  		
 
 
+		//while (1)
+		//{
+		//	*p_Tdio2 = 1;
+		//	for (int k = 0;k < 500;k++)
+		//		//mCScanner[PIEZO_X].update(100);
+		//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
+		//
+		//	*p_Tdio2 = 0;
+		//	for (int k = 0;k < 500;k++)
+		//		//mCScanner[PIEZO_X].update(100);
+		//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
+		//}
+	}
+	void AFM_main_setup() 
+	{	
+		CAFM_ClockDefine mCAFM_ClockDefine;
+		mCAFM_ClockDefine.AFM_SystemInit();
+		mAFM_DAC.Initialize();
+		mAFM_DAC.DAC_write(PIEZO_X, 0);
+		mAFM_DAC.DAC_write(PIEZO_Y, 0);
+		mAFM_DAC.DAC_write(PIEZO_Z, 0);
+		
+		mUSerial.begin(); 
+//		while (1)
+//		{
+//			send_system_package_to_PC(100, 1, 2, 3, 4, 5, 6, 7);
+//			wait(0.5);
+//		}
+//		while (1)
+//		{
+////			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1, GPIO_PIN_SET);
+////			HAL_Delay(500);
+////			HAL_GPIO_WritePin(GPIOE, GPIO_PIN_1, GPIO_PIN_RESET);
+////			mUSerial.println(12);
+//			float x = 1, y = 3;
+//			p_Tdio2->write_hal(1);	
+////			FOR_REPEAT(500000, x = x*y ;);
+//			p_Tdio2->write_hal(0);	
+//			FOR_REPEAT(1, x = x/y ;);
+//			MY_Debug_LN(x);
+//		}
 
 
 		mCTickTimer_RealTime.start();
 		Initial_parameters();
 
-		while (1)// wait for connection
-		{
-					
-			int byte_ready = mUSerial.readBytes(com_buffer, 1);//LENGTH_COM_BUFFER_PC2MCU * 2);
-			if (byte_ready > 0) 
-			{
-				mUSerial.println(com_buffer[0]++);
-				break;
-			}
-			wait(0.1);
-			int x = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC);//ADC_PORT_ZlOOP_SENSOR
-			MY_Debug_LN(x);
-			//Software_Reset();
-			toggle_pin_led();
-		}
+//		while (1)// wait for connection
+//		{
+//					
+//			int byte_ready = mUSerial.readBytes(com_buffer, 1);//LENGTH_COM_FRAME_PC2MCU * 2);
+//			if (byte_ready > 0) 
+//			{
+//				mUSerial.println(com_buffer[0]++);
+//				break;
+//			}
+//			wait(0.1);
+//			int x = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC);//ADC_PORT_ZlOOP_SENSOR
+//			MY_Debug_LN(x);
+//			//Software_Reset();
+//			toggle_pin_led();
+//		}
 		
 		//int x = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC);//ADC_PORT_ZlOOP_SENSOR
 		//mTicker_AFM_Communication.attach_us(&AFM_Communication_Process, mPeriod_Communication_us);			
-		MY_Debug_LN("MCU starts.");	
-				double x=1,y=3;
-		x=x/y+100;
-		MY_Debug_LN(x);
+//		MY_Debug_LN("MCU starts.");	
+//				double x=1,y=3;
+//		x=x/y+100;
+//		MY_Debug_LN(x);
 
 		mAFM_DAC.Initialize();
 		mAFM_SEM.SetFrequency(1000000);
@@ -2872,58 +3077,14 @@ public:
 //		float z = mPID_ZLOOP->GetKd();
 		Initialze_XYZScanner_CloseLoop();
 
-//		time test:
-		
-//		mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false));// 3.87 us
-//		mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false))); // 86us
-//		mAFM_DAC.DAC_write(0, BIT18MAX);	// 71 us
-		
-		
-		
-		
-//		sys_state = SS_Scan;
-////		DigitalIn* u = new DigitalIn(PE_10);
 //		while (1)
 //		{
-//			p_Tdio2->write_hal(1);	
-//				
-//			for (int k = 0;k < 500;k++)
-////				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
-////				mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
-//				mAFM_DAC.DAC_write(0, BIT18MAX);
-//			
-//			
-//			p_Tdio2->write_hal(0);	
-//			for (int k = 0;k < 500;k++)
-////				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
-////				mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
-//				mAFM_DAC.DAC_write(0, BIT18MAX);
-//			
+//			wait_us(30);
+//			p_Tdio2->write(1);
+//			wait_us(30);
+//			p_Tdio2->write(0);
+////			toggle_pin_p(p_Tdio2);
 //		}
-//		{
-//			p_Tdio2->write_hal(1);
-//				
-//				AFM_ProcessScheduler_Realtime();
-//				
-//				
-//				p_Tdio2->write_hal(0);
-//			}
-
-
-		//while (1)
-		//{
-		//	*p_Tdio2 = 1;
-		//	for (int k = 0;k < 500;k++)
-		//		//mCScanner[PIEZO_X].update(100);
-		//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
-		//
-		//	*p_Tdio2 = 0;
-		//	for (int k = 0;k < 500;k++)
-		//		//mCScanner[PIEZO_X].update(100);
-		//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);
-		//}
-		
-		
 	}
 	void Initialze_XYZScanner_CloseLoop()
 	{
@@ -2949,10 +3110,10 @@ public:
 		MY_Debug_StringValue_LN("ADC18_Max[1]", ADC18_Max[1]);
 		MY_Debug_StringValue_LN("ADC18_Max[2]", ADC18_Max[2]);
 		// send twice to make sure PC will receive
-		send_system_package_to_PC(3, ADC18_Min[0], ADC18_Min[1], ADC18_Min[2]);
-		send_system_package_to_PC(3, ADC18_Min[0], ADC18_Min[1], ADC18_Min[2]);		
-		send_system_package_to_PC(4, ADC18_Max[0], ADC18_Max[1], ADC18_Max[2]);
-		send_system_package_to_PC(4, ADC18_Max[0], ADC18_Max[1], ADC18_Max[2]);
+		send_system_package_to_PC(13, ADC18_Min[0], ADC18_Min[1], ADC18_Min[2]);
+		send_system_package_to_PC(13, ADC18_Min[0], ADC18_Min[1], ADC18_Min[2]);		
+		send_system_package_to_PC(14, ADC18_Max[0], ADC18_Max[1], ADC18_Max[2]);
+		send_system_package_to_PC(14, ADC18_Max[0], ADC18_Max[1], ADC18_Max[2]);
 		
 		for (int k = 0;k < NUM_OF_SCANNER;k++)
 		{
@@ -2967,9 +3128,9 @@ public:
 		for (int k = 0;k < 10;k++)
 		{			
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_ALL, 0);
-			wait(0.01);
+			wait(0.3);
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_ALL, BIT18MAX);			
-			wait(0.01);
+			wait(0.3);
 		}// here must use square wave to move the piezos;
 		
 
@@ -3060,7 +3221,7 @@ public:
 //
 //
 //				if (switch_read_SG > 0)
-//					send_system_package16_char_to_PC((char*)com);
+//					send_system_package_string_to_PC((char*)com);
 //				if (switch_read_SG == 1) switch_read_SG = 0;// read only once
 //				//for (int k=0;k<LENGTH_I2C_DATA_SG;k++)
 //				//{mUSerial.print(Buffer_SG_data[k],DEC);         // print the character
@@ -3072,8 +3233,28 @@ public:
 //	}
 	void AFM_main_loop() 
 	{		
+//		static byte x = 0;
+//		sys_state = SS_Scan;// for test only
+//		send_image_package_to_PC(x++, 0, 0.5, 0.5);
+//		int value = 0;
+//		while (1)
+//		{
+//			value = 0;
+//			mAFM_DAC.DAC_write(0, value);
+//			mAFM_DAC.DAC_write(1, value);
+//			mAFM_DAC.DAC_write(2, value);
+//			mAFM_DAC.DAC_write(3, value);
+//			value = BIT18MAX;
+//			mAFM_DAC.DAC_write(0, value);
+//			mAFM_DAC.DAC_write(1, value);
+//			mAFM_DAC.DAC_write(2, value);
+//			mAFM_DAC.DAC_write(3, value);
+//		}
+		
+		
+		
+		
 		Communication_Command_Console();
-//		AFM_Communication_Process();
 		AFM_ProcessScheduler_Realtime();
 		AFM_ProcessScheduler_NonRealtime();
 

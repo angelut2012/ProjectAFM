@@ -7,6 +7,7 @@
 //#endif
 //
 //#include "tm_stm32_adc.h"
+//#include "stm32f7xx_hal_adc.h"
 #include "constant_define.h"
 #include "define_AFM_platform.h"	
 //	\verbatim
@@ -73,3 +74,44 @@ public:
 //}
 //#endif
 #endif
+
+
+//
+//class CTemperature 
+//{
+//public: 
+//	CTemperature()
+//	{
+//		TM_ADC_Channel_t mTemperatureController;// = TM_ADC_Channel_11;
+////		mTemperatureController = TM_ADC_Channel_11;
+////		TM_ADC_Init(ADC1, mTemperatureController);
+//	}
+//	;	
+//	~CTemperature()
+//	{
+//		
+//	}
+//	;
+//// alalog input conflict with USB
+//	
+//	float Read(bool Convert2Degree = true)
+//	{
+////		TM_ADC_Channel_t mTemperatureController;// = TM_ADC_Channel_11;
+////		mTemperatureController = TM_ADC_Channel_11;
+////		const float VCC = 2.8;
+////		const float Sensitivity_VperC = 0.02;
+////		float T = 0;
+////		T = (float)TM_ADC_Read(ADC1, mTemperatureController);
+////		if (Convert2Degree == true)
+////		{	
+////			T = T / 4095.0;//BIT(12);
+////			T = T* VCC;//--> Volt	
+////			T = (T - 0.5) / Sensitivity_VperC + 25	- 2.4;// degree
+////		}
+////		return T;
+//		return 0;
+//	}
+//	;
+//
+//	
+//};

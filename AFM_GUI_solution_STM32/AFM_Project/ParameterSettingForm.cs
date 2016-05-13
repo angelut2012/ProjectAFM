@@ -21,25 +21,28 @@ namespace NameSpace_AFM_Project
         {
             InitializeComponent();
             pParent = pmain;
+
+            listBox_ScannerAxis.SelectedIndex = 0;
         }
 
         private void button_DAC_Output_Click(object sender, EventArgs e)
         {
-            int axis = Convert.ToInt32(textBox_DAC_Axis.Text);
+
+           //for (k = 0; k < listBox_ScannerAxis.Items.Count; k++)
+           //     if (listBox_ScannerAxis.GetSelected(k))
+           //         break;
+            int axis = listBox_ScannerAxis.SelectedIndex;//Convert.ToInt32(textBox_DAC_Axis.Text);
             double value = Convert.ToDouble(textBox_DAC_Value.Text);
             value = value * 5.0 / 150.0;
             //pParent.set_output_parameters('D', (byte)axis, (UInt32)value);
            pParent.set_output_DAC_Value_0_5((byte)axis, value);
         }
 
-        private void button_Position_Output_Click(object sender, EventArgs e)
+        private void button_SetPosition_OpenLoop_Click(object sender, EventArgs e)
         {
-            int axis = Convert.ToInt32(textBox_Position_Axis.Text);
-            double value_nm = Convert.ToDouble(textBox_Position_Value.Text);
-            //value = value * 5.0 / 150.0;
-
-            double value_01 = value_nm / pParent.MAX_RANGE_AXIS_NM[axis];
-            pParent.set_output_Position_Value_01((byte)axis, value_01);
+            int axis = listBox_ScannerAxis.SelectedIndex;
+            double value_01 = Convert.ToDouble(textBox_Position_Value.Text);
+            pParent.set_output_Position_Value_01(axis, value_01);
         }
 
         private void button_Read_StrainGauge_Continue_Click(object sender, EventArgs e)
@@ -60,15 +63,24 @@ namespace NameSpace_AFM_Project
         private void trackBar_PositionZ_Scroll(object sender, EventArgs e)
         {
             double value = (double)trackBar_PositionZ.Value / (double)trackBar_PositionZ.Maximum;
-            byte axis = Convert.ToByte(textBox_Position_Axis.Text);
-            pParent.set_output_Position_Value_01(axis, value);
-            value*=pParent.MAX_RANGE_AXIS_NM[axis];
+            //byte axis = Convert.ToByte(textBox_Position_Axis.Text);
+            int axis = listBox_ScannerAxis.SelectedIndex;
             textBox_Position_Value.Text = value.ToString();
+            textBox_DAC_Value.Text = Convert.ToString(value * 150);
+
+
+
+              value = Convert.ToDouble(textBox_DAC_Value.Text);
+            value = value * 5.0 / 150.0;
+            //pParent.set_output_parameters('D', (byte)axis, (UInt32)value);
+            pParent.set_output_DAC_Value_0_5((byte)axis, value);
         }
         Thread mThread_wave_generator;
+        byte axis_wave;
         private void button_T_debug_Click(object sender, EventArgs e)
         {
             mWaveRun = true;
+            axis_wave = (byte)listBox_ScannerAxis.SelectedIndex;
             mThread_wave_generator = new Thread(function_wave_generator);
             mThread_wave_generator.Start();
         }
@@ -78,14 +90,15 @@ namespace NameSpace_AFM_Project
             {
                 int N = Convert.ToInt32(textBox_T_Test_cycles.Text);
                 int dt = Convert.ToInt32(textBox_T_test_dt.Text);
-                byte axis = Convert.ToByte(textBox_Position_Axis.Text);
+                //byte axis = Convert.ToByte(textBox_Position_Axis.Text);
+               
 
                 //for (int k = 0; k < N; k++)
                 {
 
-                    pParent.set_output_DAC_Value_0_5(axis, 5);
+                    pParent.set_output_DAC_Value_0_5(axis_wave, 5);
                     Thread.Sleep(dt);
-                    pParent.set_output_DAC_Value_0_5(axis, 0);
+                    pParent.set_output_DAC_Value_0_5(axis_wave, 0);
                     Thread.Sleep(dt);
                 }
             }
@@ -130,6 +143,34 @@ namespace NameSpace_AFM_Project
         private void button_WaveStop_Click(object sender, EventArgs e)
         {
             mWaveRun = false;
+        }
+
+        private void button_SetPositioin_CloseLoop_Click(object sender, EventArgs e)
+        {
+            //int axis = Convert.ToInt32(textBox_Position_Axis.Text);
+            int axis = listBox_ScannerAxis.SelectedIndex;
+            double value_01 = Convert.ToDouble(textBox_Position_Value.Text);
+            pParent.set_output_Position_Value_01(axis+100, value_01);
+        }
+
+        private void button_P_Click(object sender, EventArgs e)
+        {
+            int axis = listBox_ScannerAxis.SelectedIndex;
+            double value_01 = Convert.ToDouble(textBox_Position_Value.Text);
+            value_01 += 0.1;
+            value_01 = pParent.MIN_MAX(value_01, 0, 1);
+            textBox_Position_Value.Text = value_01.ToString();
+            pParent.set_output_Position_Value_01(axis + 100, value_01);
+        }
+
+        private void button_N_Click(object sender, EventArgs e)
+        {
+            int axis = listBox_ScannerAxis.SelectedIndex;
+            double value_01 = Convert.ToDouble(textBox_Position_Value.Text);
+            value_01 -= 0.1;
+            value_01 = pParent.MIN_MAX(value_01, 0, 1);
+            textBox_Position_Value.Text = value_01.ToString();
+            pParent.set_output_Position_Value_01(axis + 100, value_01);
         }
 
     }

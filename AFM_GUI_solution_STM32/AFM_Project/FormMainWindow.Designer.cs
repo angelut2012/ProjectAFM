@@ -188,8 +188,9 @@
             this.listBox_SelectIdlePackage.FormattingEnabled = true;
             this.listBox_SelectIdlePackage.Items.AddRange(new object[] {
             "PRC_Tsem_Tmcu",
-            "SCSG_xysz",
-            "calibration"});
+            "SCSG_XYZ",
+            "calibration",
+            "drift_XPZ"});
             this.listBox_SelectIdlePackage.Location = new System.Drawing.Point(46, 24);
             this.listBox_SelectIdlePackage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.listBox_SelectIdlePackage.Name = "listBox_SelectIdlePackage";

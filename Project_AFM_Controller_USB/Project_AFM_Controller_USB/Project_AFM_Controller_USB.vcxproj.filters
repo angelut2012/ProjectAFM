@@ -292,6 +292,9 @@
     <ClCompile Include="Scanner.cpp">
       <Filter>Source files</Filter>
     </ClCompile>
+    <ClCompile Include="AFM_functions\AFM_clock.c">
+      <Filter>Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="usbd_cdc_if.h">
@@ -650,6 +653,12 @@
     </ClInclude>
     <ClInclude Include="Scanner.h">
       <Filter>Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="AFM_functions\AFM_ClockDefine.h">
+      <Filter>Header files\AFM</Filter>
+    </ClInclude>
+    <ClInclude Include="AFM_functions\AFM_clock.h">
+      <Filter>Header files\AFM</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

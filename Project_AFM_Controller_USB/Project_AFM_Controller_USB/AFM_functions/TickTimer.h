@@ -5,7 +5,7 @@
 #define  __TICK_TIMER_HEADER__
 
 #include "stm32f7xx_hal.h"
-
+#include "AFM_clock.h"
 
 //stm32f7xx_hal.c
 // HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)// use strong define to override the default system define

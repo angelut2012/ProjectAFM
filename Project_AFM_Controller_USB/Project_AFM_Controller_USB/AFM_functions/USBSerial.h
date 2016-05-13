@@ -276,8 +276,8 @@ public:
 
 void	begin()
 {   
-	HAL_Init();
-	SystemClock_Config();
+//	HAL_Init();
+//	SystemClock_Config();
 	USBD_Init(&USBD_Device, &VCP_Desc, 0);
 
 	USBD_RegisterClass(&USBD_Device, &USBD_CDC);

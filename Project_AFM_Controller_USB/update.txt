@@ -1,3 +1,8 @@
+20160429
+AFM_clock.h .c
+recover stm32f7xx_hal.h .c to system library
+use CAFM_ClockDefine to configure system clock, achieved 7.2 MHz IO speed
+
 20160428_1
 close imaging OK
 

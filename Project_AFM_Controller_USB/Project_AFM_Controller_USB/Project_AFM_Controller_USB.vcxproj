@@ -63,6 +63,7 @@
   <ItemGroup>
     <ClCompile Include="AFM_functions\ADC_Chain.cpp" />
     <ClCompile Include="AFM_functions\ADC_Temperature.cpp" />
+    <ClCompile Include="AFM_functions\AFM_clock.c" />
     <ClCompile Include="AFM_functions\AFM_functions.cpp" />
     <ClCompile Include="AFM_functions\DAC.cpp" />
     <ClCompile Include="AFM_functions\define_AFM_hardware.cpp" />
@@ -149,6 +150,8 @@
   <ItemGroup>
     <ClInclude Include="AFM_functions\ADC_Chain.h" />
     <ClInclude Include="AFM_functions\ADC_Temperature.h" />
+    <ClInclude Include="AFM_functions\AFM_clock.h" />
+    <ClInclude Include="AFM_functions\AFM_ClockDefine.h" />
     <ClInclude Include="AFM_functions\AFM_functions.h" />
     <ClInclude Include="AFM_functions\console_serial.h" />
     <ClInclude Include="AFM_functions\constant_define.h" />
