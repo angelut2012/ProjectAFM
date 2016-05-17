@@ -162,7 +162,11 @@
             this.textBox_DataPath = new System.Windows.Forms.TextBox();
             this.tabPage_Control = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button_CoarseWithdraw = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.button_DataCapture = new System.Windows.Forms.Button();
+            this.textBox_FileName = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -626,7 +630,7 @@
             this.button_Apporach.Location = new System.Drawing.Point(10, 20);
             this.button_Apporach.Margin = new System.Windows.Forms.Padding(2);
             this.button_Apporach.Name = "button_Apporach";
-            this.button_Apporach.Size = new System.Drawing.Size(90, 35);
+            this.button_Apporach.Size = new System.Drawing.Size(63, 35);
             this.button_Apporach.TabIndex = 41;
             this.button_Apporach.Text = "Start";
             this.button_Apporach.UseVisualStyleBackColor = true;
@@ -634,18 +638,18 @@
             // 
             // button_CancelApproach
             // 
-            this.button_CancelApproach.Location = new System.Drawing.Point(146, 20);
+            this.button_CancelApproach.Location = new System.Drawing.Point(89, 20);
             this.button_CancelApproach.Margin = new System.Windows.Forms.Padding(2);
             this.button_CancelApproach.Name = "button_CancelApproach";
-            this.button_CancelApproach.Size = new System.Drawing.Size(90, 35);
+            this.button_CancelApproach.Size = new System.Drawing.Size(58, 35);
             this.button_CancelApproach.TabIndex = 42;
-            this.button_CancelApproach.Text = "stop";
+            this.button_CancelApproach.Text = "Cancel";
             this.button_CancelApproach.UseVisualStyleBackColor = true;
             this.button_CancelApproach.Click += new System.EventHandler(this.button_ManuallyCancelApproach_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(46, 197);
+            this.button1.Location = new System.Drawing.Point(16, 175);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(88, 33);
@@ -661,7 +665,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(50, 111);
+            this.button2.Location = new System.Drawing.Point(20, 101);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(72, 32);
@@ -881,7 +885,7 @@
             // 
             // button_MultiTask
             // 
-            this.button_MultiTask.Location = new System.Drawing.Point(141, 308);
+            this.button_MultiTask.Location = new System.Drawing.Point(100, 308);
             this.button_MultiTask.Margin = new System.Windows.Forms.Padding(2);
             this.button_MultiTask.Name = "button_MultiTask";
             this.button_MultiTask.Size = new System.Drawing.Size(68, 45);
@@ -1553,6 +1557,8 @@
             // 
             // tabPage_DataExport
             // 
+            this.tabPage_DataExport.Controls.Add(this.label30);
+            this.tabPage_DataExport.Controls.Add(this.textBox_FileName);
             this.tabPage_DataExport.Controls.Add(this.label29);
             this.tabPage_DataExport.Controls.Add(this.textBox_DataPath);
             this.tabPage_DataExport.Controls.Add(this.radioButton_Topography);
@@ -1587,6 +1593,7 @@
             // 
             // tabPage_Control
             // 
+            this.tabPage_Control.Controls.Add(this.button_DataCapture);
             this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
             this.tabPage_Control.Controls.Add(this.button2);
             this.tabPage_Control.Controls.Add(this.button1);
@@ -1604,6 +1611,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button_CoarseWithdraw);
             this.groupBox1.Controls.Add(this.button_CancelApproach);
             this.groupBox1.Controls.Add(this.button_Apporach);
             this.groupBox1.Location = new System.Drawing.Point(12, 245);
@@ -1613,6 +1621,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Auto Approach";
             // 
+            // button_CoarseWithdraw
+            // 
+            this.button_CoarseWithdraw.Location = new System.Drawing.Point(162, 20);
+            this.button_CoarseWithdraw.Margin = new System.Windows.Forms.Padding(2);
+            this.button_CoarseWithdraw.Name = "button_CoarseWithdraw";
+            this.button_CoarseWithdraw.Size = new System.Drawing.Size(86, 35);
+            this.button_CoarseWithdraw.TabIndex = 43;
+            this.button_CoarseWithdraw.Text = "move to safe  position";
+            this.button_CoarseWithdraw.UseVisualStyleBackColor = true;
+            this.button_CoarseWithdraw.Click += new System.EventHandler(this.button_CoarseWithdraw_Click);
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label_SystemState);
@@ -1621,6 +1640,34 @@
             this.groupBox2.Size = new System.Drawing.Size(1411, 28);
             this.groupBox2.TabIndex = 107;
             this.groupBox2.TabStop = false;
+            // 
+            // button_DataCapture
+            // 
+            this.button_DataCapture.Location = new System.Drawing.Point(139, 176);
+            this.button_DataCapture.Margin = new System.Windows.Forms.Padding(2);
+            this.button_DataCapture.Name = "button_DataCapture";
+            this.button_DataCapture.Size = new System.Drawing.Size(101, 32);
+            this.button_DataCapture.TabIndex = 85;
+            this.button_DataCapture.Text = "data capture";
+            this.button_DataCapture.UseVisualStyleBackColor = true;
+            this.button_DataCapture.Click += new System.EventHandler(this.button_DataCapture_Click);
+            // 
+            // textBox_FileName
+            // 
+            this.textBox_FileName.Location = new System.Drawing.Point(0, 226);
+            this.textBox_FileName.Name = "textBox_FileName";
+            this.textBox_FileName.Size = new System.Drawing.Size(242, 20);
+            this.textBox_FileName.TabIndex = 71;
+            this.textBox_FileName.Text = "Sample";
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(6, 210);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(52, 13);
+            this.label30.TabIndex = 72;
+            this.label30.Text = "file_name";
             // 
             // MainWindow
             // 
@@ -1810,6 +1857,10 @@
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Button button_CoarseWithdraw;
+        private System.Windows.Forms.Button button_DataCapture;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox textBox_FileName;
     }
 }
 

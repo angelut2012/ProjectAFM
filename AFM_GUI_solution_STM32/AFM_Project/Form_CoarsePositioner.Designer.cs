@@ -108,7 +108,7 @@
             this.textBox_Distance.Name = "textBox_Distance";
             this.textBox_Distance.Size = new System.Drawing.Size(58, 20);
             this.textBox_Distance.TabIndex = 6;
-            this.textBox_Distance.Text = "500.0";
+            this.textBox_Distance.Text = "5";
             // 
             // label1
             // 

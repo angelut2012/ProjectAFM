@@ -80,7 +80,7 @@ public:
 		mSPI_SEM=new SWSPI(Sspi_mosi, Sspi_miso, Sspi_clk);	
 		mSPI_SEM->SetFrequency(frequencyHz);
 		//mSPI_SEM->format(18,2);// to be adjusted
-		mSPI_SEM->SetMode(2);
+		mSPI_SEM->SetMode(1);//2
 		mSPI_SEM->SetDataLength(ADC_DATA_LENGTH);
 
 
@@ -171,6 +171,7 @@ public:
 		//mSPI_CS_AFM->write(1);
 		//mSPI_SEM->sclk->write(1);
 		//wait_us(10);
+		//mSPI_SEM->transfer_read(1);// send one clock pulse
 
 		mSPI_CS_AFM->write(0);// start the convertion
 #ifdef SPI_WAIT 
@@ -178,7 +179,7 @@ public:
 #endif	
 		//int value_array[NUM_OF_ADC]=0;
 
-		mSPI_SEM->transfer_read(1);// send one clock pulse
+		//mSPI_SEM->transfer_read(1);// send one clock pulse
 		
 		for (int k=0;k<number_of_ADC;k++)
 //			value_array[k]=mSPI_SEM->transfer(0xaa55,ADC_DATA_LENGTH);// data readout at the next clock

@@ -11,8 +11,8 @@ imraw=medfilt2(imraw,[3,3],'symmetric');
 imraw=-imraw;
 % imraw=imraw';
 % imm=mean(imraw(:))-imraw;
-% imm=imraw-min(imraw(:));
-% surf(imm)
+imm=imraw-min(imraw(:));
+surf(imm)
 % return
 
 % imL=image_adjust_each_line(imm,1);
@@ -35,9 +35,6 @@ surf(im_flat,'LineStyle','non')
 colorbar
 figure(2)
 imshow(im_flat,[])
-
-set(gca,'LooseInset',get(gca,'TightInset'))
-colorbar 
 % title(fn)
 
 % [x,y]=ginput(1);
@@ -50,13 +47,9 @@ p=im_flat(:)
 figure(4)
 hist(p,min(p):0.1:max(p))
 title([fn ' std=' num2str(std(p))],'Interpreter','non')
+
 xlabel('noise (nm)')
-ylabel('point count')
-
 % [image_show_buffer,im_buffer]=AFM_dip_for_show(im_flat,127,127);
-
-
-
 return
 
 if ~exist('point_select.mat','file')

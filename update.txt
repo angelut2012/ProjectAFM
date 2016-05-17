@@ -1,3 +1,11 @@
+20160517
+cmd_PC2MCU
+
+new wait_us
+
+coarse auto re initialize
+
+
 opencvsharp
 https://github.com/shimat/opencvsharp
 

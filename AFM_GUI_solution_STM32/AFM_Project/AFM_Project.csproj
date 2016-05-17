@@ -92,6 +92,9 @@
     <Compile Include="FormMainWindow.Designer.cs">
       <DependentUpon>FormMainWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_CMD_define_PC2MCU.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form_CoarsePositioner.cs">
       <SubType>Form</SubType>
     </Compile>

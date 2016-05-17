@@ -4,24 +4,30 @@
 % data=importdata('D:\AFMdata\SEM_drift_after_10_hour_then_start_all.txt');
 % data=importdata('D:\AFMdata\SEM_SCSG_drift_75V.txt');
 fn='drift_tri_SEM_newZ_5hour.txt'
-fn='drift_air_bag_1.txt'
 data=importdata(['D:\AFMdata\' fn]);
 % data=data.data;
 % 
-% data=data(13050:203410,:);
+data=data(16897:end,:);%20 minutes later
 
-t=data(:,2);
+t=data(:,1);
+V=data(:,2);
 y=data(:,5);
 x=data(:,6);
 p=data(:,7);
 z=data(:,8);
 
+
+
+
+
 t=t-t(1);
 y=y-y(1);
-x=-x;
+% x=-x;
 x=x-x(1);
 p=p-p(1);
 z=z-z(1);
+
+% z=-z;
 
 t=t./60;
 
@@ -43,6 +49,32 @@ p=p./35;
 
 T=data(:,4);
 T=convert_temperature_adc2degree(T);
+%%
+[outR0,outRange]=sub_calc_show_drift_triangle(p,1)
+
+return
+
+
+plot(t0,z0,'r-')
+hold on
+plot(t1,z1-z1(1),'b.-')
+r=z1-z0;
+
+plot(t1,r-r(1),'gd-')
+
+legend('0 V','150 V','range')
+
+plot(t1,r./r(1),'gd-')
+T0=T(ind0);
+plot(T0,r./r(1))
+
+
+plot(t,T)
+
+
+
+
+
 % T=T-T(1);
 % T=T.*1000;
 plot(t,x,t,y,t,z,t,p,t,T)
@@ -63,7 +95,7 @@ close all
 q=z;
 q=q-min(q);
 figure
-plot(T,q,'.-')
+plot(t,q,'.-')
 grid on
 xlabel('time (minute)')
 

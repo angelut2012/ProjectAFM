@@ -2,6 +2,8 @@
 #ifndef __AFM_clock_H__
 #define __AFM_clock_H__
 
+#include "constant_define.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

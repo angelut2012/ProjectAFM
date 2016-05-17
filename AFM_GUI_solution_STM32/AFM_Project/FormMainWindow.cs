@@ -12,6 +12,8 @@ using System.Threading;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+
+using System.Diagnostics;
 //using CLRWrapper;
 
 namespace NameSpace_AFM_Project
@@ -147,6 +149,9 @@ namespace NameSpace_AFM_Project
 
         public MainWindow()
         {
+            Process thisProc = Process.GetCurrentProcess();
+            thisProc.PriorityClass = ProcessPriorityClass.RealTime;
+
             DialogResult result = DialogResult.Cancel;
             while (result != DialogResult.Yes)
                 result = MessageBox.Show("Make sure the SEM is ready in high vacuum state before you start to use the AFM.\nOtherwise, the system might be damaged!", "Conformation", MessageBoxButtons.YesNo);
@@ -546,7 +551,7 @@ namespace NameSpace_AFM_Project
             set_AFM_parameters('m', ref para_XL, textBox_XL, 1, MAX_RANGE_X_NM);
             set_AFM_parameters('n', ref para_YL, textBox_YL, 1, MAX_RANGE_Y_NM);
             // 
-            set_AFM_parameters('S', ref para_ScanRate, textBox_ScanRate, 0.01, 5);
+            set_AFM_parameters('S', ref para_ScanRate, textBox_ScanRate, 0.01, 10);
 
             // for PRC, use VWset_deltaV_input_mV as nm,
             // for tuning fork, use this as delta_voltage
@@ -575,72 +580,7 @@ namespace NameSpace_AFM_Project
             button_SetParameters.Enabled = true;
             button_SetParameters.Visible = true;
         }
-        public void set_AFM_parameters_old(char parameter_name, double data)
-        {
-            const double para_EPS = 3.814697265625000e-06;
-            double Ggain = 16384;//2^17 65536 * 2.0;// keep 5 decimal
-            UInt32 value = (UInt32)(data * Ggain);
-            //int value = (int)(data * gain);
-            byte[] Bvalue = new byte[4] { 0, 0, 0, 0 };
-            convert_uint32_to_byte4(value, Bvalue);
-            send_Data_Frame_To_Arduino('P', parameter_name, Bvalue);
-            Thread.Sleep(20);
-        }
-        public void set_AFM_parameters(char parameter_name, double data)
-        {
-            float fdata = Convert.ToSingle(data);
-            byte[] valueByte4 = BitConverter.GetBytes(fdata);
-            //float x = BitConverter.ToSingle(valueByte4, 0);
-            send_Data_Frame_To_Arduino('P', parameter_name, valueByte4);
-            Thread.Sleep(50);
-        }
-        void set_AFM_parameters(char parameter_name, ref double para_store, TextBox T)//,double  low_limit,double up_limit)
-        {
-            double data = Math.Abs(Convert.ToDouble(T.Text));
-            if (checkBox_ForceSetAll.Checked == true || data != para_store)// avoid set the same one
-            {
-                para_store = data;
-                set_AFM_parameters(parameter_name, data);
-            }
-        }
-        void set_AFM_parameters(char parameter_name, ref double para_store, TextBox T, double low_limit, double up_limit)
-        {
-            double value = //Math.Abs
-                (Convert.ToDouble(T.Text));
-            // use max 6 number in decimal part
-            const int x = 1000000;
-            value *= x;
-            value = (Int64)value;
-            value = value / x;
-
-            value = Math.Max(value, low_limit);
-            value = Math.Min(value, up_limit);
-            T.Text = Convert.ToString(value);
-
-            set_AFM_parameters(parameter_name, ref para_store, T);
-        }
-        public void set_output_Position_Value_01(int in_axis, double value_01)
-        {
-            UInt32 value_position_FF32 = (UInt32)(value_01 * BIT32MAX);
-            set_output_parameters('F', in_axis, value_position_FF32);
-
-        }
-        public void set_output_DAC_Value_0_5(byte axis, double value0_5)
-        {
-
-            value0_5 = value0_5 * BIT18MAX / 5.0;
-            set_output_parameters('D', axis, (UInt32)value0_5);
-        }
-        public void set_output_parameters(char parameter_name, int axis, UInt32 value)//,double  low_limit,double up_limit)
-        {
-            // double data = Math.Abs(Convert.ToDouble(T.Text));
-            //double Ggain = 1000.0;// keep 3 decimal
-            //int value = (int)(data * Ggain);
-            byte[] Bvalue = new byte[4] { 0, 0, 0, 0 };
-            convert_uint32_to_byte4(value, Bvalue);
-            send_Data_Frame_To_Arduino(parameter_name, (char)axis, Bvalue);
-        }
-
+ 
 
         //private void button_SetStepLength_Click(object sender, EventArgs e)
         //{
@@ -789,88 +729,7 @@ namespace NameSpace_AFM_Project
         //AA 55 52 03 f0 55 AA
         //AA 55 52 05 01 55 AA turn on IC0_DO2
         //AA 55 52 05 00 55 AA turn off IC0_DO2
-        public void send_DR_Value(byte IC, byte channel, byte value)
-        {
-            para_IC0_DR[channel] = value;
-            send_Data_Frame_To_Arduino('R', IC, channel, value);
-        }
-
-        public void send_Data_Frame_To_Arduino(char d0, char d1 = (char)0, char d2 = (char)0, byte d3 = 0, byte d4 = 0, byte d5 = 0)
-        { send_Data_Frame_To_Arduino((byte)d0, (byte)d1, (byte)d2, d3, d4, d5); }
-        public void send_Data_Frame_To_Arduino(char d0, byte d1 = 0, byte d2 = 0, byte d3 = 0, byte d4 = 0, byte d5 = 0)
-        { send_Data_Frame_To_Arduino((byte)d0, (byte)d1, (byte)d2, d3, d4, d5); }
-        public void send_Data_Frame_To_Arduino(char d0, char d1, byte[] db4)
-        { send_Data_Frame_To_Arduino((byte)d0, (byte)d1, db4[0], db4[1], db4[2], db4[3]); }
-
-
-        byte[] mDataBuffer_ThreadWriteSerial = new byte[LENGTH_COM_FRAME_PC2MCU];
-        public void send_Data_Frame_To_Arduino
-            (byte d0, byte d1 = 0, byte d2 = 0, byte d3 = 0, byte d4 = 0, byte d5 = 0)
-        {
-            //AA 55 52 00 03 aa 00 00 55 AA 
-            //byte[]
-            mDataBuffer_ThreadWriteSerial = new byte[LENGTH_COM_FRAME_PC2MCU] 
-                        { COM_HEADER1, COM_HEADER2, 
-                         d0,d1,d2,d3,d4,d5,
-                            // (byte)'R', 0, 0, 0,0,0,// 6 byte
-                         COM_TAIL1, COM_TAIL2 };
-            while (mB_serialVirtual_Arduino_busy == true)
-            {
-                Thread.Sleep(5);
-                MY_DEBUG("serial write busy.");
-            }
-
-            {
-                mThread_WriteSerialData = new Thread(ThreadFunction_WriteSerialData);
-                mThread_WriteSerialData.Start();
-            }
-            //if (serialPort_Arduino.IsOpen == true)
-            //{
-            //try
-            //{
-
-            //mB_serialVirtual_Arduino_busy = true;
-            //serialPort_Arduino.Write(com, 0, LENGTH_COM_FRAME_PC2MCU);
-
-            // mThread_WriteSerialData.;// do not block the main thread
-            //mB_serialVirtual_Arduino_busy = false;
-
-            //Thread.Sleep(15);
-            //}
-            //catch
-            //{
-            //    //Thread.Sleep(100);
-            //    //serialPort_Arduino.Write(com, 0, LENGTH_COM_FRAME_PC2MCU);
-            //    MY_DEBUG("serialPort_Arduino.Write time out");
-            //}
-
-            //MessageBox.Show("MCU port is not connected.", "Error");
-
-        }
-        void ThreadFunction_WriteSerialData()
-        {
-            //MY_DEBUG("Thread Write Serial Data: start");
-            if (serialPort_Arduino.IsOpen == true)
-            {
-                try
-                {
-                    mB_serialVirtual_Arduino_busy = true;
-                    serialPort_Arduino.Write(mDataBuffer_ThreadWriteSerial, 0, LENGTH_COM_FRAME_PC2MCU);
-                    mB_serialVirtual_Arduino_busy = false;
-                }
-                catch
-                {
-                    //Thread.Sleep(100);
-                    //serialPort_Arduino.Write(com, 0, LENGTH_COM_FRAME_PC2MCU);
-                    MY_DEBUG("Thread serialPort_Arduino.Write time out");
-                }
-            }
-            else
-                MY_DEBUG("Thread, MCU port is not connected.");
-
-            //  MY_DEBUG("Thread Write Serial Data: end");
-        }
-
+ 
         private void timerFunction_Appraoch(object sender, EventArgs e)
         {
             // if (mApproach_heat_beat_received == -1)
@@ -1316,6 +1175,7 @@ namespace NameSpace_AFM_Project
                 s += "PRC:" + PRC5.ToString("f4") + ":";
                 s += "T_SEM:" + v_Temperature_SEM.ToString("f3") + ":";
                 s += "T_MCU:" + v_Temperature_MCU.ToString("f3") + ":";
+                s += "Vz:" + (v7/BIT18MAX).ToString("f3") + ":";
                 MY_DEBUG(s);
             }
 
@@ -1383,6 +1243,9 @@ namespace NameSpace_AFM_Project
             int indy = (int)convert_byte2_to_int16(com_buffer, ind + 6); //com_buffer[ind + 6] << 8 + com_buffer[ind + 7];
             double vH = convert_byte3_to_uint32(com_buffer, ind + 8);
             double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3);
+            double vDAC = convert_byte3_to_uint32(com_buffer, ind + 8 + 3+3);
+            
+
             vE = vE - BIT24MAX / 2;
             vE = vE / BIT24MAX;
             vE *= MAX_RANGE_Z_NM;
@@ -1390,6 +1253,8 @@ namespace NameSpace_AFM_Project
             vH = vH / BIT24MAX;// convert back to 01
             vH *= MAX_RANGE_Z_NM;// convert to full range nm
 
+
+            vE = vDAC;
             //vH = MAX_RANGE_Z_NM - vH;
 
             Sys_Inf = (
@@ -1719,6 +1584,8 @@ namespace NameSpace_AFM_Project
         {
             //serialPort_Arduino.DtrEnable = false; //on programming usb serial will reset mcu
             //serialPort_Arduino.DtrEnable = true;// on programming usb serial will reset mcu
+            mCCoarsePositioner.MoveDistance(mCaxis_z, MAX_RANGE_Z_NM * 1.21, 1000);// move away up for safety reason
+            Thread.Sleep(1000);
             send_Data_Frame_To_Arduino('r', 's', 't');
             //serialPort_Arduino.Close();
             Function_ConnetComPort_Click();
@@ -1815,6 +1682,7 @@ namespace NameSpace_AFM_Project
         {
             //AA 55 43 5A 57 00 00 00 55 AA 
             //AA 55 43 53 52 00 00 00 55 AA 
+
             send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
             send_Data_Frame_To_Arduino('C', 'S', 'R');
             //with draw Z, stop Zloop PID, and stop xy scan and xy move to XL YL
@@ -1828,13 +1696,25 @@ namespace NameSpace_AFM_Project
             //AFM_coarse_positioner_MoveDistance(2, 5000000);// 5mm 
             mCCoarsePositioner.MoveDistance(mCaxis_z, 5000000, 2000);// lift up
         }
-
+        System.Windows.Forms.Timer mTaskTimer ;//= new System.Windows.Forms.Timer();
+        private void timerFunction_Task(object sender, EventArgs e)
+        {
+            send_Data_Frame_To_Arduino('r', 's', 't');
+            MY_DEBUG("task MCU reset");
+        }
         private void button2_Click(object sender, EventArgs e)
         {
+            mTaskTimer = new System.Windows.Forms.Timer();
+            mTaskTimer.Interval = 5*3600*1000; //6512;
+            mTaskTimer.Tick +=  new System.EventHandler(this.timerFunction_Task);
+            mTaskTimer.Stop();
+            mTaskTimer.Start();//trigger function   timerFunction_Appraoch
+
+
             //MY_DEBUG("tres");
             //SpeakVoice("I am test a word");
             //SpeakVoice("you are rate");
-            UpdateImageShow_SaveMat("test");
+            //UpdateImageShow_SaveMat("test");
 
 
             //
@@ -1892,20 +1772,21 @@ namespace NameSpace_AFM_Project
         }
         void ThreadFunction_SaveImage()
         {
+            string file_name=mDataPath+"Image_"+textBox_FileName.Text;
             string t = DateTime.Now.ToString("yyyyMMddHHmmss");
-            SaveImageToTextFile(mDataPath, t, "HL", mImageArrayHL);
-            SaveImageToTextFile(mDataPath, t, "HR", mImageArrayHR);
-            SaveImageToTextFile(mDataPath, t, "EL", mImageArrayEL);
-            SaveImageToTextFile(mDataPath, t, "ER", mImageArrayER);
+            SaveImageToTextFile(file_name, t, "HL", mImageArrayHL);
+            SaveImageToTextFile(file_name, t, "HR", mImageArrayHR);
+            SaveImageToTextFile(file_name, t, "EL", mImageArrayEL);
+            SaveImageToTextFile(file_name, t, "ER", mImageArrayER);
             SaveAFMParaToTextFile(t);
 
             //UpdateImageShow_SaveMat(t);
 
             t = null;
-            SaveImageToTextFile(mDataPath, t, "HL", mImageArrayHL);
-            SaveImageToTextFile(mDataPath, t, "HR", mImageArrayHR);
-            SaveImageToTextFile(mDataPath, t, "EL", mImageArrayEL);
-            SaveImageToTextFile(mDataPath, t, "ER", mImageArrayER);
+            SaveImageToTextFile(file_name, t, "HL", mImageArrayHL);
+            SaveImageToTextFile(file_name, t, "HR", mImageArrayHR);
+            SaveImageToTextFile(file_name, t, "EL", mImageArrayEL);
+            SaveImageToTextFile(file_name, t, "ER", mImageArrayER);
             SaveAFMParaToTextFile(t);
 
         }
@@ -1915,7 +1796,7 @@ namespace NameSpace_AFM_Project
         {
 
 
-            string Fpath = path + "AFM" + "_" + name + time + ".txt";
+            string Fpath = path + "_" + name + time + ".txt";
             //para_Nx = 128; para_Ny = 90;
             // StreamWriter writetext = new StreamWriter("write.txt");
             string text = null;
@@ -2127,6 +2008,17 @@ namespace NameSpace_AFM_Project
         private void button_Coarse_MoveToHomePosition_Click(object sender, EventArgs e)
         {
             button_CoarseLiftUp_Click();
+        }
+
+        private void button_CoarseWithdraw_Click(object sender, EventArgs e)
+        {
+            mCCoarsePositioner.MoveDistance(mCaxis_z, MAX_RANGE_Z_NM * 2, 1000);// move away up for safety reason
+            Thread.Sleep(1000);
+        }
+
+        private void button_DataCapture_Click(object sender, EventArgs e)
+        {
+            send_CMD_PC2MCU(CMD_PC2MCU.DATA_CAPTURE, 0);
         }
 
     }

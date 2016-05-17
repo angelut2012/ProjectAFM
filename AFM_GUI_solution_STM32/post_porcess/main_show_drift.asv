@@ -1,14 +1,10 @@
  close all
  clear
 
-% data=importdata('D:\AFMdata\SEM_drift_after_10_hour_then_start_all.txt');
-% data=importdata('D:\AFMdata\SEM_SCSG_drift_75V.txt');
-fn='drift_tri_SEM_newZ_5hour.txt'
-fn='drift_air_bag_1.txt'
-data=importdata(['D:\AFMdata\' fn]);
+data=importdata('D:\AFMdata\SEM_SCSG_drift_75V.txt');
 % data=data.data;
-% 
-% data=data(13050:203410,:);
+% SEM_drift_after_10_hour_then_start_all
+data=data(13050:203410,:);
 
 t=data(:,2);
 y=data(:,5);
@@ -60,24 +56,20 @@ title('')
 
 
 close all
-q=z;
+q=t;
 q=q-min(q);
 figure
-plot(T,q,'.-')
+plot(t,q,'.-')
 grid on
 xlabel('time (minute)')
-
-xlabel('temperature (degree centigrade)')
 ylabel('nm')
-createFit_line_poly_N(T,q,2,1)
-return
+
 
 q=q(1:end);
-[rq,cfL]=line_polyfit_adjust(q,5);
+[rq,cfL]=line_polyfit_adjust(q,8);
 
 figure
 % plot(cfL,'fit');
 plot(rq);
 
 std(rq(10000:20000))
-q(end)/t(end)

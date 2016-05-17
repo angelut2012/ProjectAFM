@@ -24,8 +24,10 @@ private:
 	//const int pdac[4];// = {PDAC0, PDAC1, PDAC2, PDAC3};
 	SWSPI *mSPI_DAC;
 	DigitalOut *mSPI_CS[NUM_OF_DAC];	
+	uint32_t mDAC_Value[NUM_OF_DAC];
 	
 public:
+	uint32_t ReadDACValue(byte channel){return mDAC_Value[channel];};
 	CDAC(void)		
 	{
 		mSPI_DAC= new SWSPI(Dspi_mosi, Dspi_miso, Dspi_clk);	
@@ -94,6 +96,7 @@ int  DAC_write(byte channel, uint32_t value) // long is 4 bytes for ARM32bit
 {
 	value = LIMIT_MAX_MIN(value,BIT18MAX,0);
 
+	mDAC_Value[channel]=value;
 	mSPI_CS[channel]->write(0);
 //	int value_back=mSPI_DAC->write(value);
 

@@ -12,3 +12,4 @@ F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_s
 F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\obj\Debug\AFM_Project.csproj.GenerateResource.Cache
 F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\obj\Debug\AFM_GUI.exe
 F:\Dropbox\TF_AFM_develop\software_TFAFM_Arduino_embeded\TFAFM_mcu_gui\AFM_GUI_solution\AFM_Project\obj\Debug\AFM_GUI.pdb
+F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\bin\AFM_GUI.exe

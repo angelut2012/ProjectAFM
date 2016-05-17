@@ -396,6 +396,7 @@ public		void  MoveDistance(uint channel,double distance, uint frequency)
 	// }
 	// 
 
+    int redo_count = 0;
     public void SetChannelVoltage(uint channelIndex,uint V_0_150)
     {
         // minimum step size=100, otherwise will mResult in error,
@@ -405,11 +406,21 @@ public		void  MoveDistance(uint channel,double distance, uint frequency)
         V_0_150 *= (uint)(4095.0/150.0);
 
         mResult = CCoarseController.SA_ScanMoveAbsolute_S((uint)mSystemIndex, (uint)(uint)channelIndex, V_0_150, 100000);
+        
+
         if (mResult != CCoarseController.SA_OK)
         {
             //Initialize();
             MY_DEBUG("SetChannelVoltage error!\n");
+            Initialize();
+
+            MY_DEBUG("redo initialize="+redo_count.ToString());
+            if (redo_count++ < 10)
+            {
+                SetChannelVoltage(channelIndex, V_0_150);
+            }
         }
+        redo_count = 0;
     }
 
     }

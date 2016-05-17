@@ -1,12 +1,14 @@
 clear
 close all
 clc
+Fs=1.5e3
 % function AFM_show_indent_data()
 % data=load('..\bin\IndentData.txt');
 % dat=importdata('..\bin\IndentData.txt');
 
-dat=importdata('D:\AFMdata\IndentData.txt');
+% dat=importdata('D:\AFMdata\IndentData.txt');
 % dat=importdata('D:\AFMdata\IndentData_vibration_si_floating_table_20160409173932.txt');
+dat=importdata('D:\AFMdata\IndentData_SEMVAc_20160516000650.txt');
 
 
 data=dat.data;
@@ -48,8 +50,9 @@ ylabel('sensor readout')
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-prc1=prc2;
-prc1=prc1/40;
+prc1=prc1;
+nm=nm1;
+prc1=prc1/35;
 figure(4)
 clf
 % plot(nm,prc,'.-')
@@ -58,15 +61,29 @@ plot(prc1,'r.-')
 x=round(x);
 x(2)=min(x(2),length(prc1))
 prc1=prc1(x(1):x(2));
-X=1:length(prc1);
+X=nm(x(1):x(2));
+X=X-X(1);
+prc1=prc1-prc1(end);
+
 cfL=createFit_line_poly_N(X,prc1,1,1)
+xlabel('indent depth (nm)')
+ylabel('sensor readout')
+
+
 prc_j=feval(cfL,X);
 prc1=prc1-prc_j;
+
+dt=1/Fs;
+t=1:length(prc1);
+t=t.*dt;
 figure(100)
-plot(prc1,'*-')
+plot(t,prc1,'*-')
+ylabel('vibration amplitude (nm)')
+xlabel('time (s)')
 
 
-DFFT(prc1,1e6/104);
+% DFFT(prc1,1e6/104);
+DFFT(prc1,1.5e3);
 std(prc1)
 
 return

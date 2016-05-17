@@ -9,12 +9,12 @@ data=importdata(['D:\AFMdata\' fn]);
 % data=data.data;
 % 
 % data=data(13050:203410,:);
-
-t=data(:,2);
-y=data(:,5);
-x=data(:,6);
-p=data(:,7);
-z=data(:,8);
+y=1;
+t=data(:,1);
+% y=data(:,5);
+x=data(:,2);
+p=data(:,3);
+z=data(:,4);
 
 t=t-t(1);
 y=y-y(1);
@@ -60,13 +60,14 @@ title('')
 
 
 close all
-q=z;
-q=q-min(q);
+q=p;
+% q=q-min(q);
 figure
-plot(T,q,'.-')
+plot(t,q,'.-')
 grid on
 xlabel('time (minute)')
-
+ylabel('nm')
+return
 xlabel('temperature (degree centigrade)')
 ylabel('nm')
 createFit_line_poly_N(T,q,2,1)
