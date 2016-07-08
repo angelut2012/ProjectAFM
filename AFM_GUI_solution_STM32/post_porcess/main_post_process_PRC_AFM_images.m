@@ -7,7 +7,7 @@ close all
 p=('D:\AFMdata')
 [fn,p]=uigetfile([p '\*.txt'])
 imraw=load([p fn]);
-imraw=medfilt2(imraw,[3,3],'symmetric');
+% imraw=medfilt2(imraw,[3,3],'symmetric');
 imraw=-imraw;
 % imraw=imraw';
 % imm=mean(imraw(:))-imraw;
@@ -33,6 +33,8 @@ im_flat=im_flat-mean(im_flat(:));
 figure(1)
 surf(im_flat,'LineStyle','non')
 colorbar
+zlabel('nm')
+zlim([-10 10])
 figure(2)
 imshow(im_flat,[])
 
@@ -46,7 +48,7 @@ colorbar
 % figure(3)
 % plot(L,'.-')
 
-p=im_flat(:)
+p=im_flat(:);
 figure(4)
 hist(p,min(p):0.1:max(p))
 title([fn ' std=' num2str(std(p))],'Interpreter','non')
@@ -54,7 +56,7 @@ xlabel('noise (nm)')
 ylabel('point count')
 
 % [image_show_buffer,im_buffer]=AFM_dip_for_show(im_flat,127,127);
-
+std(p)
 
 
 return

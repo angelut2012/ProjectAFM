@@ -4,8 +4,10 @@
 % data=importdata('D:\AFMdata\SEM_drift_after_10_hour_then_start_all.txt');
 % data=importdata('D:\AFMdata\SEM_SCSG_drift_75V.txt');
 fn='drift_tri_SEM_newZ_5hour.txt'
-fn='drift_tri_SEMAir_newZ_1hour.txt'
-fn='drift_tri_Air_newZ_1hour.txt'
+% fn='drift_tri_SEMAir_newZ_1hour.txt'
+% fn='drift_tri_Air_newZ_1hour.txt'
+
+% fn='test_triangle_wave6.txt'
 data=importdata(['D:\AFMdata\' fn]);
 % data=data.data;
 % 
@@ -58,7 +60,21 @@ T=convert_temperature_adc2degree(T);
 [outR0,outRange]=sub_calc_show_drift_triangle(x,dx,V,t,T)
 [outR0,outRange]=sub_calc_show_drift_triangle(y,dy,V,t,T)
 
+% return
+q=-z;
+q=line_polyfit_adjust(q,1);
+
+v=normalize_01(V);
+q=normalize_01(q);
+
+createFit_line_poly_N(v,q,2,1)
 return
+
+q=q(1:end);
+[rq,cfL]=line_polyfit_adjust(q,5);
+
+
+
 
 
 plot(t0,z0,'r-')

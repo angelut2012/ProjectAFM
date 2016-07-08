@@ -20,6 +20,8 @@ namespace NameSpace_AFM_Project
     {
        private const int BASE	=(32768);//2^15
        public const int DATA_CAPTURE = (BASE + 1);
+        public const int WAVE_TEST = (BASE + 2);
+
     }
 
      public partial class MainWindow : Form

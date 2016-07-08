@@ -1021,7 +1021,7 @@ namespace NameSpace_AFM_Project
             const double Sensitivity_VperC = 0.02;
             T = T / BIT18MAX;
             T = T * VCC;//--> Volt	
-            T = (T - 0.5) / Sensitivity_VperC + 25 - 2.4;// degree
+            T = (T - 0.5) / Sensitivity_VperC + 25;// -2.4;// degree
             return T;
         }
 
@@ -1143,13 +1143,13 @@ namespace NameSpace_AFM_Project
 
                 double v_Temperature_SEM = convert_Temperature2Degree_SEM(sys_data[1]);
                 int k = 0;
-                MY_DEBUG("sys_data:"
-                    + sys_data[k++].ToString() + ":"
-                    + sys_data[k++].ToString() + ":"
-                    + sys_data[k++].ToString() + ":"
-                    + sys_data[k++].ToString() + ":"
-                    + sys_data[k++].ToString() + ":"
-                    + sys_data[k++].ToString() + ":"
+                MY_DEBUG("sys_data, "
+                    + sys_data[k++].ToString() + ", "
+                    + sys_data[k++].ToString() + ", "
+                    + sys_data[k++].ToString() + ", "
+                    + sys_data[k++].ToString() + ", "
+                    + sys_data[k++].ToString() + ", "
+                    + sys_data[k++].ToString() + ", "
                     + v_Temperature_SEM.ToString("f3")
                     );
             }
@@ -1167,15 +1167,29 @@ namespace NameSpace_AFM_Project
                 //6     mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
                 double v_Temperature_SEM = convert_Temperature2Degree_SEM(v[2]);
                 double v_Temperature_MCU = convert_Temperature2Degree_MCU(v[0]);
-                string s = "data:";
+                string s = "data, ";
                 for (int j = 0; j < 7; j++)
-                    s += v[j].ToString() + "\t:\t";
+                    s += v[j].ToString() + "\t, \t";
 
                 double PRC5 = v[5] / BIT18MAX * 5;
-                s += "PRC:" + PRC5.ToString("f4") + ":";
-                s += "T_SEM:" + v_Temperature_SEM.ToString("f3") + ":";
-                s += "T_MCU:" + v_Temperature_MCU.ToString("f3") + ":";
-                s += "Vz:" + (v7/BIT18MAX).ToString("f3") + ":";
+                s += "PRC, " + PRC5.ToString("f4") + ", ";
+                s += "T_SEM, " + v_Temperature_SEM.ToString("f1") + ", ";
+                s += "T_MCU, " + v_Temperature_MCU.ToString("f1") + ", ";
+               
+                //s += "Vy, " + (v4 / BIT18MAX*5.0).ToString("f4") + ", ";
+                //s += "Vx, " + (v5 / BIT18MAX*5.0).ToString("f4") + ", ";
+                s += "Vy, " + (v5 / BIT18MAX * 5.0).ToString("f4") + ", ";
+                s += "Vx, " + (v4 / BIT18MAX * 5.0).ToString("f4") + ", ";
+                s += "Vz, " + (v7 / BIT18MAX*5.0).ToString("f4") + ", ";
+                 
+
+      double p1 =  -4.628e-09;//  (-1.754e-08, 8.28e-09)
+    double   p2 =   6.396e-05;//  (-0.003195, 0.003323)
+    double p3 = 92.47;// (-112.6, 297.6)
+                double x=v[2];
+    double Tz= p1*x*x + p2*x + p3;
+    s += "Tz, " + Tz.ToString("f3");
+                s+="T, " + textBox_TC.Text;
                 MY_DEBUG(s);
             }
 
@@ -1696,19 +1710,9 @@ namespace NameSpace_AFM_Project
             //AFM_coarse_positioner_MoveDistance(2, 5000000);// 5mm 
             mCCoarsePositioner.MoveDistance(mCaxis_z, 5000000, 2000);// lift up
         }
-        System.Windows.Forms.Timer mTaskTimer ;//= new System.Windows.Forms.Timer();
-        private void timerFunction_Task(object sender, EventArgs e)
-        {
-            send_Data_Frame_To_Arduino('r', 's', 't');
-            MY_DEBUG("task MCU reset");
-        }
+
         private void button2_Click(object sender, EventArgs e)
         {
-            mTaskTimer = new System.Windows.Forms.Timer();
-            mTaskTimer.Interval = 5*3600*1000; //6512;
-            mTaskTimer.Tick +=  new System.EventHandler(this.timerFunction_Task);
-            mTaskTimer.Stop();
-            mTaskTimer.Start();//trigger function   timerFunction_Appraoch
 
 
             //MY_DEBUG("tres");
@@ -2018,9 +2022,33 @@ namespace NameSpace_AFM_Project
 
         private void button_DataCapture_Click(object sender, EventArgs e)
         {
-            send_CMD_PC2MCU(CMD_PC2MCU.DATA_CAPTURE, 0);
+            send_CMD_PC2MCU(CMD_PC2MCU.DATA_CAPTURE, 50);
         }
 
+        private void button_WaveTest_Click(object sender, EventArgs e)
+        {
+            send_CMD_PC2MCU(CMD_PC2MCU.WAVE_TEST, 50);
+        }
+        //-------------------------- task cunction
+        private void button_StartTask_Click(object sender, EventArgs e)
+        {
+            mTaskTimer = new System.Windows.Forms.Timer();
+            mTaskTimer.Interval = 6 * 3600 * 1000; //6512;
+            mTaskTimer.Tick += new System.EventHandler(this.timerFunction_Task);
+            mTaskTimer.Stop();
+            mTaskTimer.Start();//trigger function   timerFunction_Appraoch
+
+        }
+        System.Windows.Forms.Timer mTaskTimer;//= new System.Windows.Forms.Timer();
+        private void timerFunction_Task(object sender, EventArgs e)
+        {
+            //send_Data_Frame_To_Arduino('r', 's', 't');
+            MY_DEBUG("task_trigger");
+            Appraoch_cancel();
+            Thread.Sleep(1000);
+            set_output_DAC_Value_0_5(1, 2.5);
+        }
+        //-------------------------- task cunction end
     }
 
 

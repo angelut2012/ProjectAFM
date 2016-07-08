@@ -110,10 +110,12 @@
 #define NUM_OF_PIEZO_MODEL (3)
 #define NUM_OF_SCANNER (NUM_OF_PIEZO_MODEL)
 #define PIEZO_Z (0)
-//#define PIEZO_X (2)
-//#define PIEZO_Y (1)
-#define PIEZO_X (1)
-#define PIEZO_Y (2)
+#define PIEZO_X (2)
+#define PIEZO_Y (1)
+
+//#define PIEZO_X (1)// normal
+//#define PIEZO_Y (2)
+
 //#define PIEZO_T (3)
 #define PIEZO_ALL (3)
 

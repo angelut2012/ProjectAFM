@@ -26,10 +26,10 @@ try
         %     point_now_y=t;
         
         [image_show_buffer,im_buffer_out]=AFM_dip_for_show(im_buffer,point_now_x,point_now_y,'show_line');
-%          [image_show_buffer,im_buffer_out]=AFM_dip_for_show(im_buffer,point_now_x,point_now_y);
-%         im=im_buffer_out;
-%         [N_x,N_y]=size(im);
-%         im_buffer_out=medfilt2(im_buffer_out,[5 5]);
+        %          [image_show_buffer,im_buffer_out]=AFM_dip_for_show(im_buffer,point_now_x,point_now_y);
+        %         im=im_buffer_out;
+        %         [N_x,N_y]=size(im);
+        %         im_buffer_out=medfilt2(im_buffer_out,[5 5]);
         
         
         K=[321
@@ -37,9 +37,9 @@ try
             322
             324];
         subplot(K(k))
-%         image_show_buffer(:,:,1)=image_show_buffer(:,:,1)';
-%         image_show_buffer(:,:,2)=image_show_buffer(:,:,2)';
-%         image_show_buffer(:,:,3)=image_show_buffer(:,:,3)';
+        %         image_show_buffer(:,:,1)=image_show_buffer(:,:,1)';
+        %         image_show_buffer(:,:,2)=image_show_buffer(:,:,2)';
+        %         image_show_buffer(:,:,3)=image_show_buffer(:,:,3)';
         imshow(image_show_buffer,[])
         hold on
         plot(point_now_x, point_now_y,'r*','MarkerSize',10)
@@ -48,11 +48,11 @@ try
             326
             326];
         
-%         point_now_y=100
-%         load('er.mat')
-% load('HL.mat')
-% ims=im_buffer_out+er;
-%         im_buffer=ims;
+        %         point_now_y=100
+        %         load('er.mat')
+        % load('HL.mat')
+        % ims=im_buffer_out+er;
+        %         im_buffer=ims;
         line_now_show=im_buffer(abs(point_now_y),1:end-1);
         line_now_show=AFM_line_for_show(line_now_show,1);
         line_now_show=line_now_show-line_now_show(1);
@@ -63,7 +63,7 @@ try
         xlim([1 length(line_now_show)])
         grid on
     end
-%     try
+    %     try
 catch ME
     %fprintf('error') ;
     out=[num2str(ME.stack(1).line) ': ' ME.message]

@@ -158,15 +158,18 @@
             this.tabPage_Memory = new System.Windows.Forms.TabPage();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage_DataExport = new System.Windows.Forms.TabPage();
+            this.label30 = new System.Windows.Forms.Label();
+            this.textBox_FileName = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.textBox_DataPath = new System.Windows.Forms.TextBox();
             this.tabPage_Control = new System.Windows.Forms.TabPage();
+            this.button_StartTask = new System.Windows.Forms.Button();
+            this.button_WaveTest = new System.Windows.Forms.Button();
+            this.button_DataCapture = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button_CoarseWithdraw = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.button_DataCapture = new System.Windows.Forms.Button();
-            this.textBox_FileName = new System.Windows.Forms.TextBox();
-            this.label30 = new System.Windows.Forms.Label();
+            this.textBox_TC = new System.Windows.Forms.TextBox();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -665,12 +668,12 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(20, 101);
+            this.button2.Location = new System.Drawing.Point(2, 74);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(72, 32);
+            this.button2.Size = new System.Drawing.Size(34, 23);
             this.button2.TabIndex = 51;
-            this.button2.Text = "button2";
+            this.button2.Text = "test";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -1283,6 +1286,7 @@
             // 
             // groupBox_Setup
             // 
+            this.groupBox_Setup.Controls.Add(this.textBox_TC);
             this.groupBox_Setup.Controls.Add(this.label_Servicing);
             this.groupBox_Setup.Controls.Add(this.label8);
             this.groupBox_Setup.Controls.Add(this.label9);
@@ -1574,6 +1578,23 @@
             this.tabPage_DataExport.Text = "Data Export";
             this.tabPage_DataExport.UseVisualStyleBackColor = true;
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(6, 210);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(52, 13);
+            this.label30.TabIndex = 72;
+            this.label30.Text = "file_name";
+            // 
+            // textBox_FileName
+            // 
+            this.textBox_FileName.Location = new System.Drawing.Point(0, 226);
+            this.textBox_FileName.Name = "textBox_FileName";
+            this.textBox_FileName.Size = new System.Drawing.Size(242, 20);
+            this.textBox_FileName.TabIndex = 71;
+            this.textBox_FileName.Text = "Sample";
+            // 
             // label29
             // 
             this.label29.AutoSize = true;
@@ -1593,6 +1614,8 @@
             // 
             // tabPage_Control
             // 
+            this.tabPage_Control.Controls.Add(this.button_StartTask);
+            this.tabPage_Control.Controls.Add(this.button_WaveTest);
             this.tabPage_Control.Controls.Add(this.button_DataCapture);
             this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
             this.tabPage_Control.Controls.Add(this.button2);
@@ -1608,6 +1631,38 @@
             this.tabPage_Control.TabIndex = 4;
             this.tabPage_Control.Text = "Control";
             this.tabPage_Control.UseVisualStyleBackColor = true;
+            // 
+            // button_StartTask
+            // 
+            this.button_StartTask.Location = new System.Drawing.Point(143, 270);
+            this.button_StartTask.Name = "button_StartTask";
+            this.button_StartTask.Size = new System.Drawing.Size(97, 34);
+            this.button_StartTask.TabIndex = 87;
+            this.button_StartTask.Text = "start task";
+            this.button_StartTask.UseVisualStyleBackColor = true;
+            this.button_StartTask.Click += new System.EventHandler(this.button_StartTask_Click);
+            // 
+            // button_WaveTest
+            // 
+            this.button_WaveTest.Location = new System.Drawing.Point(139, 221);
+            this.button_WaveTest.Margin = new System.Windows.Forms.Padding(2);
+            this.button_WaveTest.Name = "button_WaveTest";
+            this.button_WaveTest.Size = new System.Drawing.Size(101, 32);
+            this.button_WaveTest.TabIndex = 86;
+            this.button_WaveTest.Text = "WaveTest";
+            this.button_WaveTest.UseVisualStyleBackColor = true;
+            this.button_WaveTest.Click += new System.EventHandler(this.button_WaveTest_Click);
+            // 
+            // button_DataCapture
+            // 
+            this.button_DataCapture.Location = new System.Drawing.Point(139, 176);
+            this.button_DataCapture.Margin = new System.Windows.Forms.Padding(2);
+            this.button_DataCapture.Name = "button_DataCapture";
+            this.button_DataCapture.Size = new System.Drawing.Size(101, 32);
+            this.button_DataCapture.TabIndex = 85;
+            this.button_DataCapture.Text = "data capture";
+            this.button_DataCapture.UseVisualStyleBackColor = true;
+            this.button_DataCapture.Click += new System.EventHandler(this.button_DataCapture_Click);
             // 
             // groupBox1
             // 
@@ -1641,33 +1696,15 @@
             this.groupBox2.TabIndex = 107;
             this.groupBox2.TabStop = false;
             // 
-            // button_DataCapture
+            // textBox_TC
             // 
-            this.button_DataCapture.Location = new System.Drawing.Point(139, 176);
-            this.button_DataCapture.Margin = new System.Windows.Forms.Padding(2);
-            this.button_DataCapture.Name = "button_DataCapture";
-            this.button_DataCapture.Size = new System.Drawing.Size(101, 32);
-            this.button_DataCapture.TabIndex = 85;
-            this.button_DataCapture.Text = "data capture";
-            this.button_DataCapture.UseVisualStyleBackColor = true;
-            this.button_DataCapture.Click += new System.EventHandler(this.button_DataCapture_Click);
-            // 
-            // textBox_FileName
-            // 
-            this.textBox_FileName.Location = new System.Drawing.Point(0, 226);
-            this.textBox_FileName.Name = "textBox_FileName";
-            this.textBox_FileName.Size = new System.Drawing.Size(242, 20);
-            this.textBox_FileName.TabIndex = 71;
-            this.textBox_FileName.Text = "Sample";
-            // 
-            // label30
-            // 
-            this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(6, 210);
-            this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(52, 13);
-            this.label30.TabIndex = 72;
-            this.label30.Text = "file_name";
+            this.textBox_TC.Location = new System.Drawing.Point(813, 119);
+            this.textBox_TC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBox_TC.Name = "textBox_TC";
+            this.textBox_TC.Size = new System.Drawing.Size(38, 20);
+            this.textBox_TC.TabIndex = 82;
+            this.textBox_TC.Text = "26.0";
+            this.toolTip_Help.SetToolTip(this.textBox_TC, "Enter the step length here.");
             // 
             // MainWindow
             // 
@@ -1861,6 +1898,9 @@
         private System.Windows.Forms.Button button_DataCapture;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.TextBox textBox_FileName;
+        private System.Windows.Forms.Button button_WaveTest;
+        private System.Windows.Forms.Button button_StartTask;
+        private System.Windows.Forms.TextBox textBox_TC;
     }
 }
 

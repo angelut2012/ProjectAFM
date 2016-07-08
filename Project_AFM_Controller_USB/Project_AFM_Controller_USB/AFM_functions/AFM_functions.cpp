@@ -60,11 +60,13 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 			// non realtime process			
 		case  AFM_Core::SS_Approach:		mAFM_Core.process_Approach();break;//		
 			//			case  AFM_Core::SS_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
-			//case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen_data_capture(); break;		
 		case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;		
 		//case  AFM_Core::SS_DataCapture:		mAFM_Core.process_data_capture(); break;		
 
-		case  AFM_Core::SS_Idle:			mAFM_Core.process_Idle(); 			break;
+		case  AFM_Core::SS_Idle:			mAFM_Core.process_Idle(); 			break;			
+		case  AFM_Core::SS_WaveTest:			mAFM_Core.process_WaveTest(); 			break;
+			
+			
 			break;
 		default:
 			;
