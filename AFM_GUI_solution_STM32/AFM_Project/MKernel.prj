@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <deployment-project plugin="plugin.deploytool" plugin-version="1.0">
-  <configuration target="target.com.component" target-name="Generic COM Component" name="MKernel" location="F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project" file="F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel.prj" build-checksum="3615159864">
-    <param.project.name>F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel.prj</param.project.name>
+  <configuration target="target.com.component" target-name="Generic COM Component" name="MKernel" location="F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_integration\AFM_Project" file="F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_integration\AFM_Project\MKernel.prj" build-checksum="1031938748">
+    <param.project.name>F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_integration\AFM_Project\MKernel.prj</param.project.name>
     <param.target.type>Generic COM Component</param.target.type>
     <param.appname>MKernel</param.appname>
     <param.intermediate>${PROJECT_ROOT}\MKernel\src</param.intermediate>
@@ -60,9 +60,7 @@
     <fileset.classes>
       <entity.package name="">
         <entity.class name="Kernel">
-          <file>${PROJECT_ROOT}\AFM_DIP_for_show.m</file>
-          <file>${PROJECT_ROOT}\AFM_dip_show_image.m</file>
-          <file>${PROJECT_ROOT}\AFM_dip_show_image_from_txt.m</file>
+          <file>${PROJECT_ROOT}\AFM_convert_height2RGB.m</file>
           <file>${PROJECT_ROOT}\AFM_line_for_show.m</file>
           <file>${PROJECT_ROOT}\AFM_scan_set_ROI.m</file>
           <file>${PROJECT_ROOT}\AFM_show_indent_data.m</file>
@@ -73,8 +71,8 @@
     <fileset.resources />
     <fileset.package />
     <build-deliverables>
-      <file name="readme.txt" location="${PROJECT_ROOT}\MKernel\distrib" optional="true">F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel\distrib\readme.txt</file>
-      <file name="MKernel_1_0.dll" location="${PROJECT_ROOT}\MKernel\distrib" optional="false">F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_STM32\AFM_Project\MKernel\distrib\MKernel_1_0.dll</file>
+      <file name="readme.txt" location="${PROJECT_ROOT}\MKernel\distrib" optional="true">F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_integration\AFM_Project\MKernel\distrib\readme.txt</file>
+      <file name="MKernel_1_0.dll" location="${PROJECT_ROOT}\MKernel\distrib" optional="false">F:\google_drive\project_STM32\VS2012\AFM_GUI_solution_integration\AFM_Project\MKernel\distrib\MKernel_1_0.dll</file>
     </build-deliverables>
     <workflow />
     <matlab>

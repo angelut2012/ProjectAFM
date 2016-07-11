@@ -6,23 +6,19 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
 using System.Threading;
-
 using System.IO.Ports;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
 //using CLRWrapper;
 
 namespace NameSpace_AFM_Project
 {
-
     public partial class MainWindow : Form
     {
-
         //-------
         public void DOS_Command(string cmdstr)
         { System.Diagnostics.Process.Start("cmd.exe", cmdstr); }
+
         public void SpeakVoice(string words)
         {
             //C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0
@@ -47,9 +43,7 @@ namespace NameSpace_AFM_Project
             if (k == 4) System.Media.SystemSounds.Question.Play();
             if (k == 5) PlaySimpleSound(@"camera.wav");
             if (k == 6) PlaySimpleSound(@"chimes.wav");
-
         }
-
 
         static T Swap<T>(ref T lhs, ref T rhs) where T : System.IComparable<T>
         {
@@ -68,6 +62,7 @@ namespace NameSpace_AFM_Project
             if (v < down) v = down;
             return v;
         }
+
         public int MIN_MAX(int v, int down, int up)
         {
             //v = Math.Max(v, down);
@@ -76,6 +71,7 @@ namespace NameSpace_AFM_Project
             if (v < down) v = down;
             return v;
         }
+
         public double MIN_MAX(double v, double down, double up)
         {
             //v = Math.Max(v, down);
@@ -84,6 +80,7 @@ namespace NameSpace_AFM_Project
             if (v < down) v = down;
             return v;
         }
+
         public void MY_DEBUG(string inf)
         {
             if (string.IsNullOrEmpty(inf) == false)
@@ -100,7 +97,6 @@ namespace NameSpace_AFM_Project
             //            mCCoarsePositioner.MY_DEBUG_CLR(sp);
             //        }
             //    }
-
             //}
         }
         public void MY_DEBUG(string inf, int x) { MY_DEBUG(inf + Convert.ToString(x)); }
@@ -116,11 +112,10 @@ namespace NameSpace_AFM_Project
         {
             long t = 0;
             if (s == 0)
-                t = TIC_TOC_t = GetCurrentTimeLong();// tic
+                t = TIC_TOC_t = GetCurrentTimeLong();  // tic
             else
                 t = GetCurrentTimeLong() - TIC_TOC_t;
             return t;
         }
-
     }
 }

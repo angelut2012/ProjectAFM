@@ -6,16 +6,13 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
-
 using System.Threading;
-
 using System.IO.Ports;
 using System.Text.RegularExpressions;
 
 namespace NameSpace_AFM_Project
 {
-     public partial class MainWindow : Form
+    public partial class MainWindow : Form
     {
         //public Indentation()
         //{
@@ -29,22 +26,26 @@ namespace NameSpace_AFM_Project
         MainWindow pParent;
         public void Form_Indentation(MainWindow pmain)
         {
-           // InitializeComponent();
+            // InitializeComponent();
 
             mThread_Indent = new Thread(ThreadFunction_Indent);
             pParent = pmain;
             //pParent.send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
         }
+
         private void button_CancelIndent_Click(object sender, EventArgs e)
         {
             string x = pParent.mCParameter.ToString();
-            string y=x.ToString();
+            string y = x.ToString();
             mSwitch_CancelIndent = true;
             pParent.send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
         }
 
         private void button_StartIndent_Click(object sender, EventArgs e)
-         { Indent_StartThread(); }
+        {
+            Indent_StartThread();
+        }
+
         void Indent_StartThread()
         {
             if (mThread_Indent.IsAlive == false)// avoid multi start
@@ -69,16 +70,15 @@ namespace NameSpace_AFM_Project
             pParent.set_AFM_parameters('f', pParent.mCParameter.LoopDelay_uS - CParameter.mI_LoopDelay_Min_uS);
             pParent.set_AFM_parameters('g', pParent.mCParameter.NumberOfSamplingPoints);
 
-
             pParent.mIndentData = new double[3, 6000];//25*1024
             pParent.mIndentData_index = -1;
             mSwitch_CancelIndent = false;
             pParent.mSwitch_IndentTrue_FinishFalse = true;
             pParent.send_Data_Frame_To_Arduino('C', 'I', 'D');
-            while (pParent.mSwitch_IndentTrue_FinishFalse ==true)
+            while (pParent.mSwitch_IndentTrue_FinishFalse == true)
             {
                 Thread.Sleep(5);
-                if (mSwitch_CancelIndent == true) 
+                if (mSwitch_CancelIndent == true)
                     return;
             }
 
@@ -86,9 +86,9 @@ namespace NameSpace_AFM_Project
                 + pParent.para_XL.ToString() + "%XL\r\n"
                 + pParent.para_YL.ToString() + "%YL\r\n"
                 + "\r\n";
-                
+
             SaveIndentDataToTextFile(mDataPath,
-                "_"+  pParent.mCParameter.SampleName,
+                "_" + pParent.mCParameter.SampleName,
                 "_" + pParent.GetCurrentTimeString(),
                 paras,
                 //"_step_size" + step_size.ToString() +
@@ -118,11 +118,10 @@ namespace NameSpace_AFM_Project
 
             try
             {
-               // ShowIndentData();
+                // ShowIndentData();
             }
             catch { MessageBox.Show("show indentation data error"); }
-        
-        
+
         }
 
         //void ThreadFunction_Indent_old()
@@ -215,20 +214,20 @@ namespace NameSpace_AFM_Project
         //        ShowIndentData();
         //    }
         //    catch { MessageBox.Show("show data error"); }
-           
+
 
         //}
 
 
-        void SaveIndentDataToTextFile(string path,  string name, string time,string paras, double[,] data)
+        void SaveIndentDataToTextFile(string path, string name, string time, string paras, double[,] data)
         {
             int para_Ny = data.Length / (data.Rank + 1);
             int para_Nx = data.Rank + 1;
-            SaveIndentDataToTextFile(path,name, time, paras,data, para_Nx, para_Ny); 
+            SaveIndentDataToTextFile(path, name, time, paras, data, para_Nx, para_Ny);
         }
-        void SaveIndentDataToTextFile(string path, string name, string time, string paras, double[,] data, int para_Nx, int para_Ny) 
+        void SaveIndentDataToTextFile(string path, string name, string time, string paras, double[,] data, int para_Nx, int para_Ny)
         {
-            string Fpath =path+ "IndentData" + name + time + ".txt";
+            string Fpath = path + "IndentData" + name + time + ".txt";
             //para_Nx = 128; para_Ny = 90;
             // StreamWriter writetext = new StreamWriter("write.txt");
             string text = paras;
@@ -258,7 +257,7 @@ namespace NameSpace_AFM_Project
             {
                 pParent.mKernelClass.StringEval(2, ref Oout_str, ref Oout_data, Oin_str, Oin_data);
             }
-            catch 
+            catch
             {
                 pParent.MY_DEBUG("ShowindentData Error in MKernel.");
             }

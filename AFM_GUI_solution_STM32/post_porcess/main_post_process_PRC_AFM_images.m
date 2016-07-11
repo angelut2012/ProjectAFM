@@ -4,11 +4,13 @@ clear
 close all
 % load('input_20150827031119.mat')
 %     imy=image_adjust_Y(imHL',123,128);
-p=('D:\AFMdata')
+p=('C:\AFMdata')
 [fn,p]=uigetfile([p '\*.txt'])
 imraw=load([p fn]);
 % imraw=medfilt2(imraw,[3,3],'symmetric');
 imraw=-imraw;
+
+imraw(1:30,:)=[];
 % imraw=imraw';
 % imm=mean(imraw(:))-imraw;
 % imm=imraw-min(imraw(:));
@@ -26,7 +28,8 @@ ps=linspace(1,size(imraw,1),20);
 [px,py]=meshgrid(ps,ps);
 px=px(:);
 py=py(:);
-im_flat=image_adjust_plane(imraw,1,px,py);
+im_flat=imraw;
+im_flat=image_adjust_plane(imraw,2,px,py);
 % im_flat=medfilt2(im_flat,[3,3],'symmetric');
 im_flat=im_flat-min(im_flat(:));
 im_flat=im_flat-mean(im_flat(:));
@@ -34,7 +37,7 @@ figure(1)
 surf(im_flat,'LineStyle','non')
 colorbar
 zlabel('nm')
-zlim([-10 10])
+% zlim([-10 10])
 figure(2)
 imshow(im_flat,[])
 

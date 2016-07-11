@@ -36,8 +36,6 @@ fn='new_scsg_comp_X_ShortPiezo_null_only_V1d25.txt'
 
 fn='new_scsg_comp_X_ShortPiezo_null_only_V2d5_recalibration_process.txt'
 fn='new_scsg_comp_X_ShortPiezo_null_only_V2d5_recalibration_SEM_process.txt'
-fn='new_scsg_comp_X_ShortPiezo_null_only_V2d5_recalibration_SEM_12hours_nomove_process.txt'
-% fn='new_scsg_comp_X_ShortPiezo_null_only_V2d5_recalibration_16hours_nomove_heatplate_processy.txt'
 data=importdata(['D:\AFMdata\' fn]);
 % data=data.data;
 %
@@ -50,7 +48,7 @@ data=importdata(['D:\AFMdata\' fn]);
 % data=data(1270:end,:);%20 minutes later
 % data=data(1:6600,:);%20 minutes later
 % data=data(396:end,:);%20 minutes later
-% data=data(396:7000,:);%20 minutes later
+data=data(396:7000,:);%20 minutes later
 
 t=data(:,1);
 t=t-t(1);
@@ -139,10 +137,10 @@ plot(t,T)
 xlabel('time (minute)')
 ylabel('temperature (degree centigrade)')
 
-cf=createFit_line_poly_N(T,y,1,5)
+cf=createFit_line_poly_N(T,y,2,5)
 xlabel('temperature (degree centigrade)')
 ylabel('nm')
-title (['drift rate = ' num2str(cf.p1) ' nm/^oC'])
+title (['drift rate = ' num2str(cf.p2) ' nm/^oC'])
 
 figure(21)
 

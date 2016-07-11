@@ -61,8 +61,11 @@ class CSEM
 #define ADC_CHANNEL_X	(2)//ADC4 = X, 
 #define ADC_CHANNEL_Y	(3)//ADC3 = Y, 
 #define ADC_CHANNEL_TEMPERATURE	(4)//ADC2 = Temperature, 
-#define ADC_CHANNEL_CALIBRATION (5) //PRC_calibration.	
-	
+#define ADC_CHANNEL_CALIBRATION (5) //PRC_calibration.		
+
+#define ADC_CHANNEL_Tz (4) 
+#define ADC_CHANNEL_Txy	(5)
+#define ADC_All (ADC_CHANNEL_Txy)	
 	
 #define  ADC_DATA_LENGTH (18)	
 

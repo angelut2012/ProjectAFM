@@ -125,7 +125,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Height)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Error)).EndInit();
             this.ResumeLayout(false);
-
         }
 
         #endregion

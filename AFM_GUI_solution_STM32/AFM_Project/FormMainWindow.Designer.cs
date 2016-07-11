@@ -108,8 +108,7 @@
             this.button_Form_CoarsePositioner = new System.Windows.Forms.Button();
             this.button_ShowImage = new System.Windows.Forms.Button();
             this.radioButton_Topography = new System.Windows.Forms.RadioButton();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_AFM_Real_Image = new System.Windows.Forms.PictureBox();
             this.button_ExportData = new System.Windows.Forms.Button();
             this.groupBox_AFMImage = new System.Windows.Forms.GroupBox();
             this.radioButton_Deflection = new System.Windows.Forms.RadioButton();
@@ -120,13 +119,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label_Speed_Y = new System.Windows.Forms.Label();
-            this.button_VideoRecord = new System.Windows.Forms.Button();
+            this.button_SEMImage_VideoRecord = new System.Windows.Forms.Button();
             this.label_VideoRecord = new System.Windows.Forms.Label();
             this.label_ScreenShot = new System.Windows.Forms.Label();
-            this.button_ScreenShot = new System.Windows.Forms.Button();
+            this.button_SEMImage_ScreenShot = new System.Windows.Forms.Button();
             this.groupBox_SEMPreview = new System.Windows.Forms.GroupBox();
+            this.pictureBox_SEMImage = new System.Windows.Forms.PictureBox();
             this.checkBox_ReferenceMarks = new System.Windows.Forms.CheckBox();
-            this.pictureBox_SEMPreview = new System.Windows.Forms.PictureBox();
             this.label_Encoder_Y = new System.Windows.Forms.Label();
             this.label_Speed_X = new System.Windows.Forms.Label();
             this.label_Axis_Z = new System.Windows.Forms.Label();
@@ -139,12 +138,12 @@
             this.label4 = new System.Windows.Forms.Label();
             this.button_Optical = new System.Windows.Forms.Button();
             this.groupBox_Setup = new System.Windows.Forms.GroupBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.label_Servicing = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.button_Servicing = new System.Windows.Forms.Button();
             this.button_ScannerCalibration = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox_SystemStatus = new System.Windows.Forms.GroupBox();
             this.button_SEM = new System.Windows.Forms.Button();
@@ -153,37 +152,47 @@
             this.label_Joystick = new System.Windows.Forms.Label();
             this.label_Microscope = new System.Windows.Forms.Label();
             this.tabPage_TopoScan = new System.Windows.Forms.TabPage();
+            this.comboBox_ParaImageQuality = new System.Windows.Forms.ComboBox();
+            this.comboBox_ParaLines = new System.Windows.Forms.ComboBox();
+            this.comboBox_ParaPixels = new System.Windows.Forms.ComboBox();
+            this.comboBox_ParaScanArea = new System.Windows.Forms.ComboBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label31 = new System.Windows.Forms.Label();
             this.button_AdvancedSettings = new System.Windows.Forms.Button();
             this.tabPage_Indentation = new System.Windows.Forms.TabPage();
             this.tabPage_Memory = new System.Windows.Forms.TabPage();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPage_backup = new System.Windows.Forms.TabPage();
+            this.tabPage_Control = new System.Windows.Forms.TabPage();
+            this.button_StartTask = new System.Windows.Forms.Button();
+            this.button_WaveTest = new System.Windows.Forms.Button();
+            this.button_DataCapture = new System.Windows.Forms.Button();
             this.tabPage_DataExport = new System.Windows.Forms.TabPage();
             this.label30 = new System.Windows.Forms.Label();
             this.textBox_FileName = new System.Windows.Forms.TextBox();
             this.label29 = new System.Windows.Forms.Label();
             this.textBox_DataPath = new System.Windows.Forms.TextBox();
-            this.tabPage_Control = new System.Windows.Forms.TabPage();
-            this.button_StartTask = new System.Windows.Forms.Button();
-            this.button_WaveTest = new System.Windows.Forms.Button();
-            this.button_DataCapture = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button_CoarseWithdraw = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.textBox_TC = new System.Windows.Forms.TextBox();
+            this.timer_Update_CoarseReadout = new System.Windows.Forms.Timer(this.components);
+            this.timer_ScaningImageShow_RealTime = new System.Windows.Forms.Timer(this.components);
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AFM_Real_Image)).BeginInit();
             this.groupBox_AFMImage.SuspendLayout();
             this.groupBox_SEMPreview.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_SEMPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_SEMImage)).BeginInit();
             this.groupBox_Setup.SuspendLayout();
             this.groupBox_SystemStatus.SuspendLayout();
             this.tabPage_TopoScan.SuspendLayout();
             this.tabPage_Indentation.SuspendLayout();
             this.tabControl.SuspendLayout();
-            this.tabPage_DataExport.SuspendLayout();
+            this.tabPage_backup.SuspendLayout();
             this.tabPage_Control.SuspendLayout();
+            this.tabPage_DataExport.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -216,7 +225,7 @@
             // 
             // textBox_Z_PID_P
             // 
-            this.textBox_Z_PID_P.Location = new System.Drawing.Point(202, 13);
+            this.textBox_Z_PID_P.Location = new System.Drawing.Point(201, 13);
             this.textBox_Z_PID_P.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Z_PID_P.Name = "textBox_Z_PID_P";
             this.textBox_Z_PID_P.Size = new System.Drawing.Size(38, 20);
@@ -226,7 +235,7 @@
             // 
             // textBox_Z_PID_I
             // 
-            this.textBox_Z_PID_I.Location = new System.Drawing.Point(202, 39);
+            this.textBox_Z_PID_I.Location = new System.Drawing.Point(201, 39);
             this.textBox_Z_PID_I.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Z_PID_I.Name = "textBox_Z_PID_I";
             this.textBox_Z_PID_I.Size = new System.Drawing.Size(38, 20);
@@ -236,7 +245,7 @@
             // 
             // textBox_Z_PID_D
             // 
-            this.textBox_Z_PID_D.Location = new System.Drawing.Point(202, 65);
+            this.textBox_Z_PID_D.Location = new System.Drawing.Point(201, 65);
             this.textBox_Z_PID_D.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Z_PID_D.Name = "textBox_Z_PID_D";
             this.textBox_Z_PID_D.Size = new System.Drawing.Size(38, 20);
@@ -247,10 +256,9 @@
             // button_SetParameters
             // 
             this.button_SetParameters.BackColor = System.Drawing.Color.Transparent;
-            this.button_SetParameters.BackgroundImage = global::NameSpace_AFM_Project.Properties.Resources.Set;
             this.button_SetParameters.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button_SetParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold);
-            this.button_SetParameters.Location = new System.Drawing.Point(159, 154);
+            this.button_SetParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_SetParameters.Location = new System.Drawing.Point(187, 812);
             this.button_SetParameters.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_SetParameters.Name = "button_SetParameters";
             this.button_SetParameters.Size = new System.Drawing.Size(81, 41);
@@ -272,13 +280,13 @@
             // 
             // button_ConnetComPort
             // 
-            this.button_ConnetComPort.BackColor = System.Drawing.Color.Transparent;
+            this.button_ConnetComPort.BackColor = System.Drawing.Color.White;
             this.button_ConnetComPort.BackgroundImage = global::NameSpace_AFM_Project.Properties.Resources.Signal_off;
             this.button_ConnetComPort.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.button_ConnetComPort.Location = new System.Drawing.Point(799, 30);
+            this.button_ConnetComPort.Location = new System.Drawing.Point(700, 23);
             this.button_ConnetComPort.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_ConnetComPort.Name = "button_ConnetComPort";
-            this.button_ConnetComPort.Size = new System.Drawing.Size(74, 65);
+            this.button_ConnetComPort.Size = new System.Drawing.Size(65, 65);
             this.button_ConnetComPort.TabIndex = 24;
             this.button_ConnetComPort.Text = "connect";
             this.toolTip_Help.SetToolTip(this.button_ConnetComPort, "Connect...");
@@ -297,7 +305,7 @@
             // 
             // button_XY_Reset
             // 
-            this.button_XY_Reset.Location = new System.Drawing.Point(14, 102);
+            this.button_XY_Reset.Location = new System.Drawing.Point(14, 118);
             this.button_XY_Reset.Margin = new System.Windows.Forms.Padding(2);
             this.button_XY_Reset.Name = "button_XY_Reset";
             this.button_XY_Reset.Size = new System.Drawing.Size(67, 35);
@@ -309,7 +317,7 @@
             // 
             // textBox_Nx
             // 
-            this.textBox_Nx.Location = new System.Drawing.Point(106, 13);
+            this.textBox_Nx.Location = new System.Drawing.Point(104, 11);
             this.textBox_Nx.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Nx.Name = "textBox_Nx";
             this.textBox_Nx.Size = new System.Drawing.Size(38, 20);
@@ -319,7 +327,7 @@
             // 
             // textBox_Ny
             // 
-            this.textBox_Ny.Location = new System.Drawing.Point(106, 37);
+            this.textBox_Ny.Location = new System.Drawing.Point(104, 35);
             this.textBox_Ny.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Ny.Name = "textBox_Ny";
             this.textBox_Ny.Size = new System.Drawing.Size(38, 20);
@@ -329,7 +337,7 @@
             // 
             // textBox_Dy
             // 
-            this.textBox_Dy.Location = new System.Drawing.Point(106, 86);
+            this.textBox_Dy.Location = new System.Drawing.Point(104, 84);
             this.textBox_Dy.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Dy.Name = "textBox_Dy";
             this.textBox_Dy.Size = new System.Drawing.Size(38, 20);
@@ -339,7 +347,7 @@
             // 
             // textBox_Dx
             // 
-            this.textBox_Dx.Location = new System.Drawing.Point(106, 62);
+            this.textBox_Dx.Location = new System.Drawing.Point(104, 60);
             this.textBox_Dx.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Dx.Name = "textBox_Dx";
             this.textBox_Dx.Size = new System.Drawing.Size(38, 20);
@@ -349,7 +357,7 @@
             // 
             // textBox_YL
             // 
-            this.textBox_YL.Location = new System.Drawing.Point(106, 130);
+            this.textBox_YL.Location = new System.Drawing.Point(104, 128);
             this.textBox_YL.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_YL.Name = "textBox_YL";
             this.textBox_YL.Size = new System.Drawing.Size(38, 20);
@@ -359,7 +367,7 @@
             // 
             // textBox_XL
             // 
-            this.textBox_XL.Location = new System.Drawing.Point(106, 108);
+            this.textBox_XL.Location = new System.Drawing.Point(104, 106);
             this.textBox_XL.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_XL.Name = "textBox_XL";
             this.textBox_XL.Size = new System.Drawing.Size(38, 20);
@@ -369,7 +377,7 @@
             // 
             // textBox_ScanRate
             // 
-            this.textBox_ScanRate.Location = new System.Drawing.Point(106, 154);
+            this.textBox_ScanRate.Location = new System.Drawing.Point(104, 152);
             this.textBox_ScanRate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_ScanRate.Name = "textBox_ScanRate";
             this.textBox_ScanRate.Size = new System.Drawing.Size(38, 20);
@@ -379,7 +387,7 @@
             // 
             // textBox_Sensitivity
             // 
-            this.textBox_Sensitivity.Location = new System.Drawing.Point(106, 179);
+            this.textBox_Sensitivity.Location = new System.Drawing.Point(104, 177);
             this.textBox_Sensitivity.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
@@ -389,7 +397,7 @@
             // 
             // textBox_SetDeltaValueNm
             // 
-            this.textBox_SetDeltaValueNm.Location = new System.Drawing.Point(106, 203);
+            this.textBox_SetDeltaValueNm.Location = new System.Drawing.Point(104, 201);
             this.textBox_SetDeltaValueNm.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_SetDeltaValueNm.Name = "textBox_SetDeltaValueNm";
             this.textBox_SetDeltaValueNm.Size = new System.Drawing.Size(38, 20);
@@ -399,7 +407,7 @@
             // 
             // textBox_NumberOfFrameToScan
             // 
-            this.textBox_NumberOfFrameToScan.Location = new System.Drawing.Point(105, 225);
+            this.textBox_NumberOfFrameToScan.Location = new System.Drawing.Point(103, 223);
             this.textBox_NumberOfFrameToScan.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_NumberOfFrameToScan.Name = "textBox_NumberOfFrameToScan";
             this.textBox_NumberOfFrameToScan.Size = new System.Drawing.Size(38, 20);
@@ -419,7 +427,7 @@
             // 
             // textBox_TaskTime
             // 
-            this.textBox_TaskTime.Location = new System.Drawing.Point(140, 71);
+            this.textBox_TaskTime.Location = new System.Drawing.Point(44, 278);
             this.textBox_TaskTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_TaskTime.Name = "textBox_TaskTime";
             this.textBox_TaskTime.Size = new System.Drawing.Size(60, 20);
@@ -429,7 +437,7 @@
             // 
             // textBox_TaskNumber
             // 
-            this.textBox_TaskNumber.Location = new System.Drawing.Point(140, 112);
+            this.textBox_TaskNumber.Location = new System.Drawing.Point(44, 319);
             this.textBox_TaskNumber.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_TaskNumber.Name = "textBox_TaskNumber";
             this.textBox_TaskNumber.Size = new System.Drawing.Size(60, 20);
@@ -439,7 +447,7 @@
             // 
             // textBox_Task_PointsNumber
             // 
-            this.textBox_Task_PointsNumber.Location = new System.Drawing.Point(140, 162);
+            this.textBox_Task_PointsNumber.Location = new System.Drawing.Point(44, 369);
             this.textBox_Task_PointsNumber.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Task_PointsNumber.Name = "textBox_Task_PointsNumber";
             this.textBox_Task_PointsNumber.Size = new System.Drawing.Size(60, 20);
@@ -449,7 +457,7 @@
             // 
             // textBox_T
             // 
-            this.textBox_T.Location = new System.Drawing.Point(140, 214);
+            this.textBox_T.Location = new System.Drawing.Point(44, 421);
             this.textBox_T.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_T.Name = "textBox_T";
             this.textBox_T.Size = new System.Drawing.Size(60, 20);
@@ -461,7 +469,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(156, 13);
+            this.label1.Location = new System.Drawing.Point(155, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 27;
@@ -471,7 +479,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(156, 39);
+            this.label5.Location = new System.Drawing.Point(155, 39);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 28;
@@ -481,7 +489,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Location = new System.Drawing.Point(156, 67);
+            this.label6.Location = new System.Drawing.Point(155, 67);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 13);
             this.label6.TabIndex = 29;
@@ -497,11 +505,11 @@
             this.groupBox6.Controls.Add(this.button_Z_Engage);
             this.groupBox6.Controls.Add(this.button_Z_Withdraw);
             this.groupBox6.Controls.Add(this.checkBox_Y_ScanEnable);
-            this.groupBox6.Location = new System.Drawing.Point(6, 269);
+            this.groupBox6.Location = new System.Drawing.Point(16, 238);
             this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox6.Size = new System.Drawing.Size(187, 171);
+            this.groupBox6.Size = new System.Drawing.Size(212, 209);
             this.groupBox6.TabIndex = 21;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Scanning";
@@ -519,7 +527,7 @@
             // 
             // button_XY_pause
             // 
-            this.button_XY_pause.Location = new System.Drawing.Point(14, 60);
+            this.button_XY_pause.Location = new System.Drawing.Point(14, 67);
             this.button_XY_pause.Margin = new System.Windows.Forms.Padding(2);
             this.button_XY_pause.Name = "button_XY_pause";
             this.button_XY_pause.Size = new System.Drawing.Size(67, 35);
@@ -530,7 +538,7 @@
             // 
             // button_ClearImage
             // 
-            this.button_ClearImage.Location = new System.Drawing.Point(105, 102);
+            this.button_ClearImage.Location = new System.Drawing.Point(118, 118);
             this.button_ClearImage.Margin = new System.Windows.Forms.Padding(2);
             this.button_ClearImage.Name = "button_ClearImage";
             this.button_ClearImage.Size = new System.Drawing.Size(67, 35);
@@ -541,7 +549,7 @@
             // 
             // button_Z_Engage
             // 
-            this.button_Z_Engage.Location = new System.Drawing.Point(105, 16);
+            this.button_Z_Engage.Location = new System.Drawing.Point(118, 16);
             this.button_Z_Engage.Margin = new System.Windows.Forms.Padding(2);
             this.button_Z_Engage.Name = "button_Z_Engage";
             this.button_Z_Engage.Size = new System.Drawing.Size(67, 35);
@@ -552,7 +560,7 @@
             // 
             // button_Z_Withdraw
             // 
-            this.button_Z_Withdraw.Location = new System.Drawing.Point(105, 60);
+            this.button_Z_Withdraw.Location = new System.Drawing.Point(118, 67);
             this.button_Z_Withdraw.Margin = new System.Windows.Forms.Padding(2);
             this.button_Z_Withdraw.Name = "button_Z_Withdraw";
             this.button_Z_Withdraw.Size = new System.Drawing.Size(67, 35);
@@ -566,7 +574,7 @@
             this.checkBox_Y_ScanEnable.AutoSize = true;
             this.checkBox_Y_ScanEnable.Checked = true;
             this.checkBox_Y_ScanEnable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_Y_ScanEnable.Location = new System.Drawing.Point(14, 146);
+            this.checkBox_Y_ScanEnable.Location = new System.Drawing.Point(14, 171);
             this.checkBox_Y_ScanEnable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBox_Y_ScanEnable.Name = "checkBox_Y_ScanEnable";
             this.checkBox_Y_ScanEnable.Size = new System.Drawing.Size(112, 17);
@@ -681,7 +689,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.BackColor = System.Drawing.Color.Transparent;
-            this.label13.Location = new System.Drawing.Point(5, 15);
+            this.label13.Location = new System.Drawing.Point(3, 13);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(64, 13);
             this.label13.TabIndex = 30;
@@ -691,7 +699,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.BackColor = System.Drawing.Color.Transparent;
-            this.label14.Location = new System.Drawing.Point(5, 39);
+            this.label14.Location = new System.Drawing.Point(3, 37);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(60, 13);
             this.label14.TabIndex = 52;
@@ -701,7 +709,7 @@
             // 
             this.label15.AutoSize = true;
             this.label15.BackColor = System.Drawing.Color.Transparent;
-            this.label15.Location = new System.Drawing.Point(5, 87);
+            this.label15.Location = new System.Drawing.Point(3, 85);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(88, 13);
             this.label15.TabIndex = 56;
@@ -711,7 +719,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.BackColor = System.Drawing.Color.Transparent;
-            this.label16.Location = new System.Drawing.Point(5, 63);
+            this.label16.Location = new System.Drawing.Point(3, 61);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(88, 13);
             this.label16.TabIndex = 54;
@@ -721,7 +729,7 @@
             // 
             this.label17.AutoSize = true;
             this.label17.BackColor = System.Drawing.Color.Transparent;
-            this.label17.Location = new System.Drawing.Point(5, 135);
+            this.label17.Location = new System.Drawing.Point(3, 133);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(66, 13);
             this.label17.TabIndex = 60;
@@ -731,7 +739,7 @@
             // 
             this.label18.AutoSize = true;
             this.label18.BackColor = System.Drawing.Color.Transparent;
-            this.label18.Location = new System.Drawing.Point(5, 111);
+            this.label18.Location = new System.Drawing.Point(3, 109);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(66, 13);
             this.label18.TabIndex = 58;
@@ -741,7 +749,7 @@
             // 
             this.label19.AutoSize = true;
             this.label19.BackColor = System.Drawing.Color.Transparent;
-            this.label19.Location = new System.Drawing.Point(5, 159);
+            this.label19.Location = new System.Drawing.Point(3, 157);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(77, 13);
             this.label19.TabIndex = 62;
@@ -751,7 +759,7 @@
             // 
             this.label20.AutoSize = true;
             this.label20.BackColor = System.Drawing.Color.Transparent;
-            this.label20.Location = new System.Drawing.Point(5, 184);
+            this.label20.Location = new System.Drawing.Point(3, 182);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(54, 13);
             this.label20.TabIndex = 64;
@@ -761,7 +769,7 @@
             // 
             this.label21.AutoSize = true;
             this.label21.BackColor = System.Drawing.Color.Transparent;
-            this.label21.Location = new System.Drawing.Point(5, 206);
+            this.label21.Location = new System.Drawing.Point(3, 204);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(70, 13);
             this.label21.TabIndex = 66;
@@ -771,7 +779,7 @@
             // 
             this.label_SystemState.AutoSize = true;
             this.label_SystemState.BackColor = System.Drawing.Color.Transparent;
-            this.label_SystemState.Location = new System.Drawing.Point(7, 10);
+            this.label_SystemState.Location = new System.Drawing.Point(7, 86);
             this.label_SystemState.Name = "label_SystemState";
             this.label_SystemState.Size = new System.Drawing.Size(71, 13);
             this.label_SystemState.TabIndex = 68;
@@ -802,20 +810,21 @@
             // 
             // button_StartSubWindow
             // 
-            this.button_StartSubWindow.Location = new System.Drawing.Point(674, 30);
+            this.button_StartSubWindow.BackColor = System.Drawing.Color.White;
+            this.button_StartSubWindow.Location = new System.Drawing.Point(614, 23);
             this.button_StartSubWindow.Margin = new System.Windows.Forms.Padding(2);
             this.button_StartSubWindow.Name = "button_StartSubWindow";
-            this.button_StartSubWindow.Size = new System.Drawing.Size(60, 65);
+            this.button_StartSubWindow.Size = new System.Drawing.Size(65, 65);
             this.button_StartSubWindow.TabIndex = 73;
             this.button_StartSubWindow.Text = "subform";
-            this.button_StartSubWindow.UseVisualStyleBackColor = true;
+            this.button_StartSubWindow.UseVisualStyleBackColor = false;
             this.button_StartSubWindow.Click += new System.EventHandler(this.button_StartSubWindow_Click);
             // 
             // label22
             // 
             this.label22.AutoSize = true;
             this.label22.BackColor = System.Drawing.Color.Transparent;
-            this.label22.Location = new System.Drawing.Point(5, 231);
+            this.label22.Location = new System.Drawing.Point(3, 229);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(69, 13);
             this.label22.TabIndex = 74;
@@ -823,13 +832,14 @@
             // 
             // button_SetScanROI
             // 
-            this.button_SetScanROI.Location = new System.Drawing.Point(566, 30);
+            this.button_SetScanROI.BackColor = System.Drawing.Color.White;
+            this.button_SetScanROI.Location = new System.Drawing.Point(528, 23);
             this.button_SetScanROI.Margin = new System.Windows.Forms.Padding(2);
             this.button_SetScanROI.Name = "button_SetScanROI";
-            this.button_SetScanROI.Size = new System.Drawing.Size(60, 65);
+            this.button_SetScanROI.Size = new System.Drawing.Size(65, 65);
             this.button_SetScanROI.TabIndex = 76;
             this.button_SetScanROI.Text = "ROI";
-            this.button_SetScanROI.UseVisualStyleBackColor = true;
+            this.button_SetScanROI.UseVisualStyleBackColor = false;
             this.button_SetScanROI.Click += new System.EventHandler(this.button_SetScanROI_Click);
             // 
             // button_StartIndent
@@ -857,7 +867,7 @@
             this.checkBox_ForceSetAll.AutoSize = true;
             this.checkBox_ForceSetAll.Checked = true;
             this.checkBox_ForceSetAll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_ForceSetAll.Location = new System.Drawing.Point(165, 135);
+            this.checkBox_ForceSetAll.Location = new System.Drawing.Point(176, 115);
             this.checkBox_ForceSetAll.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBox_ForceSetAll.Name = "checkBox_ForceSetAll";
             this.checkBox_ForceSetAll.Size = new System.Drawing.Size(63, 17);
@@ -901,7 +911,7 @@
             // 
             this.label25.AutoSize = true;
             this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Location = new System.Drawing.Point(146, 56);
+            this.label25.Location = new System.Drawing.Point(50, 263);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(63, 13);
             this.label25.TabIndex = 88;
@@ -911,7 +921,7 @@
             // 
             this.label26.AutoSize = true;
             this.label26.BackColor = System.Drawing.Color.Transparent;
-            this.label26.Location = new System.Drawing.Point(146, 95);
+            this.label26.Location = new System.Drawing.Point(50, 302);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(65, 13);
             this.label26.TabIndex = 90;
@@ -921,7 +931,7 @@
             // 
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Location = new System.Drawing.Point(135, 145);
+            this.label27.Location = new System.Drawing.Point(39, 352);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(111, 13);
             this.label27.TabIndex = 92;
@@ -931,7 +941,7 @@
             // 
             this.label28.AutoSize = true;
             this.label28.BackColor = System.Drawing.Color.Transparent;
-            this.label28.Location = new System.Drawing.Point(146, 199);
+            this.label28.Location = new System.Drawing.Point(50, 406);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(30, 13);
             this.label28.TabIndex = 94;
@@ -939,24 +949,26 @@
             // 
             // button_Form_CoarsePositioner
             // 
-            this.button_Form_CoarsePositioner.Location = new System.Drawing.Point(350, 30);
+            this.button_Form_CoarsePositioner.BackColor = System.Drawing.Color.White;
+            this.button_Form_CoarsePositioner.Location = new System.Drawing.Point(356, 23);
             this.button_Form_CoarsePositioner.Margin = new System.Windows.Forms.Padding(2);
             this.button_Form_CoarsePositioner.Name = "button_Form_CoarsePositioner";
-            this.button_Form_CoarsePositioner.Size = new System.Drawing.Size(60, 65);
+            this.button_Form_CoarsePositioner.Size = new System.Drawing.Size(65, 65);
             this.button_Form_CoarsePositioner.TabIndex = 95;
             this.button_Form_CoarsePositioner.Text = "coarse position";
-            this.button_Form_CoarsePositioner.UseVisualStyleBackColor = true;
+            this.button_Form_CoarsePositioner.UseVisualStyleBackColor = false;
             this.button_Form_CoarsePositioner.Click += new System.EventHandler(this.button_Form_CoarsePositioner_Click);
             // 
             // button_ShowImage
             // 
-            this.button_ShowImage.Location = new System.Drawing.Point(458, 30);
+            this.button_ShowImage.BackColor = System.Drawing.Color.White;
+            this.button_ShowImage.Location = new System.Drawing.Point(442, 23);
             this.button_ShowImage.Margin = new System.Windows.Forms.Padding(2);
             this.button_ShowImage.Name = "button_ShowImage";
-            this.button_ShowImage.Size = new System.Drawing.Size(60, 65);
+            this.button_ShowImage.Size = new System.Drawing.Size(65, 65);
             this.button_ShowImage.TabIndex = 96;
             this.button_ShowImage.Text = "show image";
-            this.button_ShowImage.UseVisualStyleBackColor = true;
+            this.button_ShowImage.UseVisualStyleBackColor = false;
             this.button_ShowImage.Click += new System.EventHandler(this.button_ShowImage_Click);
             // 
             // radioButton_Topography
@@ -971,26 +983,16 @@
             this.radioButton_Topography.Text = "Topography";
             this.radioButton_Topography.UseVisualStyleBackColor = true;
             // 
-            // pictureBox1
+            // pictureBox_AFM_Real_Image
             // 
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(26, 35);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(412, 448);
-            this.pictureBox1.TabIndex = 1;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox3.BackgroundImage")));
-            this.pictureBox3.Location = new System.Drawing.Point(448, 35);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(30, 448);
-            this.pictureBox3.TabIndex = 3;
-            this.pictureBox3.TabStop = false;
+            this.pictureBox_AFM_Real_Image.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox_AFM_Real_Image.BackgroundImage")));
+            this.pictureBox_AFM_Real_Image.InitialImage = null;
+            this.pictureBox_AFM_Real_Image.Location = new System.Drawing.Point(20, 23);
+            this.pictureBox_AFM_Real_Image.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.pictureBox_AFM_Real_Image.Name = "pictureBox_AFM_Real_Image";
+            this.pictureBox_AFM_Real_Image.Size = new System.Drawing.Size(570, 570);
+            this.pictureBox_AFM_Real_Image.TabIndex = 1;
+            this.pictureBox_AFM_Real_Image.TabStop = false;
             // 
             // button_ExportData
             // 
@@ -1004,14 +1006,13 @@
             // 
             // groupBox_AFMImage
             // 
-            this.groupBox_AFMImage.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox_AFMImage.Controls.Add(this.pictureBox1);
-            this.groupBox_AFMImage.Controls.Add(this.pictureBox3);
-            this.groupBox_AFMImage.Location = new System.Drawing.Point(294, 199);
+            this.groupBox_AFMImage.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox_AFMImage.Controls.Add(this.pictureBox_AFM_Real_Image);
+            this.groupBox_AFMImage.Location = new System.Drawing.Point(294, 168);
             this.groupBox_AFMImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox_AFMImage.Name = "groupBox_AFMImage";
             this.groupBox_AFMImage.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox_AFMImage.Size = new System.Drawing.Size(506, 596);
+            this.groupBox_AFMImage.Size = new System.Drawing.Size(610, 640);
             this.groupBox_AFMImage.TabIndex = 103;
             this.groupBox_AFMImage.TabStop = false;
             this.groupBox_AFMImage.Text = "AFM Imaging Result";
@@ -1032,12 +1033,12 @@
             // 
             this.button_Coarse_MoveToHomePosition.BackColor = System.Drawing.SystemColors.HighlightText;
             this.button_Coarse_MoveToHomePosition.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_Coarse_MoveToHomePosition.BackgroundImage")));
-            this.button_Coarse_MoveToHomePosition.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button_Coarse_MoveToHomePosition.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.button_Coarse_MoveToHomePosition.Font = new System.Drawing.Font("SimSun", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button_Coarse_MoveToHomePosition.Location = new System.Drawing.Point(1295, 21);
+            this.button_Coarse_MoveToHomePosition.Location = new System.Drawing.Point(1189, 23);
             this.button_Coarse_MoveToHomePosition.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Coarse_MoveToHomePosition.Name = "button_Coarse_MoveToHomePosition";
-            this.button_Coarse_MoveToHomePosition.Size = new System.Drawing.Size(121, 113);
+            this.button_Coarse_MoveToHomePosition.Size = new System.Drawing.Size(65, 65);
             this.button_Coarse_MoveToHomePosition.TabIndex = 97;
             this.button_Coarse_MoveToHomePosition.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.button_Coarse_MoveToHomePosition.UseVisualStyleBackColor = false;
@@ -1066,17 +1067,17 @@
             this.button_CantileverCalibration.BackColor = System.Drawing.SystemColors.HighlightText;
             this.button_CantileverCalibration.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_CantileverCalibration.BackgroundImage")));
             this.button_CantileverCalibration.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button_CantileverCalibration.Location = new System.Drawing.Point(26, 30);
+            this.button_CantileverCalibration.Location = new System.Drawing.Point(19, 23);
             this.button_CantileverCalibration.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_CantileverCalibration.Name = "button_CantileverCalibration";
-            this.button_CantileverCalibration.Size = new System.Drawing.Size(60, 65);
+            this.button_CantileverCalibration.Size = new System.Drawing.Size(65, 65);
             this.button_CantileverCalibration.TabIndex = 0;
             this.button_CantileverCalibration.UseVisualStyleBackColor = false;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(28, 126);
+            this.label2.Location = new System.Drawing.Point(23, 109);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(56, 13);
             this.label2.TabIndex = 2;
@@ -1085,7 +1086,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(30, 108);
+            this.label3.Location = new System.Drawing.Point(24, 93);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 2;
@@ -1100,22 +1101,23 @@
             this.label_Speed_Y.TabIndex = 2;
             this.label_Speed_Y.Text = "Auto";
             // 
-            // button_VideoRecord
+            // button_SEMImage_VideoRecord
             // 
-            this.button_VideoRecord.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.button_VideoRecord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_VideoRecord.BackgroundImage")));
-            this.button_VideoRecord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button_VideoRecord.Location = new System.Drawing.Point(474, 500);
-            this.button_VideoRecord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button_VideoRecord.Name = "button_VideoRecord";
-            this.button_VideoRecord.Size = new System.Drawing.Size(60, 65);
-            this.button_VideoRecord.TabIndex = 6;
-            this.button_VideoRecord.UseVisualStyleBackColor = false;
+            this.button_SEMImage_VideoRecord.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.button_SEMImage_VideoRecord.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_SEMImage_VideoRecord.BackgroundImage")));
+            this.button_SEMImage_VideoRecord.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button_SEMImage_VideoRecord.Location = new System.Drawing.Point(852, 176);
+            this.button_SEMImage_VideoRecord.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_SEMImage_VideoRecord.Name = "button_SEMImage_VideoRecord";
+            this.button_SEMImage_VideoRecord.Size = new System.Drawing.Size(60, 65);
+            this.button_SEMImage_VideoRecord.TabIndex = 6;
+            this.button_SEMImage_VideoRecord.UseVisualStyleBackColor = false;
+            this.button_SEMImage_VideoRecord.Click += new System.EventHandler(this.button_SEMImage_VideoRecord_Click);
             // 
             // label_VideoRecord
             // 
             this.label_VideoRecord.AutoSize = true;
-            this.label_VideoRecord.Location = new System.Drawing.Point(472, 570);
+            this.label_VideoRecord.Location = new System.Drawing.Point(846, 245);
             this.label_VideoRecord.Name = "label_VideoRecord";
             this.label_VideoRecord.Size = new System.Drawing.Size(72, 13);
             this.label_VideoRecord.TabIndex = 6;
@@ -1124,61 +1126,62 @@
             // label_ScreenShot
             // 
             this.label_ScreenShot.AutoSize = true;
-            this.label_ScreenShot.Location = new System.Drawing.Point(386, 570);
+            this.label_ScreenShot.Location = new System.Drawing.Point(846, 154);
             this.label_ScreenShot.Name = "label_ScreenShot";
             this.label_ScreenShot.Size = new System.Drawing.Size(66, 13);
             this.label_ScreenShot.TabIndex = 6;
             this.label_ScreenShot.Text = "Screen Shot";
             // 
-            // button_ScreenShot
+            // button_SEMImage_ScreenShot
             // 
-            this.button_ScreenShot.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.button_ScreenShot.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_ScreenShot.BackgroundImage")));
-            this.button_ScreenShot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button_ScreenShot.Location = new System.Drawing.Point(388, 500);
-            this.button_ScreenShot.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button_ScreenShot.Name = "button_ScreenShot";
-            this.button_ScreenShot.Size = new System.Drawing.Size(60, 65);
-            this.button_ScreenShot.TabIndex = 0;
-            this.button_ScreenShot.UseVisualStyleBackColor = false;
+            this.button_SEMImage_ScreenShot.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.button_SEMImage_ScreenShot.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_SEMImage_ScreenShot.BackgroundImage")));
+            this.button_SEMImage_ScreenShot.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button_SEMImage_ScreenShot.Location = new System.Drawing.Point(849, 77);
+            this.button_SEMImage_ScreenShot.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_SEMImage_ScreenShot.Name = "button_SEMImage_ScreenShot";
+            this.button_SEMImage_ScreenShot.Size = new System.Drawing.Size(60, 65);
+            this.button_SEMImage_ScreenShot.TabIndex = 0;
+            this.button_SEMImage_ScreenShot.UseVisualStyleBackColor = false;
+            this.button_SEMImage_ScreenShot.Click += new System.EventHandler(this.button_SEMImage_ScreenShot_Click);
             // 
             // groupBox_SEMPreview
             // 
-            this.groupBox_SEMPreview.Controls.Add(this.button_VideoRecord);
+            this.groupBox_SEMPreview.Controls.Add(this.button_SEMImage_VideoRecord);
             this.groupBox_SEMPreview.Controls.Add(this.label_VideoRecord);
-            this.groupBox_SEMPreview.Controls.Add(this.label_ScreenShot);
+            this.groupBox_SEMPreview.Controls.Add(this.pictureBox_SEMImage);
             this.groupBox_SEMPreview.Controls.Add(this.checkBox_ReferenceMarks);
-            this.groupBox_SEMPreview.Controls.Add(this.button_ScreenShot);
-            this.groupBox_SEMPreview.Controls.Add(this.pictureBox_SEMPreview);
-            this.groupBox_SEMPreview.Location = new System.Drawing.Point(828, 199);
+            this.groupBox_SEMPreview.Controls.Add(this.button_SEMImage_ScreenShot);
+            this.groupBox_SEMPreview.Controls.Add(this.label_ScreenShot);
+            this.groupBox_SEMPreview.Location = new System.Drawing.Point(930, 168);
             this.groupBox_SEMPreview.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox_SEMPreview.Name = "groupBox_SEMPreview";
             this.groupBox_SEMPreview.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox_SEMPreview.Size = new System.Drawing.Size(592, 596);
+            this.groupBox_SEMPreview.Size = new System.Drawing.Size(638, 640);
             this.groupBox_SEMPreview.TabIndex = 104;
             this.groupBox_SEMPreview.TabStop = false;
             this.groupBox_SEMPreview.Text = "SEM/Optical Image Preview";
             // 
+            // pictureBox_SEMImage
+            // 
+            this.pictureBox_SEMImage.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox_SEMImage.BackgroundImage")));
+            this.pictureBox_SEMImage.Location = new System.Drawing.Point(18, 23);
+            this.pictureBox_SEMImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.pictureBox_SEMImage.Name = "pictureBox_SEMImage";
+            this.pictureBox_SEMImage.Size = new System.Drawing.Size(600, 600);
+            this.pictureBox_SEMImage.TabIndex = 1;
+            this.pictureBox_SEMImage.TabStop = false;
+            // 
             // checkBox_ReferenceMarks
             // 
             this.checkBox_ReferenceMarks.AutoSize = true;
-            this.checkBox_ReferenceMarks.Location = new System.Drawing.Point(52, 526);
+            this.checkBox_ReferenceMarks.Location = new System.Drawing.Point(830, 283);
             this.checkBox_ReferenceMarks.Margin = new System.Windows.Forms.Padding(2);
             this.checkBox_ReferenceMarks.Name = "checkBox_ReferenceMarks";
             this.checkBox_ReferenceMarks.Size = new System.Drawing.Size(108, 17);
             this.checkBox_ReferenceMarks.TabIndex = 4;
             this.checkBox_ReferenceMarks.Text = "Reference Marks";
             this.checkBox_ReferenceMarks.UseVisualStyleBackColor = true;
-            // 
-            // pictureBox_SEMPreview
-            // 
-            this.pictureBox_SEMPreview.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox_SEMPreview.BackgroundImage")));
-            this.pictureBox_SEMPreview.Location = new System.Drawing.Point(28, 35);
-            this.pictureBox_SEMPreview.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.pictureBox_SEMPreview.Name = "pictureBox_SEMPreview";
-            this.pictureBox_SEMPreview.Size = new System.Drawing.Size(536, 448);
-            this.pictureBox_SEMPreview.TabIndex = 1;
-            this.pictureBox_SEMPreview.TabStop = false;
             // 
             // label_Encoder_Y
             // 
@@ -1286,11 +1289,13 @@
             // 
             // groupBox_Setup
             // 
-            this.groupBox_Setup.Controls.Add(this.textBox_TC);
+            this.groupBox_Setup.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox_Setup.Controls.Add(this.label11);
             this.groupBox_Setup.Controls.Add(this.label_Servicing);
             this.groupBox_Setup.Controls.Add(this.label8);
             this.groupBox_Setup.Controls.Add(this.label9);
             this.groupBox_Setup.Controls.Add(this.button_Servicing);
+            this.groupBox_Setup.Controls.Add(this.button_Coarse_MoveToHomePosition);
             this.groupBox_Setup.Controls.Add(this.button_ConnetComPort);
             this.groupBox_Setup.Controls.Add(this.button_ScannerCalibration);
             this.groupBox_Setup.Controls.Add(this.button_CantileverCalibration);
@@ -1304,15 +1309,24 @@
             this.groupBox_Setup.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox_Setup.Name = "groupBox_Setup";
             this.groupBox_Setup.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox_Setup.Size = new System.Drawing.Size(962, 163);
+            this.groupBox_Setup.Size = new System.Drawing.Size(1274, 137);
             this.groupBox_Setup.TabIndex = 105;
             this.groupBox_Setup.TabStop = false;
             this.groupBox_Setup.Text = "Setup";
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(1205, 95);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(39, 13);
+            this.label11.TabIndex = 108;
+            this.label11.Text = "HOME";
+            // 
             // label_Servicing
             // 
             this.label_Servicing.AutoSize = true;
-            this.label_Servicing.Location = new System.Drawing.Point(204, 108);
+            this.label_Servicing.Location = new System.Drawing.Point(242, 93);
             this.label_Servicing.Name = "label_Servicing";
             this.label_Servicing.Size = new System.Drawing.Size(51, 13);
             this.label_Servicing.TabIndex = 5;
@@ -1321,7 +1335,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(116, 126);
+            this.label8.Location = new System.Drawing.Point(131, 109);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(56, 13);
             this.label8.TabIndex = 3;
@@ -1330,7 +1344,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(120, 108);
+            this.label9.Location = new System.Drawing.Point(136, 93);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(47, 13);
             this.label9.TabIndex = 4;
@@ -1341,10 +1355,10 @@
             this.button_Servicing.BackColor = System.Drawing.SystemColors.HighlightText;
             this.button_Servicing.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_Servicing.BackgroundImage")));
             this.button_Servicing.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button_Servicing.Location = new System.Drawing.Point(242, 30);
+            this.button_Servicing.Location = new System.Drawing.Point(235, 23);
             this.button_Servicing.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Servicing.Name = "button_Servicing";
-            this.button_Servicing.Size = new System.Drawing.Size(60, 65);
+            this.button_Servicing.Size = new System.Drawing.Size(65, 65);
             this.button_Servicing.TabIndex = 0;
             this.button_Servicing.UseVisualStyleBackColor = false;
             // 
@@ -1353,23 +1367,12 @@
             this.button_ScannerCalibration.BackColor = System.Drawing.SystemColors.HighlightText;
             this.button_ScannerCalibration.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_ScannerCalibration.BackgroundImage")));
             this.button_ScannerCalibration.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button_ScannerCalibration.Location = new System.Drawing.Point(134, 30);
+            this.button_ScannerCalibration.Location = new System.Drawing.Point(127, 23);
             this.button_ScannerCalibration.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_ScannerCalibration.Name = "button_ScannerCalibration";
-            this.button_ScannerCalibration.Size = new System.Drawing.Size(60, 65);
+            this.button_ScannerCalibration.Size = new System.Drawing.Size(65, 65);
             this.button_ScannerCalibration.TabIndex = 0;
             this.button_ScannerCalibration.UseVisualStyleBackColor = false;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label11.Location = new System.Drawing.Point(1320, 139);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(72, 25);
-            this.label11.TabIndex = 102;
-            this.label11.Text = "HOME";
             // 
             // label10
             // 
@@ -1462,102 +1465,270 @@
             // 
             // tabPage_TopoScan
             // 
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Z_PID_P);
+            this.tabPage_TopoScan.BackColor = System.Drawing.Color.LightGray;
+            this.tabPage_TopoScan.Controls.Add(this.comboBox_ParaImageQuality);
+            this.tabPage_TopoScan.Controls.Add(this.comboBox_ParaLines);
+            this.tabPage_TopoScan.Controls.Add(this.comboBox_ParaPixels);
+            this.tabPage_TopoScan.Controls.Add(this.comboBox_ParaScanArea);
+            this.tabPage_TopoScan.Controls.Add(this.label34);
+            this.tabPage_TopoScan.Controls.Add(this.label33);
+            this.tabPage_TopoScan.Controls.Add(this.label32);
+            this.tabPage_TopoScan.Controls.Add(this.label31);
             this.tabPage_TopoScan.Controls.Add(this.button_AdvancedSettings);
-            this.tabPage_TopoScan.Controls.Add(this.label1);
-            this.tabPage_TopoScan.Controls.Add(this.button_SetParameters);
-            this.tabPage_TopoScan.Controls.Add(this.label6);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Z_PID_D);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Z_PID_I);
-            this.tabPage_TopoScan.Controls.Add(this.checkBox_ForceSetAll);
-            this.tabPage_TopoScan.Controls.Add(this.label5);
-            this.tabPage_TopoScan.Controls.Add(this.label17);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Nx);
-            this.tabPage_TopoScan.Controls.Add(this.label13);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Ny);
-            this.tabPage_TopoScan.Controls.Add(this.label14);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Dx);
-            this.tabPage_TopoScan.Controls.Add(this.label16);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Dy);
-            this.tabPage_TopoScan.Controls.Add(this.label15);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_XL);
-            this.tabPage_TopoScan.Controls.Add(this.label18);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_YL);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_ScanRate);
-            this.tabPage_TopoScan.Controls.Add(this.label19);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_Sensitivity);
-            this.tabPage_TopoScan.Controls.Add(this.label20);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_SetDeltaValueNm);
-            this.tabPage_TopoScan.Controls.Add(this.label22);
-            this.tabPage_TopoScan.Controls.Add(this.label21);
-            this.tabPage_TopoScan.Controls.Add(this.textBox_NumberOfFrameToScan);
             this.tabPage_TopoScan.Controls.Add(this.groupBox6);
             this.tabPage_TopoScan.Location = new System.Drawing.Point(4, 22);
             this.tabPage_TopoScan.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage_TopoScan.Name = "tabPage_TopoScan";
             this.tabPage_TopoScan.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage_TopoScan.Size = new System.Drawing.Size(252, 448);
+            this.tabPage_TopoScan.Size = new System.Drawing.Size(252, 460);
             this.tabPage_TopoScan.TabIndex = 0;
-            this.tabPage_TopoScan.Text = "Scan";
-            this.tabPage_TopoScan.UseVisualStyleBackColor = true;
+            this.tabPage_TopoScan.Text = "TopoScan";
+            // 
+            // comboBox_ParaImageQuality
+            // 
+            this.comboBox_ParaImageQuality.BackColor = System.Drawing.Color.LightGray;
+            this.comboBox_ParaImageQuality.FormattingEnabled = true;
+            this.comboBox_ParaImageQuality.Items.AddRange(new object[] {
+            "Standard",
+            "Speed Priority",
+            "High quality"});
+            this.comboBox_ParaImageQuality.Location = new System.Drawing.Point(96, 124);
+            this.comboBox_ParaImageQuality.Name = "comboBox_ParaImageQuality";
+            this.comboBox_ParaImageQuality.Size = new System.Drawing.Size(132, 21);
+            this.comboBox_ParaImageQuality.TabIndex = 27;
+            // 
+            // comboBox_ParaLines
+            // 
+            this.comboBox_ParaLines.BackColor = System.Drawing.Color.LightGray;
+            this.comboBox_ParaLines.FormattingEnabled = true;
+            this.comboBox_ParaLines.Items.AddRange(new object[] {
+            "512",
+            "256",
+            "128",
+            "64",
+            "32",
+            "16"});
+            this.comboBox_ParaLines.Location = new System.Drawing.Point(96, 90);
+            this.comboBox_ParaLines.Name = "comboBox_ParaLines";
+            this.comboBox_ParaLines.Size = new System.Drawing.Size(132, 21);
+            this.comboBox_ParaLines.TabIndex = 28;
+            // 
+            // comboBox_ParaPixels
+            // 
+            this.comboBox_ParaPixels.BackColor = System.Drawing.Color.LightGray;
+            this.comboBox_ParaPixels.FormattingEnabled = true;
+            this.comboBox_ParaPixels.Items.AddRange(new object[] {
+            "512",
+            "256",
+            "128",
+            "64",
+            "32",
+            "16"});
+            this.comboBox_ParaPixels.Location = new System.Drawing.Point(96, 56);
+            this.comboBox_ParaPixels.Name = "comboBox_ParaPixels";
+            this.comboBox_ParaPixels.Size = new System.Drawing.Size(132, 21);
+            this.comboBox_ParaPixels.TabIndex = 27;
+            // 
+            // comboBox_ParaScanArea
+            // 
+            this.comboBox_ParaScanArea.BackColor = System.Drawing.Color.LightGray;
+            this.comboBox_ParaScanArea.FormattingEnabled = true;
+            this.comboBox_ParaScanArea.Items.AddRange(new object[] {
+            "50um × 50um",
+            "40um × 40um",
+            "30um × 30um",
+            "20um × 20um",
+            "10um × 10um",
+            "5um × 5um",
+            "2um × 2um",
+            "1um × 1um"});
+            this.comboBox_ParaScanArea.Location = new System.Drawing.Point(96, 22);
+            this.comboBox_ParaScanArea.Name = "comboBox_ParaScanArea";
+            this.comboBox_ParaScanArea.Size = new System.Drawing.Size(132, 21);
+            this.comboBox_ParaScanArea.TabIndex = 26;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(17, 128);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(71, 13);
+            this.label34.TabIndex = 25;
+            this.label34.Text = "Image Quality";
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(17, 94);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(32, 13);
+            this.label33.TabIndex = 24;
+            this.label33.Text = "Lines";
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(17, 60);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(34, 13);
+            this.label32.TabIndex = 23;
+            this.label32.Text = "Pixels";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Location = new System.Drawing.Point(17, 26);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(57, 13);
+            this.label31.TabIndex = 22;
+            this.label31.Text = "Scan Area";
             // 
             // button_AdvancedSettings
             // 
-            this.button_AdvancedSettings.Location = new System.Drawing.Point(158, 206);
+            this.button_AdvancedSettings.Location = new System.Drawing.Point(17, 169);
             this.button_AdvancedSettings.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_AdvancedSettings.Name = "button_AdvancedSettings";
-            this.button_AdvancedSettings.Size = new System.Drawing.Size(88, 35);
+            this.button_AdvancedSettings.Size = new System.Drawing.Size(81, 41);
             this.button_AdvancedSettings.TabIndex = 0;
             this.button_AdvancedSettings.Text = "Advanced Settings";
             this.button_AdvancedSettings.UseVisualStyleBackColor = true;
             // 
             // tabPage_Indentation
             // 
+            this.tabPage_Indentation.BackColor = System.Drawing.Color.LightGray;
             this.tabPage_Indentation.Controls.Add(this.button_StartIndent);
             this.tabPage_Indentation.Controls.Add(this.button_CancelIndent);
             this.tabPage_Indentation.Controls.Add(this.propertyGrid_AFM_Parameter);
             this.tabPage_Indentation.Controls.Add(this.button_MultiTask);
-            this.tabPage_Indentation.Controls.Add(this.textBox_T);
-            this.tabPage_Indentation.Controls.Add(this.textBox_TaskTime);
-            this.tabPage_Indentation.Controls.Add(this.label25);
-            this.tabPage_Indentation.Controls.Add(this.textBox_TaskNumber);
-            this.tabPage_Indentation.Controls.Add(this.label26);
-            this.tabPage_Indentation.Controls.Add(this.label28);
-            this.tabPage_Indentation.Controls.Add(this.textBox_Task_PointsNumber);
-            this.tabPage_Indentation.Controls.Add(this.label27);
             this.tabPage_Indentation.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Indentation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage_Indentation.Name = "tabPage_Indentation";
             this.tabPage_Indentation.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage_Indentation.Size = new System.Drawing.Size(252, 448);
+            this.tabPage_Indentation.Size = new System.Drawing.Size(252, 460);
             this.tabPage_Indentation.TabIndex = 1;
-            this.tabPage_Indentation.Text = "Indent";
-            this.tabPage_Indentation.UseVisualStyleBackColor = true;
+            this.tabPage_Indentation.Text = "Indentation";
             // 
             // tabPage_Memory
             // 
             this.tabPage_Memory.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Memory.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage_Memory.Name = "tabPage_Memory";
-            this.tabPage_Memory.Size = new System.Drawing.Size(252, 448);
+            this.tabPage_Memory.Size = new System.Drawing.Size(252, 460);
             this.tabPage_Memory.TabIndex = 2;
             this.tabPage_Memory.Text = "Memory";
             this.tabPage_Memory.UseVisualStyleBackColor = true;
             // 
             // tabControl
             // 
+            this.tabControl.Controls.Add(this.tabPage_backup);
+            this.tabControl.Controls.Add(this.tabPage_Control);
             this.tabControl.Controls.Add(this.tabPage_TopoScan);
             this.tabControl.Controls.Add(this.tabPage_Indentation);
             this.tabControl.Controls.Add(this.tabPage_Memory);
             this.tabControl.Controls.Add(this.tabPage_DataExport);
-            this.tabControl.Controls.Add(this.tabPage_Control);
             this.tabControl.Location = new System.Drawing.Point(12, 322);
             this.tabControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(260, 474);
+            this.tabControl.Size = new System.Drawing.Size(260, 486);
             this.tabControl.TabIndex = 98;
             this.tabControl.Tag = "";
+            // 
+            // tabPage_backup
+            // 
+            this.tabPage_backup.Controls.Add(this.textBox_Z_PID_P);
+            this.tabPage_backup.Controls.Add(this.label15);
+            this.tabPage_backup.Controls.Add(this.textBox_T);
+            this.tabPage_backup.Controls.Add(this.textBox_Dy);
+            this.tabPage_backup.Controls.Add(this.textBox_TaskTime);
+            this.tabPage_backup.Controls.Add(this.checkBox_ForceSetAll);
+            this.tabPage_backup.Controls.Add(this.label25);
+            this.tabPage_backup.Controls.Add(this.label16);
+            this.tabPage_backup.Controls.Add(this.textBox_TaskNumber);
+            this.tabPage_backup.Controls.Add(this.label26);
+            this.tabPage_backup.Controls.Add(this.textBox_Dx);
+            this.tabPage_backup.Controls.Add(this.label28);
+            this.tabPage_backup.Controls.Add(this.textBox_XL);
+            this.tabPage_backup.Controls.Add(this.textBox_Task_PointsNumber);
+            this.tabPage_backup.Controls.Add(this.label1);
+            this.tabPage_backup.Controls.Add(this.label27);
+            this.tabPage_backup.Controls.Add(this.label14);
+            this.tabPage_backup.Controls.Add(this.label18);
+            this.tabPage_backup.Controls.Add(this.label13);
+            this.tabPage_backup.Controls.Add(this.label6);
+            this.tabPage_backup.Controls.Add(this.textBox_Ny);
+            this.tabPage_backup.Controls.Add(this.textBox_YL);
+            this.tabPage_backup.Controls.Add(this.textBox_ScanRate);
+            this.tabPage_backup.Controls.Add(this.textBox_Z_PID_D);
+            this.tabPage_backup.Controls.Add(this.textBox_Nx);
+            this.tabPage_backup.Controls.Add(this.label19);
+            this.tabPage_backup.Controls.Add(this.textBox_NumberOfFrameToScan);
+            this.tabPage_backup.Controls.Add(this.textBox_Z_PID_I);
+            this.tabPage_backup.Controls.Add(this.label17);
+            this.tabPage_backup.Controls.Add(this.label5);
+            this.tabPage_backup.Controls.Add(this.textBox_Sensitivity);
+            this.tabPage_backup.Controls.Add(this.label20);
+            this.tabPage_backup.Controls.Add(this.textBox_SetDeltaValueNm);
+            this.tabPage_backup.Controls.Add(this.label21);
+            this.tabPage_backup.Controls.Add(this.label22);
+            this.tabPage_backup.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_backup.Name = "tabPage_backup";
+            this.tabPage_backup.Size = new System.Drawing.Size(252, 460);
+            this.tabPage_backup.TabIndex = 5;
+            this.tabPage_backup.Text = "backup";
+            this.tabPage_backup.UseVisualStyleBackColor = true;
+            // 
+            // tabPage_Control
+            // 
+            this.tabPage_Control.Controls.Add(this.button_StartTask);
+            this.tabPage_Control.Controls.Add(this.button_WaveTest);
+            this.tabPage_Control.Controls.Add(this.button_DataCapture);
+            this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
+            this.tabPage_Control.Controls.Add(this.button2);
+            this.tabPage_Control.Controls.Add(this.button1);
+            this.tabPage_Control.Controls.Add(this.checkBox_ShowImage);
+            this.tabPage_Control.Controls.Add(this.textBox_TF_DC_Gain);
+            this.tabPage_Control.Controls.Add(this.label24);
+            this.tabPage_Control.Controls.Add(this.groupBox7);
+            this.tabPage_Control.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_Control.Name = "tabPage_Control";
+            this.tabPage_Control.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_Control.Size = new System.Drawing.Size(252, 460);
+            this.tabPage_Control.TabIndex = 4;
+            this.tabPage_Control.Text = "backup1";
+            this.tabPage_Control.UseVisualStyleBackColor = true;
+            // 
+            // button_StartTask
+            // 
+            this.button_StartTask.Location = new System.Drawing.Point(143, 270);
+            this.button_StartTask.Name = "button_StartTask";
+            this.button_StartTask.Size = new System.Drawing.Size(97, 34);
+            this.button_StartTask.TabIndex = 87;
+            this.button_StartTask.Text = "start task";
+            this.button_StartTask.UseVisualStyleBackColor = true;
+            this.button_StartTask.Click += new System.EventHandler(this.button_StartTask_Click);
+            // 
+            // button_WaveTest
+            // 
+            this.button_WaveTest.Location = new System.Drawing.Point(139, 221);
+            this.button_WaveTest.Margin = new System.Windows.Forms.Padding(2);
+            this.button_WaveTest.Name = "button_WaveTest";
+            this.button_WaveTest.Size = new System.Drawing.Size(101, 32);
+            this.button_WaveTest.TabIndex = 86;
+            this.button_WaveTest.Text = "WaveTest";
+            this.button_WaveTest.UseVisualStyleBackColor = true;
+            this.button_WaveTest.Click += new System.EventHandler(this.button_WaveTest_Click);
+            // 
+            // button_DataCapture
+            // 
+            this.button_DataCapture.Location = new System.Drawing.Point(139, 176);
+            this.button_DataCapture.Margin = new System.Windows.Forms.Padding(2);
+            this.button_DataCapture.Name = "button_DataCapture";
+            this.button_DataCapture.Size = new System.Drawing.Size(101, 32);
+            this.button_DataCapture.TabIndex = 85;
+            this.button_DataCapture.Text = "data capture";
+            this.button_DataCapture.UseVisualStyleBackColor = true;
+            this.button_DataCapture.Click += new System.EventHandler(this.button_DataCapture_Click);
             // 
             // tabPage_DataExport
             // 
@@ -1573,7 +1744,7 @@
             this.tabPage_DataExport.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage_DataExport.Name = "tabPage_DataExport";
             this.tabPage_DataExport.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.tabPage_DataExport.Size = new System.Drawing.Size(252, 448);
+            this.tabPage_DataExport.Size = new System.Drawing.Size(252, 460);
             this.tabPage_DataExport.TabIndex = 3;
             this.tabPage_DataExport.Text = "Data Export";
             this.tabPage_DataExport.UseVisualStyleBackColor = true;
@@ -1612,58 +1783,6 @@
             this.textBox_DataPath.TabIndex = 70;
             this.textBox_DataPath.Text = "D:\\AFM_Data";
             // 
-            // tabPage_Control
-            // 
-            this.tabPage_Control.Controls.Add(this.button_StartTask);
-            this.tabPage_Control.Controls.Add(this.button_WaveTest);
-            this.tabPage_Control.Controls.Add(this.button_DataCapture);
-            this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
-            this.tabPage_Control.Controls.Add(this.button2);
-            this.tabPage_Control.Controls.Add(this.button1);
-            this.tabPage_Control.Controls.Add(this.checkBox_ShowImage);
-            this.tabPage_Control.Controls.Add(this.textBox_TF_DC_Gain);
-            this.tabPage_Control.Controls.Add(this.label24);
-            this.tabPage_Control.Controls.Add(this.groupBox7);
-            this.tabPage_Control.Location = new System.Drawing.Point(4, 22);
-            this.tabPage_Control.Name = "tabPage_Control";
-            this.tabPage_Control.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_Control.Size = new System.Drawing.Size(252, 448);
-            this.tabPage_Control.TabIndex = 4;
-            this.tabPage_Control.Text = "Control";
-            this.tabPage_Control.UseVisualStyleBackColor = true;
-            // 
-            // button_StartTask
-            // 
-            this.button_StartTask.Location = new System.Drawing.Point(143, 270);
-            this.button_StartTask.Name = "button_StartTask";
-            this.button_StartTask.Size = new System.Drawing.Size(97, 34);
-            this.button_StartTask.TabIndex = 87;
-            this.button_StartTask.Text = "start task";
-            this.button_StartTask.UseVisualStyleBackColor = true;
-            this.button_StartTask.Click += new System.EventHandler(this.button_StartTask_Click);
-            // 
-            // button_WaveTest
-            // 
-            this.button_WaveTest.Location = new System.Drawing.Point(139, 221);
-            this.button_WaveTest.Margin = new System.Windows.Forms.Padding(2);
-            this.button_WaveTest.Name = "button_WaveTest";
-            this.button_WaveTest.Size = new System.Drawing.Size(101, 32);
-            this.button_WaveTest.TabIndex = 86;
-            this.button_WaveTest.Text = "WaveTest";
-            this.button_WaveTest.UseVisualStyleBackColor = true;
-            this.button_WaveTest.Click += new System.EventHandler(this.button_WaveTest_Click);
-            // 
-            // button_DataCapture
-            // 
-            this.button_DataCapture.Location = new System.Drawing.Point(139, 176);
-            this.button_DataCapture.Margin = new System.Windows.Forms.Padding(2);
-            this.button_DataCapture.Name = "button_DataCapture";
-            this.button_DataCapture.Size = new System.Drawing.Size(101, 32);
-            this.button_DataCapture.TabIndex = 85;
-            this.button_DataCapture.Text = "data capture";
-            this.button_DataCapture.UseVisualStyleBackColor = true;
-            this.button_DataCapture.Click += new System.EventHandler(this.button_DataCapture_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.button_CoarseWithdraw);
@@ -1690,39 +1809,39 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.label_SystemState);
-            this.groupBox2.Location = new System.Drawing.Point(12, 802);
+            this.groupBox2.Location = new System.Drawing.Point(12, 878);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1411, 28);
+            this.groupBox2.Size = new System.Drawing.Size(1594, 28);
             this.groupBox2.TabIndex = 107;
             this.groupBox2.TabStop = false;
             // 
-            // textBox_TC
+            // timer_Update_CoarseReadout
             // 
-            this.textBox_TC.Location = new System.Drawing.Point(813, 119);
-            this.textBox_TC.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBox_TC.Name = "textBox_TC";
-            this.textBox_TC.Size = new System.Drawing.Size(38, 20);
-            this.textBox_TC.TabIndex = 82;
-            this.textBox_TC.Text = "26.0";
-            this.toolTip_Help.SetToolTip(this.textBox_TC, "Enter the step length here.");
+            this.timer_Update_CoarseReadout.Enabled = true;
+            this.timer_Update_CoarseReadout.Interval = 300;
+            this.timer_Update_CoarseReadout.Tick += new System.EventHandler(this.timer_Update_CoarseReadout_Tick);
+            // 
+            // timer_ScaningImageShow_RealTime
+            // 
+            this.timer_ScaningImageShow_RealTime.Interval = 10000;
+            this.timer_ScaningImageShow_RealTime.Tick += new System.EventHandler(this.timer_ScaningImageShow_RealTime_Tick);
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.Silver;
+            this.BackColor = System.Drawing.Color.LightGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1438, 842);
+            this.ClientSize = new System.Drawing.Size(1664, 1012);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox_SEMPreview);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox_AFMImage);
-            this.Controls.Add(this.button_Coarse_MoveToHomePosition);
-            this.Controls.Add(this.groupBox_SEMPreview);
             this.Controls.Add(this.groupBox_Setup);
-            this.Controls.Add(this.label11);
             this.Controls.Add(this.groupBox_SystemStatus);
             this.Controls.Add(this.tabControl);
+            this.Controls.Add(this.button_SetParameters);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -1736,12 +1855,11 @@
             this.groupBox6.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AFM_Real_Image)).EndInit();
             this.groupBox_AFMImage.ResumeLayout(false);
             this.groupBox_SEMPreview.ResumeLayout(false);
             this.groupBox_SEMPreview.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_SEMPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_SEMImage)).EndInit();
             this.groupBox_Setup.ResumeLayout(false);
             this.groupBox_Setup.PerformLayout();
             this.groupBox_SystemStatus.ResumeLayout(false);
@@ -1749,17 +1867,17 @@
             this.tabPage_TopoScan.ResumeLayout(false);
             this.tabPage_TopoScan.PerformLayout();
             this.tabPage_Indentation.ResumeLayout(false);
-            this.tabPage_Indentation.PerformLayout();
             this.tabControl.ResumeLayout(false);
-            this.tabPage_DataExport.ResumeLayout(false);
-            this.tabPage_DataExport.PerformLayout();
+            this.tabPage_backup.ResumeLayout(false);
+            this.tabPage_backup.PerformLayout();
             this.tabPage_Control.ResumeLayout(false);
             this.tabPage_Control.PerformLayout();
+            this.tabPage_DataExport.ResumeLayout(false);
+            this.tabPage_DataExport.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -1839,8 +1957,7 @@
         private System.Windows.Forms.Button button_Form_CoarsePositioner;
         private System.Windows.Forms.Button button_ShowImage;
         private System.Windows.Forms.RadioButton radioButton_Topography;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBox_AFM_Real_Image;
         private System.Windows.Forms.Button button_ExportData;
         private System.Windows.Forms.GroupBox groupBox_AFMImage;
         private System.Windows.Forms.RadioButton radioButton_Deflection;
@@ -1851,13 +1968,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label_Speed_Y;
-        private System.Windows.Forms.Button button_VideoRecord;
+        private System.Windows.Forms.Button button_SEMImage_VideoRecord;
         private System.Windows.Forms.Label label_VideoRecord;
         private System.Windows.Forms.Label label_ScreenShot;
-        private System.Windows.Forms.Button button_ScreenShot;
+        private System.Windows.Forms.Button button_SEMImage_ScreenShot;
         private System.Windows.Forms.GroupBox groupBox_SEMPreview;
         private System.Windows.Forms.CheckBox checkBox_ReferenceMarks;
-        private System.Windows.Forms.PictureBox pictureBox_SEMPreview;
+        private System.Windows.Forms.PictureBox pictureBox_SEMImage;
         private System.Windows.Forms.Label label_Encoder_Y;
         private System.Windows.Forms.Label label_Speed_X;
         private System.Windows.Forms.Label label_Axis_Z;
@@ -1875,7 +1992,6 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button button_Servicing;
         private System.Windows.Forms.Button button_ScannerCalibration;
-        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.GroupBox groupBox_SystemStatus;
         private System.Windows.Forms.Button button_SEM;
@@ -1900,7 +2016,18 @@
         private System.Windows.Forms.TextBox textBox_FileName;
         private System.Windows.Forms.Button button_WaveTest;
         private System.Windows.Forms.Button button_StartTask;
-        private System.Windows.Forms.TextBox textBox_TC;
+        private System.Windows.Forms.Timer timer_Update_CoarseReadout;
+        private System.Windows.Forms.TabPage tabPage_backup;
+        private System.Windows.Forms.ComboBox comboBox_ParaImageQuality;
+        private System.Windows.Forms.ComboBox comboBox_ParaLines;
+        private System.Windows.Forms.ComboBox comboBox_ParaPixels;
+        private System.Windows.Forms.ComboBox comboBox_ParaScanArea;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Timer timer_ScaningImageShow_RealTime;
     }
 }
 

@@ -71,7 +71,7 @@ namespace NameSpace_AFM_Project
                 if (Rect != null && Rect.Width > 0 && Rect.Height > 0)
                 {
                     //e.Graphics.FillRectangle(selectionBrush, Rect);
-                    e.Graphics.DrawRectangle(pen,Rect);
+                    e.Graphics.DrawRectangle(pen, Rect);
                 }
             }
         }

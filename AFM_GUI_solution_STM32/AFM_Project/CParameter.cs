@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using CSE;
-
 using System.Globalization;
 using System.CodeDom.Compiler;
 using Microsoft.CSharp;
 using Microsoft.VisualBasic;
-
 
 namespace NameSpace_AFM_Project
 {
@@ -67,8 +65,7 @@ namespace NameSpace_AFM_Project
             }
             set
             {
-                this.mI_TriggerForce_nN = value;// 
-
+                this.mI_TriggerForce_nN = value;
             }
         }
         [CategoryAttribute("AFM indentation"),
@@ -88,7 +85,6 @@ namespace NameSpace_AFM_Project
             get { return this.mI_step_size_nm; }
             set { this.mI_step_size_nm = value; }
         }
-
 
         [CategoryAttribute("AFM indentation"),
         DescriptionAttribute("parameters for AFM indentation"),
@@ -157,14 +153,11 @@ namespace NameSpace_AFM_Project
             for (int k = 0; k < NumOfPara; k++)
             { mO[k, 0] = ""; mO[k, 1] = ""; }
 
-
-
             //int x = 2;
             //CsEval.EvalEnvironment = this;
             //object result = CsEval.Eval("3 + mI_MaxDepth / 2");
 
             // string x=GetParaString();
-
         }
 
         void test()
@@ -178,13 +171,12 @@ namespace NameSpace_AFM_Project
 
             Oin[1] = (object)data;
 
-
             object output = Eval("Oin[1]=Oin[0];", ref Oin);
         }
         //  Eval > Evaluates C# sourcelanguage
+
         public static object Eval(string sCSCode, ref object[] Oin)
         {
-
             CSharpCodeProvider c = new CSharpCodeProvider();
             ICodeCompiler icc = c.CreateCompiler();
             CompilerParameters cp = new CompilerParameters();
@@ -232,12 +224,10 @@ namespace NameSpace_AFM_Project
             Type t = o.GetType();
             System.Reflection.MethodInfo mi = t.GetMethod("EvalCode");
 
-
             // Oin[1] = "test";
             object s = mi.Invoke(o, Oin);
             //object s = mi.Invoke(o,  Oin);
             return s;
-
         }
     }
 }

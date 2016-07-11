@@ -12,13 +12,13 @@ namespace NameSpace_AFM_Project
     public class CIniFile
     {
         private string filePath;
-         
+
         [DllImport("kernel32")]
         private static extern long WritePrivateProfileString(string section,
         string key,
         string val,
         string filePath);
- 
+
         [DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section,
         string key,
@@ -35,7 +35,7 @@ namespace NameSpace_AFM_Project
         {
             string str = value.ToString();
             WriteString(section, key, str.ToLower());
-        } 
+        }
         public void WriteString(string section, string key, string value)
         {
             WritePrivateProfileString(section, key, value.ToLower(), this.filePath);
@@ -49,10 +49,10 @@ namespace NameSpace_AFM_Project
         }
         public double ReadDouble(string section, string key)
         {
-            string str=ReadString(section, key);
+            string str = ReadString(section, key);
             return Convert.ToDouble(str);
         }
-         
+
         public string FilePath
         {
             get { return this.filePath; }

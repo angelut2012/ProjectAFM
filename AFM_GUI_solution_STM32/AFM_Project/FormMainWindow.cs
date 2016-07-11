@@ -6,24 +6,22 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-
 using System.Threading;
-
 using System.IO.Ports;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
-
 using System.Diagnostics;
+using System.Drawing.Imaging;
 //using CLRWrapper;
 
 namespace NameSpace_AFM_Project
 {
-
     public partial class MainWindow : Form
     {
-        public string mDataPath = "d:\\AFMdata\\";
-
+        public string mDataPath = "c:\\AFMdata\\";
         public MKernel.KernelClass mKernelClass;
+
+        public Bitmap mAFMImage_show;
+
         // coarse positioner
         public CCoarsePositioner mCCoarsePositioner;
         public uint mCaxis_x = 0;
@@ -34,14 +32,11 @@ namespace NameSpace_AFM_Project
         // variable
         //  public Manipulator //mManipulator=new Manipulator();
 
-
         public delegate void DelegateFunction();
         public DelegateFunction mDelegateFunction;
 
-
         const int LENGTH_COM_DATA_PC2MCU = (6);
         const int LENGTH_COM_FRAME_PC2MCU = (2 + LENGTH_COM_DATA_PC2MCU + 2);
-
 
         const int LENGTH_COM_DATA_MCU2PC = (12 + 3 * 4);
         const int LENGTH_COM_FRAME_MCU2PC = (2 + LENGTH_COM_DATA_MCU2PC + 2);
@@ -96,9 +91,7 @@ namespace NameSpace_AFM_Project
         double[] para_IC0_DR = { 128, 128, 128, 128, 0, 0 };//R0~R3,DO1,DO2, counted as only four
         double para_NumberOfFrameToScan = 1;
         double para_TF_DC_Gain = 1;
-
         double para_NumberOfFrameFinished = 0;
-
         const int NumberOfParameters = 20;
         public CParameter mCParameter = new CParameter();
         // Form_Indentation mForm_Indentation;// = new Form_Indentation(this);
@@ -128,7 +121,6 @@ namespace NameSpace_AFM_Project
         double mApproach_TimesCounter = 0;
         bool mApproach_state = false;
 
-
         public double[,] mIndentData = new double[3, 10000];
         public int mIndentData_index = 0;
         public bool mSwitch_IndentTrue_FinishFalse = false;
@@ -143,8 +135,6 @@ namespace NameSpace_AFM_Project
         bool mSWitchShowImage = false;// not show by default
         bool mSwitch_ShowComDdata = true;
 
-
-
         Form_ImageShow_Realtime mForm_ImageShow_Realtime;
 
         public MainWindow()
@@ -156,10 +146,25 @@ namespace NameSpace_AFM_Project
             while (result != DialogResult.Yes)
                 result = MessageBox.Show("Make sure the SEM is ready in high vacuum state before you start to use the AFM.\nOtherwise, the system might be damaged!", "Conformation", MessageBoxButtons.YesNo);
 
-
             InitializeComponent();
             mCCoarsePositioner = new CCoarsePositioner();
-            mCCoarsePositioner.Initialize();
+            try
+            {
+                mCCoarsePositioner.Initialize();
+            }
+            catch { MY_DEBUG("CoarsePositioner fail."); }
+            try
+            {
+                JoyStick_Initialize();
+            }
+            catch { MY_DEBUG("joystick fail."); }
+            try
+            {
+                SEM_Image_Initialize();
+            }
+            catch { MY_DEBUG("SEM image fail."); }
+          
+           
 
 
             // serialVirtual_Coarse = new SerialPort("COM12", 115200, Parity.None, 8, StopBits.One);
@@ -173,7 +178,6 @@ namespace NameSpace_AFM_Project
             serialVirtual_echo.ReadTimeout = 1;
             //serialVirtual_echo.Open();
 
-
             //mImageBmpH = new Bitmap(256, 200);
             //pictureBox_Height.Image = mImageBmpH;
 
@@ -184,7 +188,6 @@ namespace NameSpace_AFM_Project
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
             listBox_SelectIdlePackage.SetSelected(0, true);
 
-
             mDelegateFunction = new DelegateFunction(Function_UpdateUI);
 
             mThread_UI_Update = new Thread(ThreadFunction_UpdateUI);
@@ -193,9 +196,7 @@ namespace NameSpace_AFM_Project
             //mThread_WriteSerialData = new Thread(ThreadFunction_WriteSerialData);
             //mThread_WriteSerialData.Start();
 
-
             propertyGrid_AFM_Parameter.SelectedObject = mCParameter;
-
 
             //mForm_Indentation = new Form_Indentation(this);
             Form_Indentation(this);// initialize indent 
@@ -204,6 +205,7 @@ namespace NameSpace_AFM_Project
             System.IO.Directory.CreateDirectory(mDataPath);
             mForm_ImageShow_Realtime = new Form_ImageShow_Realtime(this);
         }
+
         public void ThreadFunction_UpdateUI()
         {
             mKernelClass = new MKernel.KernelClass();
@@ -221,9 +223,10 @@ namespace NameSpace_AFM_Project
                 }
             }
         }
+
         void LoadAFMParamter()
         {
-            string in_str = in_str = "out_data=[-1;-1];out_data=load(\'AFM_parameter.txt\');";//'out_data=load(''AFM_parameter.txt\'');'
+            string in_str = in_str = "out_data=[-1;-1];out_data=load(\'AFM_parameter.txt\');";    //'out_data=load(''AFM_parameter.txt\'');'
             object Oin_str = (object)in_str;
             string out_str = null;
             object Oout_str = (object)out_str;
@@ -260,11 +263,10 @@ namespace NameSpace_AFM_Project
                 para_IC0_DR[2] = out_data[k++, 1];
                 para_IC0_DR[3] = out_data[k++, 1];
 
-
-                UpdateGUITextBox_Invoke(ref para_Z_PID_P, textBox_Z_PID_P);//, 0);//, 100);
-                UpdateGUITextBox_Invoke(ref para_Z_PID_I, textBox_Z_PID_I);//, 0);//, 100);
-                UpdateGUITextBox_Invoke(ref para_Z_PID_D, textBox_Z_PID_D);//, 0);//, 100);
-                UpdateGUITextBox_Invoke(ref para_Nx, textBox_Nx);//, 32, 512);
+                UpdateGUITextBox_Invoke(ref para_Z_PID_P, textBox_Z_PID_P);     //, 0);//, 100);
+                UpdateGUITextBox_Invoke(ref para_Z_PID_I, textBox_Z_PID_I);     //, 0);//, 100);
+                UpdateGUITextBox_Invoke(ref para_Z_PID_D, textBox_Z_PID_D);      //, 0);//, 100);
+                UpdateGUITextBox_Invoke(ref para_Nx, textBox_Nx);    //, 32, 512);
                 UpdateGUITextBox_Invoke(ref para_Ny, textBox_Ny);//, 32, 512);
                 UpdateGUITextBox_Invoke(ref para_Dx, textBox_Dx);//, 1, MAX_RANGE_X_NM);
                 UpdateGUITextBox_Invoke(ref para_Dy, textBox_Dy);//, 1, MAX_RANGE_Y_NM);
@@ -276,7 +278,6 @@ namespace NameSpace_AFM_Project
                 UpdateGUITextBox_Invoke(ref para_NumberOfFrameToScan, textBox_NumberOfFrameToScan);//, 1, 2000);
                 UpdateGUITextBox_Invoke(ref para_TF_DC_Gain, textBox_TF_DC_Gain);//, 1, 2000);
 
-
                 //UpdateGUITextBox_Invoke(ref para_IC0_DR[0], textBox_IC0_R0);
                 //UpdateGUITextBox_Invoke(ref para_IC0_DR[1], textBox_IC0_R1);
                 //UpdateGUITextBox_Invoke(ref para_IC0_DR[2], textBox_IC0_R2);
@@ -286,12 +287,14 @@ namespace NameSpace_AFM_Project
                 ImageArray_ValueReset();
             }
         }
+
         void UpdateGUITextBox_Invoke(ref double value, TextBox T)
         {
             double v = value;
             value += 0.0000001;// to make a little difference for first time parameter write to mcu
             T.BeginInvoke((MethodInvoker)delegate() { T.Text = v.ToString(); });
         }
+
         void UpdateImageShow_SaveMat(string t)
         {
             //point_now_x = 30;
@@ -315,18 +318,19 @@ namespace NameSpace_AFM_Project
             string output = null;
             object Ooutput = (object)output;
 
-            mKernelClass.AFM_dip_show_image(
-                1, ref Ooutput,
-                OmImageArrayHL,
-                OmImageArrayHR,
-                OmImageArrayEL,
-                OmImageArrayER,
-                Opoint_now_x,
-                Opoint_now_y,
-                OstrIN);
+            //mKernelClass.AFM_dip_show_image(
+            //    1, ref Ooutput,
+            //    OmImageArrayHL,
+            //    OmImageArrayHR,
+            //    OmImageArrayEL,
+            //    OmImageArrayER,
+            //    Opoint_now_x,
+            //    Opoint_now_y,
+            //    OstrIN);
             output = Convert.ToString(Ooutput);
             if (output.Length > 1) MY_DEBUG(output);
         }
+
         void UpdateImageShow()
         {
             //point_now_x = 30;
@@ -350,15 +354,15 @@ namespace NameSpace_AFM_Project
             string output = null;
             object Ooutput = (object)output;
 
-            mKernelClass.AFM_dip_show_image(
-                1, ref Ooutput,
-                OmImageArrayHL,
-                OmImageArrayHR,
-                OmImageArrayEL,
-                OmImageArrayER,
-                Opoint_now_x,
-                Opoint_now_y,
-                OstrIN);
+            //mKernelClass.AFM_dip_show_image(
+            //    1, ref Ooutput,
+            //    OmImageArrayHL,
+            //    OmImageArrayHR,
+            //    OmImageArrayEL,
+            //    OmImageArrayER,
+            //    Opoint_now_x,
+            //    Opoint_now_y,
+            //    OstrIN);
             output = Convert.ToString(Ooutput);
             if (output.Length > 1) MY_DEBUG(output);
         }
@@ -369,7 +373,6 @@ namespace NameSpace_AFM_Project
                 update_UI_label(Sys_Inf);
             if (mSWitchShowImage == true)
                 UpdateImageShow();
-
         }
 
         private void listBox_Axis_SelectedIndexChanged(object sender, EventArgs e)
@@ -382,10 +385,12 @@ namespace NameSpace_AFM_Project
                     break;
             set_AFM_parameters('a', k);
         }
+
         //private void button_Stop_Click(object sender, EventArgs e)
         //{
         //    //mManipulator.Stop(axis);
         //}
+
         private void button_MoveToEnd_Click(object sender, EventArgs e)
         {
             //mManipulator.MoveAtSpeed(axis, Convert.ToDouble(// textBox_Speed.Text) * (1));
@@ -406,18 +411,13 @@ namespace NameSpace_AFM_Project
             //mManipulator.MoveDistance(axis, Convert.ToDouble(textBox_IC1_R0.Text));
         }
 
-
         private void button_SetSpeed_Click(object sender, EventArgs e)
         {
-
             double data = 0;//Convert.ToDouble(// textBox_Speed.Text);
             data = Math.Abs(data);
             // textBox_Speed.Text = Convert.ToString(data);
             //mManipulator.SetSpeed((sbyte)'A', data);
         }
-
-
-
 
         private void button_SetPosition_Click(object sender, EventArgs e)
         {
@@ -456,11 +456,13 @@ namespace NameSpace_AFM_Project
             //}
             //mManipulator.Reset(axis);
         }
+
         void ThreadFunction_ResteHome()
         {
             ////mManipulator.ResetHomePosition(axis);
             //this.Invoke(this.mDelegateFunction);         
         }
+
         void convert_uint32_to_byte4(UInt32 x, byte[] b)
         {
             //            value+=com_buffer_frame[2]<<24;
@@ -472,6 +474,7 @@ namespace NameSpace_AFM_Project
             foreach (int k in L)
                 b[3 - k] = (byte)((x & (vb << k * 8)) >> k * 8);
         }
+
         double convert_byte4_to_uint32(byte[] b, int offset)
         {
             double value = 0;
@@ -481,6 +484,7 @@ namespace NameSpace_AFM_Project
             value += (double)(b[3 + offset]);
             return value;
         }
+
         double convert_byte3_to_uint32(byte[] b, int offset)
         {
             double value = 0;
@@ -489,6 +493,7 @@ namespace NameSpace_AFM_Project
             value += (double)(b[2 + offset]);
             return value;
         }
+
         double convert_byte2_to_int16(byte[] b, int offset)
         {
             double value = 0;
@@ -507,8 +512,10 @@ namespace NameSpace_AFM_Project
             T.Text = t.ToString();
             return t;
         }
+
         private void button_SetParameters_Click(object sender, EventArgs e)
         { button_SetParameters_Click_function(); }
+
         void button_SetParameters_Click_function()
         {
             if (button_SetParameters.Enabled == false)
@@ -524,9 +531,6 @@ namespace NameSpace_AFM_Project
             //set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, -100, 100);
             //set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, -100, 100);
             //set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, -100, 100);
-
-
-
 
             //return;
             // XY resolution
@@ -580,7 +584,7 @@ namespace NameSpace_AFM_Project
             button_SetParameters.Enabled = true;
             button_SetParameters.Visible = true;
         }
- 
+
 
         //private void button_SetStepLength_Click(object sender, EventArgs e)
         //{
@@ -589,7 +593,6 @@ namespace NameSpace_AFM_Project
         //    textBox_IC0_R0.Text = Convert.ToString(sl);
         //}
 
-
         //////////////////////////////////////////////////////////////////////
 
 
@@ -597,6 +600,7 @@ namespace NameSpace_AFM_Project
         {
             Function_ConnetComPort_Click();
         }
+
         public void Function_ConnetComPort_Click()
         {
             if (button_ConnetComPort.Text == "disconnect")
@@ -613,7 +617,6 @@ namespace NameSpace_AFM_Project
                     this.toolTip_Help.SetToolTip(this.button_ConnetComPort, "not connected.");
                     return;
                 }
-
 
             string com_number = "COM" + textBox_ComPortNO.Text;
 
@@ -640,7 +643,6 @@ namespace NameSpace_AFM_Project
 
             if (state == true)
             {
-
                 this.button_ConnetComPort.BackgroundImage = global::NameSpace_AFM_Project.Properties.Resources.Signal_on;
                 //this.button_ConnetComPort.Enabled = false;
                 this.toolTip_Help.SetToolTip(this.button_ConnetComPort, "Connected.");
@@ -650,7 +652,6 @@ namespace NameSpace_AFM_Project
                 //button_SetParameters_Click_function();
 
                 //reset_MCU_actuator();
-
 
                 if (button_ConnetComPort.Text == "connect")
                 {
@@ -663,7 +664,6 @@ namespace NameSpace_AFM_Project
                 //this.button_ConnetComPort.Enabled = false;
                 //MessageBox.Show("fail to open serial port");
             }
-
         }
         //void reset_MCU_actuator()
         //{
@@ -672,6 +672,7 @@ namespace NameSpace_AFM_Project
         //    set_output_DAC_Value_0_5(0, 0);
         //    set_output_Position_Value_01(0, 0);
         //}
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
 
@@ -684,6 +685,7 @@ namespace NameSpace_AFM_Project
             v = v - v % 1;// convert to int
             T.Text = Convert.ToString(v);
         }
+
         //private void text_CheckKeys_IC0R0(object sender, System.Windows.Forms.KeyPressEventArgs e)
         //{
         //    if (e.KeyChar == (char)13)
@@ -729,7 +731,7 @@ namespace NameSpace_AFM_Project
         //AA 55 52 03 f0 55 AA
         //AA 55 52 05 01 55 AA turn on IC0_DO2
         //AA 55 52 05 00 55 AA turn off IC0_DO2
- 
+
         private void timerFunction_Appraoch(object sender, EventArgs e)
         {
             // if (mApproach_heat_beat_received == -1)
@@ -739,9 +741,7 @@ namespace NameSpace_AFM_Project
             }
         }
 
-        private void serialPort_DataReceivedHandler_com2com(
-                            object sender,
-                            SerialDataReceivedEventArgs e)
+        private void serialPort_DataReceivedHandler_com2com(object sender, SerialDataReceivedEventArgs e)
         {
             SerialPort serialPort_echo = (SerialPort)sender;
             //string str_in = serialPort_Arduino.ReadExisting();
@@ -800,6 +800,7 @@ namespace NameSpace_AFM_Project
                 { MY_DEBUG("Updata_UI_Richtext error"); }
             }
         }
+
         //private void timerFunction_CheckCOM(object sender, EventArgs e)
         //{
         //    return;
@@ -868,9 +869,8 @@ namespace NameSpace_AFM_Project
         //    }
         //}
         // bool mB_serialPort_DataReceivedHandler_busy = false;
-        private void on_Received_serialPort_DataReceivedHandler(
-                            object sender,
-                            SerialDataReceivedEventArgs e)
+
+        private void on_Received_serialPort_DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
         {
             //if (mB_serialPort_DataReceivedHandler_busy == true)
             //{
@@ -909,7 +909,6 @@ namespace NameSpace_AFM_Project
 
                 //string s = Encoding.UTF8.GetString(db, 0, mCounter_ComReadByte);
                 //MY_DEBUG(s);
-                //MY_DEBUG(" ");
 
             }
             catch
@@ -981,9 +980,7 @@ namespace NameSpace_AFM_Project
                                         //AA 55 43 5A 45 00 00 00 01 00 00 00 02 ff 55 AA
                                         on_Received_Package_ZScannerEngage(com_buffer, ind);
                                 }
-
                             }
-
 
             //string str = Encoding.UTF8.GetString(com_buffer);
             //var regex = new Regex(@"UCZE");
@@ -995,7 +992,6 @@ namespace NameSpace_AFM_Project
             //}
 
             return ind;
-
         }
         //private BitmapImage GetPhoto(byte[] p)
         //{
@@ -1014,6 +1010,7 @@ namespace NameSpace_AFM_Project
             T = (T - 0.5) / Sensitivity_VperC + 25 - 2.4;// degree
             return T;
         }
+
         double convert_Temperature2Degree_SEM(double T)
         {
             double VCC = 5.0;
@@ -1024,7 +1021,6 @@ namespace NameSpace_AFM_Project
             T = (T - 0.5) / Sensitivity_VperC + 25;// -2.4;// degree
             return T;
         }
-
 
         double[] sys_data = { 1, 2, 3, 4, 5, 6 };
 
@@ -1051,7 +1047,6 @@ namespace NameSpace_AFM_Project
             //return;
             if (index == 0)
             {
-
                 double value_cantilever = v1 * 5.0 / BIT18MAX;
                 double v_Temperature_SEM = convert_Temperature2Degree_SEM(v2);
                 double v_Temperature_MCU = convert_Temperature2Degree_MCU(v3);
@@ -1095,8 +1090,6 @@ namespace NameSpace_AFM_Project
                      + ":\t scsg_z:\t" + scsg_z.ToString("f3"));
             }
 
-
-
             if (index == 13)
             {
                 //double[] mSensorADC18_Min = new double[3] { 4561, 35500, 231916 };// {8164, 34928, 232626};
@@ -1121,7 +1114,6 @@ namespace NameSpace_AFM_Project
                 MY_DEBUG("SCSG range y:", mSensorADC18_Max[PIEZO_Y] - mSensorADC18_Min[PIEZO_Y]);
                 MY_DEBUG("SCSG range z:", mSensorADC18_Max[PIEZO_Z] - mSensorADC18_Min[PIEZO_Z]);
             }
-
 
             //------------------drift 
 
@@ -1155,6 +1147,8 @@ namespace NameSpace_AFM_Project
             }
 
             // test_scanner_wave_output
+
+            // test_scanner_wave_output
             if (index == 20)
             {
 
@@ -1175,26 +1169,72 @@ namespace NameSpace_AFM_Project
                 s += "PRC, " + PRC5.ToString("f4") + ", ";
                 s += "T_SEM, " + v_Temperature_SEM.ToString("f1") + ", ";
                 s += "T_MCU, " + v_Temperature_MCU.ToString("f1") + ", ";
-               
+
                 //s += "Vy, " + (v4 / BIT18MAX*5.0).ToString("f4") + ", ";
                 //s += "Vx, " + (v5 / BIT18MAX*5.0).ToString("f4") + ", ";
                 s += "Vy, " + (v5 / BIT18MAX * 5.0).ToString("f4") + ", ";
                 s += "Vx, " + (v4 / BIT18MAX * 5.0).ToString("f4") + ", ";
-                s += "Vz, " + (v7 / BIT18MAX*5.0).ToString("f4") + ", ";
-                 
+                s += "Vz, " + (v7 / BIT18MAX * 5.0).ToString("f4") + ", ";
+                //s += "T, " + textBox_TC.Text;
+                s += ",pz, " + GetSensorPosition01(0, (int)v7, (int)v3).ToString("f6");
+                s += ",px, " + GetSensorPosition01(0, (int)v4, (int)v2).ToString("f6");
+                s += ",py, " + GetSensorPosition01(0, (int)v5, (int)v2).ToString("f6");
 
-      double p1 =  -4.628e-09;//  (-1.754e-08, 8.28e-09)
-    double   p2 =   6.396e-05;//  (-0.003195, 0.003323)
-    double p3 = 92.47;// (-112.6, 297.6)
-                double x=v[2];
-    double Tz= p1*x*x + p2*x + p3;
-    s += "Tz, " + Tz.ToString("f3");
-                s+="T, " + textBox_TC.Text;
+                s += ",Txy, " + Convert_VRadc2Temperature_xy(v2).ToString("f4");
+                s += ",Tz, " + Convert_VRadc2Temperature_z(v3).ToString("f4");
                 MY_DEBUG(s);
             }
 
+	
+        }
+        double Convert_VRadc2Temperature_xy(double VRadc )
+        {
+            // xy
+            double p1 = 0.00000006348549803628420000;
+            double p2 = -0.00483842959102221000000000;
+            double p3 = 103.66310311575000000000000000;
+
+            return (p1 * VRadc + p2) * VRadc + p3;
+        }
+        double Convert_VRadc2Temperature_z(double VRadc)
+        {
+            double p1 = -0.00000000462849120918884000;
+            double p2 = 0.00006395673239768250000000;
+            double p3 = 92.46784306755080000000000000;
+            return (p1 * VRadc + p2) * VRadc + p3;
         }
 
+
+
+float GetSensorPosition01(int mAxis, int  positionADC18,int temperatureADC18)
+	{
+float	xp00		=(float)	-1.25976130991591000000000000	;
+float	xp01		=(float)	0.04064898312247370000000000	;
+float	xp10		=(float)	0.00000774214599727934000000	;
+float	xp11		=(float)	0.00000002591495044575960000	;
+float	xp02		=(float)	-0.00027860784460091000000000	;
+float	yp00		=(float)	-1.39306871111335000000000000	;
+float	yp01		=(float)	0.04023992323571540000000000	;
+float	yp10		=(float)	0.00000758641170006858000000	;
+float	yp11		=(float)	0.00000009225240571389740000	;
+float	yp02		=(float)	-0.00013983813379961800000000	;
+float	zp00		=(float)	5.56940871292436000000000000	;
+float	zp01		=(float)	-0.00006552734101777870000000	;
+float	zp10		=(float)	0.00001553239623067130000000	;
+float	zp11		=(float)	-0.00000000004439813004644080	;
+float	zp02		=(float)	0.00000000014588477288958600	;
+
+
+		float position_compensated =0;
+		if (mAxis==0)
+		position_compensated= zp00 + positionADC18*zp10 + temperatureADC18*(zp01 + temperatureADC18*zp02 + positionADC18*zp11);
+		else if (mAxis==1)
+		position_compensated= xp00 + positionADC18*xp10 + temperatureADC18*(xp01 + temperatureADC18*xp02 + positionADC18*xp11);
+		else if (mAxis==2)
+		position_compensated= yp00 + positionADC18*yp10 + temperatureADC18*(yp01 + temperatureADC18*yp02 + positionADC18*yp11);
+    return position_compensated;
+	}
+	
         void on_Received_Package_Indent(byte[] com_buffer, int ind)
         {
             // AA 55 73 70 00   05 1E B8    00 FF E0    01 20 41    55 AA
@@ -1228,6 +1268,7 @@ namespace NameSpace_AFM_Project
                 }
             }
         }
+
         void update_UI_label(string inf)
         {
             if (label_SystemState.InvokeRequired)
@@ -1238,15 +1279,15 @@ namespace NameSpace_AFM_Project
             {
                 label_SystemState.Text = inf;
             }
-
         }
+
         int indx_store_for_save_image = 0;
         int indy_store_for_save_image = 0;
+
         void on_Received_Package_Image(byte[] com_buffer, int ind)
         {
             //test point x=127,y=65,height=65536,error=256
             // AA 55 49 4D 00 7F 00 41 01 00 00 00 01 00 55 AA 
-
 
             //height=0.1,error=0.8
             //height=1677721  ,error=13421772 
@@ -1257,8 +1298,7 @@ namespace NameSpace_AFM_Project
             int indy = (int)convert_byte2_to_int16(com_buffer, ind + 6); //com_buffer[ind + 6] << 8 + com_buffer[ind + 7];
             double vH = convert_byte3_to_uint32(com_buffer, ind + 8);
             double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3);
-            double vDAC = convert_byte3_to_uint32(com_buffer, ind + 8 + 3+3);
-            
+            double vDAC = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 + 3);
 
             vE = vE - BIT24MAX / 2;
             vE = vE / BIT24MAX;
@@ -1267,8 +1307,8 @@ namespace NameSpace_AFM_Project
             vH = vH / BIT24MAX;// convert back to 01
             vH *= MAX_RANGE_Z_NM;// convert to full range nm
 
-
-            vE = vDAC;
+            vDAC /= BIT18MAX;
+            vDAC *= 150;
             //vH = MAX_RANGE_Z_NM - vH;
 
             Sys_Inf = (
@@ -1276,9 +1316,9 @@ namespace NameSpace_AFM_Project
                 + " x:" + Convert.ToString(indx)
                 + " y:" + Convert.ToString(indy)
                 + " H:" + String.Format("{0:0.0}", vH)//vH.ToString()//Convert.ToString(vH)
-                + " E:" + vE.ToString()//String.Format("{0:0.0}", vE)//vE.ToString()//Convert.ToString(vE)
+                + " E:" + vE.ToString("f3")//String.Format("{0:0.0}", vE)//vE.ToString()//Convert.ToString(vE)
+                + " V:" + vDAC.ToString("f1")
                 );
-
 
             //Z_position_now = vH;
 
@@ -1337,7 +1377,6 @@ namespace NameSpace_AFM_Project
 
             //mImageBmpH.SetPixel(indx, indy, Color.FromArgb(vH / 65536, vH / 65536, vH / 65536));
             //pictureBox_Height.Update();
-
         }
 
         void on_Received_Package_ZScannerEngage(byte[] com_buffer, int ind)
@@ -1359,6 +1398,7 @@ namespace NameSpace_AFM_Project
                 MY_DEBUG("Z scanner engage: fail");
             }
         }
+
         void on_Received_Package_Approach(byte[] com_buffer, int ind)
         {
             //int adc = (int)convert_byte4_to_uint32(com_buffer, ind + 5);
@@ -1398,7 +1438,6 @@ namespace NameSpace_AFM_Project
                 }
 
                 mApproach_heat_beat_received = -1;
-
             }
             if (done == 2)
             {
@@ -1443,7 +1482,6 @@ namespace NameSpace_AFM_Project
                 mApproach_TimesCounter--;
                 if (mApproach_TimesCounter > 0)
                 {
-
                     System.Media.SystemSounds.Exclamation.Play();// ok
                     Thread.Sleep(300);
                     Apporach_start();
@@ -1541,7 +1579,10 @@ namespace NameSpace_AFM_Project
 
 
         private void button_Apporach_Click(object sender, EventArgs e)
-        { Apporach_start_multi(); }
+        {
+            Apporach_start_multi();
+        }
+
         public void Apporach_start_multi()
         {
             mApproach_state = true;
@@ -1581,7 +1622,6 @@ namespace NameSpace_AFM_Project
             timer_Approach.Start();//trigger function   timerFunction_Appraoch
             mApproach_CoarseStepCounter = 0;
 
-
             //if (button_Apporach.Text == "apporach")
             //{
             //    send_Data_Frame_To_Arduino('C','A','P');
@@ -1589,7 +1629,6 @@ namespace NameSpace_AFM_Project
             //}
             //else
             //{
-
             //    button_Apporach.Text = "apporach";
             //}
         }
@@ -1613,7 +1652,6 @@ namespace NameSpace_AFM_Project
         private void checkBox_COM_Transfer_CheckedChanged(object sender, EventArgs e)
         {
             //the checkbox is used as a global switch
-
             if (checkBox_COM_Transfer.Checked == true)
             {
                 if (serialVirtual_echo.IsOpen == false)
@@ -1625,7 +1663,6 @@ namespace NameSpace_AFM_Project
                     {
                         checkBox_COM_Transfer.Checked = false;
                     }
-
             }
             else
             {
@@ -1639,7 +1676,6 @@ namespace NameSpace_AFM_Project
                         checkBox_COM_Transfer.Checked = false;
                     }
             }
-
         }
 
         private void button_Z_Engage_Click(object sender, EventArgs e)
@@ -1655,7 +1691,9 @@ namespace NameSpace_AFM_Project
             //AA 55 43 53 52 00 00 00 55 AA 
             send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
             //send_Data_Frame_To_Arduino('C', 'Z', 'W');
+
         }
+
         public void send_Data_Frame_To_Arduino_SetSystemIdle_Multi()
         {
             MY_DEBUG("reset.");
@@ -1663,7 +1701,9 @@ namespace NameSpace_AFM_Project
             // for (int k = 0; k < 10; k++)
             { send_Data_Frame_To_Arduino('C', 'Z', 'W'); Thread.Sleep(100); }
             serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC;
+            timer_ScaningImageShow_RealTime.Enabled = false;
         }
+
         private void checkBox_Y_ScanEnable_CheckedChanged(object sender, EventArgs e)
         {
             char ch;
@@ -1679,7 +1719,10 @@ namespace NameSpace_AFM_Project
             serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC * 40;// 100;
             button_XY_Scan_Function();
             mSwitch_ShowComDdata = false;
+            timer_ScaningImageShow_RealTime.Interval = 2000;
+            timer_ScaningImageShow_RealTime.Enabled = true;
         }
+
         void button_XY_Scan_Function()
         {
             //AA 55 43 53 53 00 00 00 55 AA 
@@ -1713,13 +1756,12 @@ namespace NameSpace_AFM_Project
 
         private void button2_Click(object sender, EventArgs e)
         {
-
-
+            //CCoarseController.SA_GotoPositionRelative_S(mSystemIndex, 0, (int)1 * 1000, 1000);
+            //AFM_Real_Imaging_show();      // added on July7 
             //MY_DEBUG("tres");
             //SpeakVoice("I am test a word");
             //SpeakVoice("you are rate");
             //UpdateImageShow_SaveMat("test");
-
 
             //
             //SoundNotice(5);
@@ -1733,8 +1775,6 @@ namespace NameSpace_AFM_Project
             //SoundNotice(k, 2000); k++;
             //SoundNotice(k, 2000); k++;
             //SoundNotice(k, 2000); k++;
-
-
 
             //mCIniFile.WriteDouble("Indentation","MaximumDepth(nm)",1/3.0f);
             //double x = mCIniFile.ReadDouble("Indentation", "MaximumDepth(nm)");
@@ -1756,13 +1796,15 @@ namespace NameSpace_AFM_Project
             //Orgb = (object)rgb;
             //Oim = (object)im;
             //Oimin = (object)mImageArrayHL;
-
         }
 
         ///------------------------------ save image start-----------------------
 
         private void button_SaveImage_Click(object sender, EventArgs e)
-        { SaveImage_StartThread(); }
+        {
+            SaveImage_StartThread();
+        }
+
         void SaveImage_StartThread()
         {
             if (mThread_SaveImage.IsAlive == false)// avoid multi start
@@ -1774,9 +1816,10 @@ namespace NameSpace_AFM_Project
                 mThread_SaveImage.Start();
             }
         }
+
         void ThreadFunction_SaveImage()
         {
-            string file_name=mDataPath+"Image_"+textBox_FileName.Text;
+            string file_name = mDataPath + "Image_" + textBox_FileName.Text;
             string t = DateTime.Now.ToString("yyyyMMddHHmmss");
             SaveImageToTextFile(file_name, t, "HL", mImageArrayHL);
             SaveImageToTextFile(file_name, t, "HR", mImageArrayHR);
@@ -1792,14 +1835,11 @@ namespace NameSpace_AFM_Project
             SaveImageToTextFile(file_name, t, "EL", mImageArrayEL);
             SaveImageToTextFile(file_name, t, "ER", mImageArrayER);
             SaveAFMParaToTextFile(t);
-
         }
 
         double inc = 0;
         void SaveImageToTextFile(string path, string time, string name, double[,] image)
         {
-
-
             string Fpath = path + "_" + name + time + ".txt";
             //para_Nx = 128; para_Ny = 90;
             // StreamWriter writetext = new StreamWriter("write.txt");
@@ -1813,6 +1853,7 @@ namespace NameSpace_AFM_Project
             }
             System.IO.File.WriteAllText(Fpath, text);
         }
+
         void SaveAFMParaToTextFile(string time)
         {
             string path = "AFM" + "_" + "parameter" + time + ".txt";
@@ -1839,16 +1880,19 @@ namespace NameSpace_AFM_Project
 
             System.IO.File.WriteAllText(path, text);
         }
+
         public static T[,] GetNew2DArray<T>(int x, int y, T initialValue)
         {
             T[,] nums = new T[x, y];
             for (int i = 0; i < x * y; i++) nums[i % x, i / x] = initialValue;
             return nums;
         }
+
         private void button_ClearImage_Click(object sender, EventArgs e)
         {
             ImageArray_ValueReset();
         }
+
         void ImageArray_SizeReset()
         {
             mImageArrayHL = new double[(int)para_Nx, (int)para_Ny];
@@ -1856,6 +1900,7 @@ namespace NameSpace_AFM_Project
             mImageArrayHR = new double[(int)para_Nx, (int)para_Ny];
             mImageArrayER = new double[(int)para_Nx, (int)para_Ny];
         }
+
         void ImageArray_ValueReset(double initial_value = -1)
         {
             int L = (int)(para_Nx * para_Ny);
@@ -1870,6 +1915,7 @@ namespace NameSpace_AFM_Project
             //Array.Clear(mImageArrayHL, 0, L);
             //Array.Clear(mImageArrayHR, 0, L);
         }
+
         //------------------------------ save image end-----------------------
         private void checkBox_ShowImage_CheckedChanged(object sender, EventArgs e)
         {
@@ -1889,10 +1935,9 @@ namespace NameSpace_AFM_Project
             Form_ImageShow_DrawROI mForm_ImageShow_DrawROI = new Form_ImageShow_DrawROI(this);
             mForm_ImageShow_DrawROI.Show();
         }
+
         public void AFM_set_scan_ROI()
         {
-
-
             //double ref para_XL,
             //double ref para_XL,
             //double ref para_XL,
@@ -1919,16 +1964,16 @@ namespace NameSpace_AFM_Project
             UpdateGUITextBox_Invoke(ref para_YL, textBox_YL);//, 1, MAX_RANGE_Y_NM);
         }
 
+
+
         private void button_Start_IndentationWindow_Click(object sender, EventArgs e)
         {
-
             button_StartIndent_Click(sender, e);
             //Form_Indentation mForm_Indentation = new Form_Indentation(this);
             //if( mForm_Indentation.IsDisposed)
             //    mForm_Indentation = new Form_Indentation(this);
             //mForm_Indentation.Show();
             //mForm_Indentation.BringToFront();
-
         }
 
         //private void trackBar_R01_Scroll(object sender, EventArgs e)
@@ -1983,19 +2028,16 @@ namespace NameSpace_AFM_Project
 
         private void button_Form_CoarsePositioner_Click(object sender, EventArgs e)
         {
-            Form_CoarsePositioner mForm_CoarsePositioner = new Form_CoarsePositioner(this);
+            Form_CoarsePositioner_Dialog mForm_CoarsePositioner = new Form_CoarsePositioner_Dialog(this);
             mForm_CoarsePositioner.Show();
         }
 
-
         private void button_ShowImage_Click(object sender, EventArgs e)
         {
-
             if (mForm_ImageShow_Realtime.IsDisposed)
                 mForm_ImageShow_Realtime = new Form_ImageShow_Realtime(this);
             mForm_ImageShow_Realtime.Show();
             mForm_ImageShow_Realtime.StartUpdate();
-
         }
 
         //-------------------------------------------------------------------------UIbutton --------------------
@@ -2029,6 +2071,7 @@ namespace NameSpace_AFM_Project
         {
             send_CMD_PC2MCU(CMD_PC2MCU.WAVE_TEST, 50);
         }
+
         //-------------------------- task cunction
         private void button_StartTask_Click(object sender, EventArgs e)
         {
@@ -2036,10 +2079,10 @@ namespace NameSpace_AFM_Project
             mTaskTimer.Interval = 6 * 3600 * 1000; //6512;
             mTaskTimer.Tick += new System.EventHandler(this.timerFunction_Task);
             mTaskTimer.Stop();
-            mTaskTimer.Start();//trigger function   timerFunction_Appraoch
-
+            mTaskTimer.Start();    //trigger function   timerFunction_Appraoch
         }
-        System.Windows.Forms.Timer mTaskTimer;//= new System.Windows.Forms.Timer();
+
+        System.Windows.Forms.Timer mTaskTimer;         //= new System.Windows.Forms.Timer();
         private void timerFunction_Task(object sender, EventArgs e)
         {
             //send_Data_Frame_To_Arduino('r', 's', 't');
@@ -2049,7 +2092,110 @@ namespace NameSpace_AFM_Project
             set_output_DAC_Value_0_5(1, 2.5);
         }
         //-------------------------- task cunction end
+        private void button_SEMImage_ScreenShot_Click(object sender, EventArgs e)
+        {
+            // mSEMImage_show.Save("C:\\SEMImage.bmp");
+            mbSave_SEMImage = true;
+        }
+
+        private void button_SEMImage_VideoRecord_Click(object sender, EventArgs e)
+        {
+
+        }
+        Thread mThread_ScaningImageShow_RealTime;
+        bool mLock_ScaningImageShow_RealTime=false;
+        private void timer_ScaningImageShow_RealTime_Tick(object sender, EventArgs e)
+        {
+            timer_ScaningImageShow_RealTime.Interval = 2000;
+            if (mLock_ScaningImageShow_RealTime == false)
+            {
+                mLock_ScaningImageShow_RealTime = true;
+                mThread_ScaningImageShow_RealTime = new Thread(ThreadFunction_AFM_ScaningImageShow_RealTime);
+                mThread_ScaningImageShow_RealTime.Start();
+            }
+        }
+        private void ThreadFunction_AFM_ScaningImageShow_RealTime()
+        {
+            //MY_DEBUG("start afm image dip");
+            AFM_ScaningImageShow_RealTime();
+            //MY_DEBUG("end afm image dip");
+            mLock_ScaningImageShow_RealTime = false;           
+        }
+        void AFM_ScaningImageShow_RealTime()
+        {
+            int ix = (int)para_Nx;
+            int iy = (int)para_Ny;
+
+            //// test image
+            //for (int k = 0; k < para_Ny; k++)
+            //    for (int m = 0; m < para_Nx; m++)
+            //        mImageArrayHL[m, k] = -1;
+            //point_now_y++;
+            //point_now_y %= (int)para_Ny;
+            //for (int k = 0; k < point_now_y; k++)
+            //    for (int m = 0; m < para_Nx; m++)
+            //        mImageArrayHL[m, k] = 100.0 * Math.Sin(m / 10.0) + Math.Cos((k + m) / 30.0) + k / 20.0;
+
+            //--------------------------------
+            object OmImageArrayHL = (object)mImageArrayHL;     // Height image
+            int line_now = 0;
+            double[] para = new double[4];
+            para[0] = line_now;
+            para[1] = 0;// do not show image in matlab
+            para[2] = 1;// line fit order
+            object Opara = (object)para;
+
+            double[,] out_r = new double[(int)para_Nx, (int)para_Ny];
+            double[,] out_g = new double[(int)para_Nx, (int)para_Ny];
+            double[,] out_b = new double[(int)para_Nx, (int)para_Ny];
+            object Oout_r = (object)out_r;
+            object Oout_g = (object)out_g;
+            object Oout_b = (object)out_b;
+            //MY_DEBUG("start  ");
+            mKernelClass.AFM_convert_height2RGB(3, ref Oout_r, ref Oout_g, ref Oout_b, OmImageArrayHL, Opara);// time =5s
+            //MY_DEBUG("end  ");
+            out_r = (double[,])Oout_r;
+            out_g = (double[,])Oout_g;
+            out_b = (double[,])Oout_b;
+
+            //double[,,] t = new double[100, 200,300];
+            //int s0 = t.GetLength(0);
+            //int s1 = t.GetLength(1);
+            //int s2 = t.GetLength(2);
+
+            int p = 0;
+            var data = new byte[(int)(para_Nx * para_Ny * 4)];
+
+            for (int k1 = 1; k1 <= para_Ny; k1++)
+            {
+                for (int m1 = 1; m1 <= para_Nx; m1++)
+                {
+                    data[p++] = Convert.ToByte(out_r[m1, k1]);
+                    data[p++] = Convert.ToByte(out_g[m1, k1]);
+                    data[p++] = Convert.ToByte(out_b[m1, k1]);
+                    data[p++] = 0;
+                }
+            }
+
+            Bitmap image = null;
+            unsafe
+            {
+                fixed (byte* ptr = data)
+                {
+                    // Craete a bitmap wit a raw pointer to the data
+                    using (image = new Bitmap(ix, iy, ix * 4, PixelFormat.Format32bppRgb, new IntPtr(ptr)))
+                    {
+                        // And save it.
+                        // image.Save(Path.ChangeExtension(fileName, ".bmp"));
+                        int scale = pictureBox_AFM_Real_Image.Width;
+                        mAFMImage_show = image;
+                        Bitmap mAFMImage_show_scale = new Bitmap(mAFMImage_show, pictureBox_AFM_Real_Image.Width, pictureBox_AFM_Real_Image.Height);
+                        //mSEMImage_show_scale = new Bitmap(mSEMImage_show, pictureBox_SEMImage.Width, pictureBox_SEMImage.Height);
+                        pictureBox_AFM_Real_Image.Image = mAFMImage_show_scale;
+                    }
+                }
+            }
+
+        }
     }
-
-
 }

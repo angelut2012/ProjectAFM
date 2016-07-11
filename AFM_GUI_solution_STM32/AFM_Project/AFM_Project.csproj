@@ -74,6 +74,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="TDx.TDxInput">
+      <HintPath>.\TDx.TDxInput.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="ZedGraph">
       <HintPath>C:\ZedGraph.dll</HintPath>
     </Reference>
@@ -95,11 +99,17 @@
     <Compile Include="Form_CMD_define_PC2MCU.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_CoarsePositioner.cs">
+    <Compile Include="Form_CoarsePositioner_Dialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_CoarsePositioner.Designer.cs">
-      <DependentUpon>Form_CoarsePositioner.cs</DependentUpon>
+    <Compile Include="Form_CoarsePositioner_Dialog.Designer.cs">
+      <DependentUpon>Form_CoarsePositioner_Dialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_CoarsePositioner_JoystickUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_CoarsePositioner_Encoder_Variable.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form_ImageShow_DrawROI.cs">
       <SubType>Form</SubType>
@@ -116,6 +126,12 @@
     <Compile Include="Form_Indentation.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form_CoarsePositioner_ParametersDefinition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_SEM_ImageShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ParameterSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,8 +144,8 @@
       <DependentUpon>FormMainWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_CoarsePositioner.resx">
-      <DependentUpon>Form_CoarsePositioner.cs</DependentUpon>
+    <EmbeddedResource Include="Form_CoarsePositioner_Dialog.resx">
+      <DependentUpon>Form_CoarsePositioner_Dialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageShow_DrawROI.resx">
       <DependentUpon>Form_ImageShow_DrawROI.cs</DependentUpon>
@@ -226,8 +242,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="DeckLinkAPI">
+      <Guid>{D864517A-EDD5-466D-867D-C819F1C052BB}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="MKernel">
-      <Guid>{E415471C-31D4-46F2-8AB8-59FB64DC480B}</Guid>
+      <Guid>{3E411F7C-F5DD-48CC-87A0-9712CB3C019B}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
