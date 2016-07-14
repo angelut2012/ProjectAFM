@@ -14,6 +14,7 @@
 CPID::CPID(bool Direction_DirectTrue_ReverseFalse)
 {
 
+	ITerm = 0;// ITerm must be initialized, otherwise will be nan, cause problem
 	myOutput = 0;
 	myInput = 0;
 	mySetpoint = 0;
@@ -57,49 +58,49 @@ CPID::CPID(bool Direction_DirectTrue_ReverseFalse)
 *   pid Output needs to be computed.  returns true when the output is computed,
 *   false when nothing has been done.
 **********************************************************************************/ 
-float CPID::Compute(float mInput)
-{
-	// if(!inAuto) return false;
-	/*Compute all the working error variables*/
-	float input = mInput;
-	float dInput = (input - lastInput);
-
-	error = mySetpoint - input;
-	ITerm+= (ki * error);
-	if(ITerm > outMax) ITerm= outMax;
-	else if(ITerm < outMin) ITerm= outMin;
-
-	/*Compute CPID Output*/
-	float output=0;
-	if (mDirection_DirectTrue_ReverseFalse==false)
-	{//output = kp * error + ITerm- kd * dInput;
-		output+= kp * error;
-		output+= ITerm;
-		output-= kd * dInput;
-	}
-	else
-	{//output =-( kp * error + ITerm- kd * dInput;)
-		output-= kp * error;
-		output-= ITerm;
-		output+= kd * dInput;
-	}		
-
-	output=LIMIT_MAX_MIN(output, 0.05, -0.05);
-//	mPosition += output;
-//	mPosition = LIMIT_MAX_MIN(mPosition, outMax, outMin);
-//	if(output > outMax) output = outMax;
-//	else if(output < outMin) output = outMin;
-	myOutput = output;
-	myInput = input;
-	/*Remember some variables for next time*/
-	lastInput = input;
-	// return true;
-	//   lastTime = now;
-	//return true;
-	//}
-	//else return false;
-	return output;
-}
+//float CPID::Compute(float mInput)// old
+//{
+//	// if(!inAuto) return false;
+//	/*Compute all the working error variables*/
+//	float input = mInput;
+//	float dInput = (input - lastInput);
+//
+//	error = mySetpoint - input;
+//	ITerm+= (ki * error);
+//	if(ITerm > outMax) ITerm= outMax;
+//	else if(ITerm < outMin) ITerm= outMin;
+//
+//	/*Compute CPID Output*/
+//	float output=0;
+//	if (mDirection_DirectTrue_ReverseFalse==false)
+//	{//output = kp * error + ITerm- kd * dInput;
+//		output+= kp * error;
+//		output+= ITerm;
+//		output-= kd * dInput;
+//	}
+//	else
+//	{//output =-( kp * error + ITerm- kd * dInput;)
+//		output-= kp * error;
+//		output-= ITerm;
+//		output+= kd * dInput;
+//	}		
+//
+//	output=LIMIT_MAX_MIN(output, 0.05, -0.05);
+////	mPosition += output;
+////	mPosition = LIMIT_MAX_MIN(mPosition, outMax, outMin);
+////	if(output > outMax) output = outMax;
+////	else if(output < outMin) output = outMin;
+//	myOutput = output;
+//	myInput = input;
+//	/*Remember some variables for next time*/
+//	lastInput = input;
+//	// return true;
+//	//   lastTime = now;
+//	//return true;
+//	//}
+//	//else return false;
+//	return output;
+//}
 float CPID::ComputePositioner(float mInput)
 {
 	// if(!inAuto) return false;
@@ -109,9 +110,17 @@ float CPID::ComputePositioner(float mInput)
 
 	error = mySetpoint - input;
 	ITerm += (ki * error);
-	if (ITerm > outMax) ITerm = outMax;
-	else if (ITerm < outMin) ITerm = outMin;
+	
+	
+//	if (ITerm > outMax) ITerm = outMax;      // this will cause problem, when outMax and outMin are both >0
+//	else if (ITerm < outMin) ITerm = outMin;
 
+//	if (ITerm > mStepSize) ITerm = mStepSize;
+//	else if (ITerm < -mStepSize) ITerm = -mStepSize;
+
+	if (ITerm > 1) ITerm = 1;
+	else if (ITerm < -1) ITerm = -1;
+	
 	/*Compute CPID Output*/
 	float output = 0;
 	if (mDirection_DirectTrue_ReverseFalse == false)
@@ -129,6 +138,7 @@ float CPID::ComputePositioner(float mInput)
 
 	output = LIMIT_MAX_MIN(output, mStepSize, -mStepSize);
 	mPosition += output;
+	
 	mPosition = LIMIT_MAX_MIN(mPosition, outMax, outMin);
 //	if(output > outMax) output = outMax;
 //	else if(output < outMin) output = outMin;
@@ -143,7 +153,7 @@ float CPID::ComputePositioner(float mInput)
 	//else return false;
 	return mPosition;
 }
-float CPID::ComputePI(float mInput)
+float CPID::ComputePI_PRC_Loop(float mInput)// for PID PRC sensor loop
 {
 	// if(!inAuto) return false;
 	/*Compute all the working error variables*/
@@ -152,8 +162,11 @@ float CPID::ComputePI(float mInput)
 
 	error = mySetpoint - input;
 	ITerm += (ki * error);
-	if (ITerm > outMax) ITerm = outMax;
-	else if (ITerm < outMin) ITerm = outMin;
+	
+//	if (ITerm > outMax) ITerm = outMax;
+//	else if (ITerm < outMin) ITerm = outMin;
+	if (ITerm > 1) ITerm = 1;
+	else if (ITerm < -1) ITerm = -1;
 
 	/*Compute CPID Output*/
 	float output = 0;

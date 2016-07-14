@@ -9,7 +9,7 @@ AFM_Core mAFM_Core;
 
 
 //			float ad=mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true);
-//			float da = mCScanner[PIEZO_Z].update(ad);
+//			float da = mCScanner[PIEZO_Z].ComputePID(ad);
 //			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, da);
 //			float er = mCScanner[PIEZO_Z].mPID_Scanner->GetError();
 //			MY_Debug_StringValue_T("ADC", ad);
@@ -20,7 +20,7 @@ AFM_Core mAFM_Core;
 //			
 //			MY_Debug_StringValue_T("po", mCScanner[PIEZO_Z].mPID_Scanner->mPosition);
 //			MY_Debug_StringValue_LN("er", er);
-//			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true)));
+//			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true)));
 //			MY_Debug_LN(mCScanner[PIEZO_Z].mPID_Scanner->GetError());
 
 //			if (
@@ -79,13 +79,13 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 		{
 
 			////				//			for (int k = 0;k < NUM_OF_SCANNER;k++)
-			////				//				mAFM_DAC.FinePositioner_MoveToPositionB18(k, mCScanner[k].update(mAFM_SEM.ADC_Read_N(ch[k], true)));
-			////				//FOR_REPEAT(1,mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true))));
+			////				//				mAFM_DAC.FinePositioner_MoveToPositionB18(k, mCScanner[k].ComputePID(mAFM_SEM.ADC_Read_N(ch[k], true)));
+			////				//FOR_REPEAT(1,mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true))));
 
 
 
 			//				changed to use open loop
-			//mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].update(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false)));
+			//mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false)));
 		}			
 		//			CHECK_COUNT_DUE2(5);
 

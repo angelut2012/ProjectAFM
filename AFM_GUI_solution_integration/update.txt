@@ -1,0 +1,23 @@
+Workaround for COM Surrogate error "This action can't be completed because the file is open in COM Surrogate".
+
+kill process"dllhost"
+
+
+20160707
+AFM image show
+
+
+20160627
+GUI updated
+
+
+20160623 
+GUI update
+
+
+20160410
+install nuget for vs2012
+
+
+https://visualstudiogallery.msdn.microsoft.c
+om/27077b70-9dad-4c64-adcf-c7cf6bc9970c

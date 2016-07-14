@@ -1,0 +1,98 @@
+clear
+close all
+clc
+% function AFM_show_indent_data()
+% data=load('..\bin\IndentData.txt');
+% dat=importdata('..\bin\IndentData.txt');
+
+dat=importdata('C:\AFMdata\IndentData.txt');
+data=dat.data;
+% data=load('..\bin\pdms_tf\pdms_IndentData_step_size20_start_position6500_depth3000_time408218771_20150528190459.txt');
+
+% data=load('..\bin\sensitivity_calibration_on_StainStell_IndentDataSiO2_TriggerForce_nN700_LoopDelay_uS1_Step_Size_nm_2_20150611124154.txt');
+data(data==0)=nan;
+% data=data(1:end-1,:);
+
+nm=-data(:,1);
+prc=data(:,2);
+
+
+% vH=nm;
+%               vH0 = 1.435565217391304e+04;
+%               vh_range = 1.519552569169960e+05;
+% 
+%             vH = (vH - vH0) ./ vh_range;
+%             MAX_RANGE_Z_NM = (21.04 * 1000.0);
+%             vH =vH.* MAX_RANGE_Z_NM;
+% nm=vH;
+
+% L=length(nm);
+% Lh=round(L/2);
+Lh=find(nm==max(nm));% asysmetric
+nm1=nm(1:Lh);
+nm2=nm(Lh:end);
+
+prc1=prc(1:Lh);
+prc2=prc(Lh:end);
+% ind=(nm~=0);
+% nm=data(ind,1);
+% prc=data(ind,2);
+% prc(prc>5e6)=nan;
+
+figure(4)
+clf
+% plot(nm,prc,'.-')
+plot(nm1,prc1,'r.-')
+hold on
+plot(nm2,prc2,'b.-')
+grid on
+legend('indent','withdraw','Location','NorthWest')
+xlabel('indent depth (nm)')
+ylabel('sensor readout')
+figure(5)
+clf
+plot(nm,'r.-')
+hold on
+plot(prc,'b.-')
+grid on
+%%
+R=174624-53436
+
+nm2=nm2./R.*10.98e3
+
+cfL=createFit_line_poly_N(nm2(1:600),prc2(1:600),1,1)
+
+
+return
+
+cfL=createFit_line_poly_N(nm1(1700:end),prc1(1700:end),1,1)
+prc_j=feval(cfL,nm1);
+prc1=prc1-prc_j;
+figure(100)
+plot(prc1,'*-')
+% ind=3828:3835;
+% ind=3838:3850
+ind=2005:2040;
+% ind=3504:3516
+% ind=3593:3600
+ADC=prc1(ind);
+depth=nm1(ind);
+cf_s=createFit_line_poly_N(depth,ADC,1,1)
+cf_s.p1
+%  1.017147505215382
+
+return
+th=(max(F)-mean(F))*0.01+mean(F);
+ind=F>th;
+depc=dep(ind);
+Fc=F(ind);
+figure(2)
+clf
+plot(dep,F,'.-')
+grid on
+hold on
+plot(depc,Fc,'r.-')
+%%
+depc=max(depc)-depc;
+figure(3)
+plot(depc,Fc,'r.-')

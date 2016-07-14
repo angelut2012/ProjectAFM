@@ -35,7 +35,7 @@ private:
 	CPID(bool Direction_DirectTrue_ReverseFalse);     //   Setpoint.  Initial tuning parameters are also set here
     //void SetMode(int Mode);               // * sets CPID to either Manual (0) or Auto (non-0)
 	//void FastCompute(); 14us
-	float ComputePI(float mInput);
+	float ComputePI_PRC_Loop(float mInput);
 	float Compute(float mInput);        
 	float ComputePositioner(float mInput);
 	// * performs the CPID calculation.  it should be
@@ -47,7 +47,11 @@ private:
 										  //it's likely the user will want to change this depending on
 										  //the application
 	// set only one parameter
-	void SetReferenceValue(float value){mySetpoint = value;mPosition = value;};
+	void SetReferenceValue(float value)
+	{
+		mySetpoint = value;
+//		mPosition = value;// this line cause PID reset, do not use
+	};
 //	void SetPID_P(float value){SetTunings(value, dispKi, dispKd);};
 //	void SetPID_I(float value){SetTunings(dispKp, value, dispKd);};
 //	void SetPID_D(float value){SetTunings(dispKp, dispKi, value);};

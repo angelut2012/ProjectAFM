@@ -4,6 +4,12 @@
 #include "constant_define.h"
 
 #include "PID_v1.h"
+
+#include "USBSerial.h"
+
+extern USBSerial mUSerial;// global
+
+
 class CScanner
 {public:
 	CPID *mPID_Scanner;
@@ -15,14 +21,17 @@ class CScanner
 	float mScannerPosition01;
 	float mPositionFromSensorNow01;
 	int mAxis;
-
+	
+	bool mDirection_PID = true;// if Vpiezo increase, sensor readout increase,==> set derection true
 	CScanner(void);
 	~CScanner(void);
 	void Initial(int axis,float mPeriod_Realtime_us)
 	{
 		mAxis = axis;
-		bool direction = false;//,bool direction =true
-		mPID_Scanner = new CPID(direction);
+		
+		const bool pid_direction [] = {false,false,false};
+		mDirection_PID = pid_direction[mAxis];
+		mPID_Scanner = new CPID(mDirection_PID);
 		
 		
 		mPID_Scanner->SetSampleTime(mPeriod_Realtime_us);
@@ -35,10 +44,16 @@ class CScanner
 //		mPID_Scanner->SetPID_P(0.2);//use P=0.01, I=0.002 OK, 20160416
 //		mPID_Scanner->SetPID_I(0.1);//(0.0001
 //		mPID_Scanner->SetPID_D(0);
-		const float step_size [] = {0.001, 0.0001, 0.0001};
-		const float pid_p [] = {0.02,0.02,0.02};
+//		const float step_size [] = {0.001, 0.0001, 0.0001};
+//		const float pid_p [] = {0.02,0.02,0.02};
+//		const float pid_i [] = {0.01, 0.01, 0.01};
+//		const float pid_d [] = {0.00001,0,0};
+		
+		const float step_size [] = {0.001, 0.001, 0.001};
+		const float pid_p [] = {0.02, 0.02, 0.02};
 		const float pid_i [] = {0.01, 0.01, 0.01};
-		const float pid_d [] = {0.00001,0,0};
+		const float pid_d [] = {0.00001, 0.00001, 0.00001};		
+		
 		mPID_Scanner->SetStepSize(step_size[mAxis]);
 		mPID_Scanner->SetPID_P(pid_p[mAxis]);//use P=0.01, I=0.002 OK, 20160416
 		mPID_Scanner->SetPID_I(pid_i[mAxis]);//(0.0001
@@ -63,17 +78,20 @@ class CScanner
 			mTemperature=(z2xyp1*valuez + z2xyTp2)*valuez + z2xyTp3;
 		}
 	}	;
-	
 
-		uint32_t update(uint32_t positionADC18)//time use=  28.2 us 
+	float GetPositionError01()
 	{
-		mPositionFromSensorNow01 = GetSensorPosition01(positionADC18);
+		return mPID_Scanner->GetError();
+	}
+		uint32_t ComputePID(uint32_t positionADC18)//time use=  28.2 us 
+	{
+		mPositionFromSensorNow01 = GetSensorPosition01(positionADC18);		
 		float outputDAC18 = mPID_Scanner->ComputePositioner(mPositionFromSensorNow01)*BIT18MAX;
 		return outputDAC18;		
 	}
 	;
-	// MoveToPosition01 only set reference position, let main cloop do PID 
-	void MoveToPosition01(float position01)
+	// SetDestinationPosition01 only set reference position, let main cloop do PID 
+	void SetDestinationPosition01(float position01)
 	{
 		mScannerPosition01 = position01;
 		mPID_Scanner->SetReferenceValue(mScannerPosition01);
@@ -102,6 +120,7 @@ class CScanner
 	float GetSensorPosition01(uint32_t positionADC18)
 	{
 		float p_raw = GetSensorPosition01_raw( positionADC18);
+
 		mPositionFromSensorNow01 = ((float)p_raw - mPosition01Raw_MIN) / (mPosition01Raw_MAX - mPosition01Raw_MIN);
 		return mPositionFromSensorNow01;
 	}
@@ -150,8 +169,10 @@ static	const	float	zp02		=	0.00000000014588477288958600	;
 
 
 		float position_compensated =positionADC18;
-		if (mAxis==PIEZO_Z)
-		position_compensated= zp00 + positionADC18*zp10 + mTemperature*(zp01 + mTemperature*zp02 + positionADC18*zp11);
+//		if (mAxis==PIEZO_Z)
+//		position_compensated= zp00 + positionADC18*zp10 + mTemperature*(zp01 + mTemperature*zp02 + positionADC18*zp11);
+		
+		
 		//else if (mAxis==PIEZO_X)
 		//position_compensated= xp00 + positionADC18*xp10 + mTemperature*(xp01 + mTemperature*xp02 + positionADC18*xp11);
 		//else if (mAxis==PIEZO_Y)

@@ -58,8 +58,9 @@ class CSEM
 #define NUM_OF_ADC		(6)
 #define ADC_CHANNEL_Z	(0)//ADC6 = Z,
 #define ADC_CHANNEL_PRC	(1)//ADC5 = PRC, 
-#define ADC_CHANNEL_X	(2)//ADC4 = X, 
-#define ADC_CHANNEL_Y	(3)//ADC3 = Y, 
+	
+#define ADC_CHANNEL_X	 (3)	// new connection 20160711		//(2)//ADC4 = X, 
+#define ADC_CHANNEL_Y	(2)//(3)//ADC3 = Y, 
 #define ADC_CHANNEL_TEMPERATURE	(4)//ADC2 = Temperature, 
 #define ADC_CHANNEL_CALIBRATION (5) //PRC_calibration.		
 

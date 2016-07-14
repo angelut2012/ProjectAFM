@@ -1,0 +1,63 @@
+import "oaidl.idl";
+import "ocidl.idl";
+import "mwcomtypes.idl";
+
+[
+  object,
+  uuid("41C05E9C-8408-44A7-B3DE-9A86A53B1557"),
+  dual,
+  helpstring("IKernel Interface"),
+  pointer_default(unique)
+]
+interface IKernel : IDispatch
+{
+  [propget, id(1), helpstring("property MWFlags")]
+  HRESULT MWFlags([out, retval] IMWFlags** ppvFlags);
+  [propput, id(1), helpstring("property MWFlags")]
+  HRESULT MWFlags([in] IMWFlags* pvFlags);
+
+  [id(2), helpstring("Method AFM_convert_height2RGB")]
+  HRESULT AFM_convert_height2RGB([in] long nargout, [in,out] VARIANT* r, [in,out] 
+                                 VARIANT* g, [in,out] VARIANT* b, [in] VARIANT im_height, 
+                                 [in] VARIANT parameter);
+
+  [id(3), helpstring("Method AFM_line_for_show")]
+  HRESULT AFM_line_for_show([in] long nargout, [in,out] VARIANT* line_show, [in] VARIANT 
+                            line_in, [in] VARIANT fit_order, [in] VARIANT 
+                            index_base_point);
+
+  [id(4), helpstring("Method AFM_scan_set_ROI")]
+  HRESULT AFM_scan_set_ROI([in] long nargout, [in,out] VARIANT* position, [in] VARIANT 
+                           im_buffer, [in] VARIANT position_in1);
+
+  [id(5), helpstring("Method AFM_show_indent_data")]
+  HRESULT AFM_show_indent_data();
+
+  [id(6), helpstring("Method StringEval")]
+  HRESULT StringEval([in] long nargout, [in,out] VARIANT* out_str, [in,out] VARIANT* 
+                     out_data, [in] VARIANT in_str, [in] VARIANT in_data);
+
+
+  [id(7), helpstring("Method MCRWaitForFigures")]
+  HRESULT MCRWaitForFigures();
+};
+[
+  uuid("3C0B94DD-D236-45DE-97E1-17BBF0F9B69E"),
+  version(1.0),
+  helpstring("MKernel 1.0 Type Library")
+]
+library MKernel
+{
+  importlib("stdole32.tlb");
+  importlib("stdole2.tlb");
+  importlib("mwcomutil.tlb");
+
+  [
+    uuid("7F637BB4-6D20-443C-9CD1-C463BBE1F0A4"),
+    helpstring("Kernel Class")
+  ]
+  coclass Kernel
+  {
+    [default] interface IKernel;
+  };
+};
