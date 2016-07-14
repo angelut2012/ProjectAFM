@@ -68,15 +68,17 @@ class CScanner
 	;
 	void SetTemperature(float valuez)
 	{
-		if (mAxis==PIEZO_Z)
 		mTemperature = valuez;
-		else
-		{
-			const	float	z2xyp1		=			-0.00001159124509559680000000	;
-			const float	 z2xyTp2		=			2.37301442007774000000000000	;
-			const float	 z2xyTp3		=			-61218.29975568410000000000000000	+761.5195000000022;
-			mTemperature=(z2xyp1*valuez + z2xyTp2)*valuez + z2xyTp3;
-		}
+		
+//		if (mAxis==PIEZO_Z)
+//		mTemperature = valuez;
+//		else
+//		{
+//			const	float	z2xyp1		=			-0.00001159124509559680000000	;
+//			const float	 z2xyTp2		=			2.37301442007774000000000000	;
+//			const float	 z2xyTp3		=			-61218.29975568410000000000000000	+761.5195000000022;
+//			mTemperature=(z2xyp1*valuez + z2xyTp2)*valuez + z2xyTp3;
+//		}
 	}	;
 
 	float GetPositionError01()

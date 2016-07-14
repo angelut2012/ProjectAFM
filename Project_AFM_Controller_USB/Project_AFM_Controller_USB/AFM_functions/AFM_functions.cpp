@@ -2,7 +2,7 @@
 
 AFM_Core mAFM_Core;
 
-//enum Sys_State {SS_Idle, SS_Approach, SS_Engage, SS_Scan, SS_XYScanReset, SS_Indent};
+//enum SystemTask {SystemTask_Idle, SystemTask_Approach, SystemTask_Engage, SystemTask_Scan, SystemTask_XYScanReset, SystemTask_Indent};
 
 //#define DAQmxErrChk(functionCall) if( DAQmxFailed(error=(functionCall)) ) goto Error; else
 
@@ -24,11 +24,11 @@ AFM_Core mAFM_Core;
 //			MY_Debug_LN(mCScanner[PIEZO_Z].mPID_Scanner->GetError());
 
 //			if (
-//			    (mAFM_Core.sys_state != SS_Approach)
+//			    (mAFM_Core.mTaskScheduler != SystemTask_Approach)
 //			    & 
-//			    (mAFM_Core.sys_state != SS_ApproachWait)
+//			    (mAFM_Core.mTaskScheduler != SystemTask_ApproachWait)
 //			    &
-//			    (mAFM_Core.sys_state !=SS_Indent)
+//			    (mAFM_Core.mTaskScheduler !=SystemTask_Indent)
 //			    )
 
 //int ch[3];
@@ -50,21 +50,21 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 		//CHECK_COUNT_DUE(TIMES_PID_LOOP);			
 
 		//switch For dense case values compiler generates jump table,
-		switch (mAFM_Core.sys_state)
+		switch (mAFM_Core.mTaskScheduler)
 		{
-		case AFM_Core::SS_Scan:			mAFM_Core.process_ScanRealTimeLoop();break;
-		case AFM_Core::SS_XYScanReset:	mAFM_Core.process_XYscanningReset();break;		
-			//		case  AFM_Core::SS_Approach:		mAFM_Core.process_Approach();break;//
-		case  AFM_Core::SS_Engage:		mAFM_Core.process_ZScannerEngage(); break;	
+		case AFM_Core::SystemTask_Scan:			mAFM_Core.process_ScanRealTimeLoop();break;
+		case AFM_Core::SystemTask_XYScanReset:	mAFM_Core.process_XYscanningReset();break;		
+			//		case  AFM_Core::SystemTask_Approach:		mAFM_Core.process_Approach();break;//
+		case  AFM_Core::SystemTask_Engage:		mAFM_Core.process_ZScannerEngage(); break;	
 
 			// non realtime process			
-		case  AFM_Core::SS_Approach:		mAFM_Core.process_Approach();break;//		
-			//			case  AFM_Core::SS_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
-		case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;		
-		//case  AFM_Core::SS_DataCapture:		mAFM_Core.process_data_capture(); break;		
+		case  AFM_Core::SystemTask_Approach:		mAFM_Core.process_Approach();break;//		
+			//			case  AFM_Core::SystemTask_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
+		case  AFM_Core::SystemTask_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;		
+		//case  AFM_Core::SystemTask_DataCapture:		mAFM_Core.process_data_capture(); break;		
 
-		case  AFM_Core::SS_Idle:			mAFM_Core.process_Idle(); 			break;			
-		case  AFM_Core::SS_WaveTest:			mAFM_Core.process_WaveTest(); 			break;
+		case  AFM_Core::SystemTask_Idle:			mAFM_Core.process_Idle(); 			break;			
+		case  AFM_Core::SystemTask_WaveTest:			mAFM_Core.process_WaveTest(); 			break;
 			
 			
 			break;
@@ -74,7 +74,7 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 
 
 
-		if (mAFM_Core.sys_state < SS_Engage)
+		if (mAFM_Core.mTaskScheduler < SystemTask_Engage)
 			// in approach and indent, Mdirectly use DAC value, do not use pid to control the piezo positions
 		{
 
@@ -97,14 +97,14 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 void AFM_Core::AFM_ProcessScheduler_NonRealtime()
 {	
 	//		//switch For dense case values compiler generates jump table,
-	//	switch (mAFM_Core.sys_state)
+	//	switch (mAFM_Core.mTaskScheduler)
 	//	{
-	//	case  AFM_Core::SS_Approach:		mAFM_Core.process_Approach();break;//		
-	//	//case  AFM_Core::SS_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
-	//	case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen_data_capture(); break;		
-	////	case  AFM_Core::SS_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;	
+	//	case  AFM_Core::SystemTask_Approach:		mAFM_Core.process_Approach();break;//		
+	//	//case  AFM_Core::SystemTask_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
+	//	case  AFM_Core::SystemTask_Indent:		mAFM_Core.process_Indent_First_SendDataThen_data_capture(); break;		
+	////	case  AFM_Core::SystemTask_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;	
 	//	
-	//	case  AFM_Core::SS_Idle:			mAFM_Core.process_Idle(); 			break;
+	//	case  AFM_Core::SystemTask_Idle:			mAFM_Core.process_Idle(); 			break;
 	//	default:
 	//		;
 	//	}

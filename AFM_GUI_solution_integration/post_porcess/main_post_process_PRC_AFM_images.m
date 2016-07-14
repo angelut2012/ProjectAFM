@@ -8,6 +8,8 @@ p=('C:\AFMdata')
 [fn,p]=uigetfile([p '\*.txt'])
 imraw=load([p fn]);
 % imraw=medfilt2(imraw,[3,3],'symmetric');
+
+% imraw(imraw==-1)=nan;
 imraw=-imraw;
 
 % imraw(1:30,:)=[];

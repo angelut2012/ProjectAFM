@@ -110,6 +110,9 @@ namespace NameSpace_AFM_Project
         public double[,] mImageArrayEL;// = new double[para_Nx, para_Ny];
         public double[,] mImageArrayHR;//= new double[para_Nx, para_Ny];
         public double[,] mImageArrayER;//= new double[para_Nx, para_Ny];
+        public double[,] mImageArrayTz;//= new double[para_Nx, para_Ny];
+        public double[,] mImageArrayTxy;//= new double[para_Nx, para_Ny];
+
         int point_now_x = 0;//+-(1~Nx) for MKernel
         public int point_now_y = 0;
         Thread mThread_SaveImage;
@@ -1289,8 +1292,10 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             int indx = (int)convert_byte2_to_int16(com_buffer, ind + 4);// com_buffer[ind + 4] << 8 + com_buffer[ind + 5];
             int indy = (int)convert_byte2_to_int16(com_buffer, ind + 6); //com_buffer[ind + 6] << 8 + com_buffer[ind + 7];
             double vH = convert_byte3_to_uint32(com_buffer, ind + 8);
-            double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3);
-            double vDAC = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 + 3);
+            double vE = convert_byte3_to_uint32(com_buffer,          ind + 8 + 3*1);
+            double vDAC = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 2);
+            double vTz = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 3);
+            double vTxy = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 4);
 
             vE = vE - BIT24MAX / 2;
             vE = vE / BIT24MAX;
@@ -1305,17 +1310,15 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             //vH = SCANNER_RANGE_Z_NM - vH;
 
             Sys_Inf = (
-                "RX:" + Convert.ToString(mCounter_ComReadByte)
-                + " x:" + Convert.ToString(indx)
-                + " y:" + Convert.ToString(indy)
-                + " H:" + String.Format("{0:0.0}", vH)//vH.ToString()//Convert.ToString(vH)
-                + " E:" + vE.ToString("f3")//String.Format("{0:0.0}", vE)//vE.ToString()//Convert.ToString(vE)
-                + " V:" + vDAC.ToString("f1")
+                "R," + Convert.ToString(mCounter_ComReadByte)
+                + ",x," + Convert.ToString(indx)
+                + ",y," + Convert.ToString(indy)
+                + ",H," + String.Format("{0:0.0}", vH)//vH.ToString()//Convert.ToString(vH)
+                + ",E," + vE.ToString("f3")
+                + ",V," + vDAC.ToString("f1")
+                + ",Tz," + vTz.ToString()
+                + ",Txy," + vTxy.ToString()
                 );
-
-            //Z_position_now = vH;
-
-            //  if (Math.Abs(Math.Abs(indx) - Math.Abs(xold)) != 1) 
             MY_DEBUG(Sys_Inf);
             //update_UI_label(inf);
 
@@ -1360,6 +1363,9 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             {
                 mImageArrayHL[indx, indy] = vH;
                 mImageArrayEL[indx, indy] = vE;
+
+                mImageArrayTz[indx, indy] = vTz;
+                mImageArrayTxy[indx, indy] = vTxy;
             }
             else
             {
@@ -1816,22 +1822,20 @@ float	zp02		=(float)	0.00000000014588477288958600	;
         {
             string file_name = mDataPath + "Image_" + textBox_FileName.Text;
             string t = DateTime.Now.ToString("yyyyMMddHHmmss");
-            SaveImageToTextFile(file_name, t, "HL", mImageArrayHL);
-            SaveImageToTextFile(file_name, t, "HR", mImageArrayHR);
-            SaveImageToTextFile(file_name, t, "EL", mImageArrayEL);
-            SaveImageToTextFile(file_name, t, "ER", mImageArrayER);
-            SaveAFMParaToTextFile(t);
-
-            //UpdateImageShow_SaveMat(t);
-
-            t = null;
-            SaveImageToTextFile(file_name, t, "HL", mImageArrayHL);
-            SaveImageToTextFile(file_name, t, "HR", mImageArrayHR);
-            SaveImageToTextFile(file_name, t, "EL", mImageArrayEL);
-            SaveImageToTextFile(file_name, t, "ER", mImageArrayER);
-            SaveAFMParaToTextFile(t);
+            //UpdateImageShow_SaveMat(t);           
+            SaveImageToTextFile_Multi(file_name, t);
+            SaveImageToTextFile_Multi(file_name, null);
         }
-
+        void SaveImageToTextFile_Multi(string file_name,string time)
+        {
+            SaveImageToTextFile(file_name, time, "HL", mImageArrayHL);
+            SaveImageToTextFile(file_name, time, "HR", mImageArrayHR);
+            SaveImageToTextFile(file_name, time, "EL", mImageArrayEL);
+            SaveImageToTextFile(file_name, time, "ER", mImageArrayER);
+            SaveImageToTextFile(file_name, time, "Tz", mImageArrayTz);
+            SaveImageToTextFile(file_name, time, "Txy", mImageArrayTxy);
+            SaveAFMParaToTextFile(time);
+        }
         double inc = 0;
         void SaveImageToTextFile(string path, string time, string name, double[,] image)
         {
@@ -1851,7 +1855,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         void SaveAFMParaToTextFile(string time)
         {
-            string path = "AFM" + "_" + "parameter" + time + ".txt";
+            string path = mDataPath+"AFM" + "_" + "parameter" + time + ".txt";
             string text = Convert.ToString(point_now_x + 1) + "\t%point_now_x\r\n"
                     + Convert.ToString(point_now_y + 1) + "\t%point_now_y\r\n"
                     + Convert.ToString(para_Nx) + "\t%N_x\r\n"
@@ -1894,6 +1898,9 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             mImageArrayEL = new double[(int)para_Nx, (int)para_Ny];
             mImageArrayHR = new double[(int)para_Nx, (int)para_Ny];
             mImageArrayER = new double[(int)para_Nx, (int)para_Ny];
+
+            mImageArrayTz = new double[(int)para_Nx, (int)para_Ny];
+            mImageArrayTxy = new double[(int)para_Nx, (int)para_Ny];           
         }
 
         void ImageArray_ValueReset(double initial_value = -1)
@@ -1904,6 +1911,9 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             mImageArrayHR = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
             mImageArrayEL = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
             mImageArrayER = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
+
+            mImageArrayTz = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
+            mImageArrayTxy = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
 
             //Array.Clear(mImageArrayEL, 0, L);
             //Array.Clear(mImageArrayER, 0, L);
