@@ -61,6 +61,7 @@
             this.textBox_Task_PointsNumber = new System.Windows.Forms.TextBox();
             this.textBox_T = new System.Windows.Forms.TextBox();
             this.button_Update_ParaPID = new System.Windows.Forms.Button();
+            this.button_ScannerCalibration = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -90,7 +91,6 @@
             this.label19 = new System.Windows.Forms.Label();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.label_SystemState = new System.Windows.Forms.Label();
             this.button_SaveImage = new System.Windows.Forms.Button();
             this.checkBox_ShowImage = new System.Windows.Forms.CheckBox();
             this.button_StartSubWindow = new System.Windows.Forms.Button();
@@ -144,7 +144,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.button_Servicing = new System.Windows.Forms.Button();
-            this.button_ScannerCalibration = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.groupBox_SystemStatus = new System.Windows.Forms.GroupBox();
             this.button_SEM = new System.Windows.Forms.Button();
@@ -177,9 +176,9 @@
             this.textBox_DataPath = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.button_CoarseWithdraw = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.timer_Update_CoarseReadout = new System.Windows.Forms.Timer(this.components);
             this.timer_ScaningImageShow_RealTime = new System.Windows.Forms.Timer(this.components);
+            this.label_SystemState = new System.Windows.Forms.Label();
             this.groupBox6.SuspendLayout();
             this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_AFM_Real_Image)).BeginInit();
@@ -195,7 +194,6 @@
             this.tabPage_Control.SuspendLayout();
             this.tabPage_DataExport.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // listBox_SelectIdlePackage
@@ -480,6 +478,20 @@
             this.toolTip_Help.SetToolTip(this.button_Update_ParaPID, "set parameters");
             this.button_Update_ParaPID.UseVisualStyleBackColor = false;
             this.button_Update_ParaPID.Click += new System.EventHandler(this.button_Update_ParaPID_Click);
+            // 
+            // button_ScannerCalibration
+            // 
+            this.button_ScannerCalibration.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.button_ScannerCalibration.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_ScannerCalibration.BackgroundImage")));
+            this.button_ScannerCalibration.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.button_ScannerCalibration.Location = new System.Drawing.Point(127, 23);
+            this.button_ScannerCalibration.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button_ScannerCalibration.Name = "button_ScannerCalibration";
+            this.button_ScannerCalibration.Size = new System.Drawing.Size(65, 65);
+            this.button_ScannerCalibration.TabIndex = 0;
+            this.toolTip_Help.SetToolTip(this.button_ScannerCalibration, "to calibrate the range of SCSG sensor on XYZ fine scanner.");
+            this.button_ScannerCalibration.UseVisualStyleBackColor = false;
+            this.button_ScannerCalibration.Click += new System.EventHandler(this.button_ScannerCalibration_Click);
             // 
             // label1
             // 
@@ -790,16 +802,6 @@
             this.label21.Size = new System.Drawing.Size(70, 13);
             this.label21.TabIndex = 66;
             this.label21.Text = "Set Point(nm)";
-            // 
-            // label_SystemState
-            // 
-            this.label_SystemState.AutoSize = true;
-            this.label_SystemState.BackColor = System.Drawing.Color.Transparent;
-            this.label_SystemState.Location = new System.Drawing.Point(7, 86);
-            this.label_SystemState.Name = "label_SystemState";
-            this.label_SystemState.Size = new System.Drawing.Size(71, 13);
-            this.label_SystemState.TabIndex = 68;
-            this.label_SystemState.Text = "system ready.";
             // 
             // button_SaveImage
             // 
@@ -1394,20 +1396,6 @@
             this.button_Servicing.TabIndex = 0;
             this.button_Servicing.UseVisualStyleBackColor = false;
             // 
-            // button_ScannerCalibration
-            // 
-            this.button_ScannerCalibration.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.button_ScannerCalibration.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("button_ScannerCalibration.BackgroundImage")));
-            this.button_ScannerCalibration.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.button_ScannerCalibration.Location = new System.Drawing.Point(127, 23);
-            this.button_ScannerCalibration.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button_ScannerCalibration.Name = "button_ScannerCalibration";
-            this.button_ScannerCalibration.Size = new System.Drawing.Size(65, 65);
-            this.button_ScannerCalibration.TabIndex = 0;
-            this.toolTip_Help.SetToolTip(this.button_ScannerCalibration, "to calibrate the range of SCSG sensor on XYZ fine scanner.");
-            this.button_ScannerCalibration.UseVisualStyleBackColor = false;
-            this.button_ScannerCalibration.Click += new System.EventHandler(this.button_ScannerCalibration_Click);
-            // 
             // label10
             // 
             this.label10.AutoSize = true;
@@ -1829,15 +1817,6 @@
             this.button_CoarseWithdraw.UseVisualStyleBackColor = true;
             this.button_CoarseWithdraw.Click += new System.EventHandler(this.button_CoarseWithdraw_Click);
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label_SystemState);
-            this.groupBox2.Location = new System.Drawing.Point(12, 878);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1594, 28);
-            this.groupBox2.TabIndex = 107;
-            this.groupBox2.TabStop = false;
-            // 
             // timer_Update_CoarseReadout
             // 
             this.timer_Update_CoarseReadout.Enabled = true;
@@ -1849,6 +1828,15 @@
             this.timer_ScaningImageShow_RealTime.Interval = 10000;
             this.timer_ScaningImageShow_RealTime.Tick += new System.EventHandler(this.timer_ScaningImageShow_RealTime_Tick);
             // 
+            // label_SystemState
+            // 
+            this.label_SystemState.AutoSize = true;
+            this.label_SystemState.Location = new System.Drawing.Point(19, 874);
+            this.label_SystemState.Name = "label_SystemState";
+            this.label_SystemState.Size = new System.Drawing.Size(73, 13);
+            this.label_SystemState.TabIndex = 107;
+            this.label_SystemState.Text = "System ready.";
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1857,7 +1845,7 @@
             this.BackColor = System.Drawing.Color.LightGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1664, 1012);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.label_SystemState);
             this.Controls.Add(this.groupBox_SEMPreview);
             this.Controls.Add(this.pictureBox_SEMImage);
             this.Controls.Add(this.groupBox1);
@@ -1899,9 +1887,8 @@
             this.tabPage_DataExport.ResumeLayout(false);
             this.tabPage_DataExport.PerformLayout();
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -1955,7 +1942,6 @@
         private System.Windows.Forms.TextBox textBox_Sensitivity;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox textBox_SetDeltaValueNm;
-        private System.Windows.Forms.Label label_SystemState;
         private System.Windows.Forms.Button button_SaveImage;
         private System.Windows.Forms.Button button_ClearImage;
         private System.Windows.Forms.CheckBox checkBox_ShowImage;
@@ -2033,7 +2019,6 @@
         private System.Windows.Forms.TextBox textBox_DataPath;
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button_CoarseWithdraw;
         private System.Windows.Forms.Button button_DataCapture;
         private System.Windows.Forms.Label label30;
@@ -2053,6 +2038,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Timer timer_ScaningImageShow_RealTime;
         private System.Windows.Forms.Button button_Update_ParaPID;
+        private System.Windows.Forms.Label label_SystemState;
     }
 }
 

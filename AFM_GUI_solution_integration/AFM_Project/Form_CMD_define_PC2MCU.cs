@@ -38,6 +38,7 @@ namespace NameSpace_AFM_Project
 
         private void button_ScannerCalibration_Click(object sender, EventArgs e)
         {
+            move_CoarseZLiftUp_FineZWidthdraw();
             send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_SCSG_RANGE_CALIBRATION, 0);
         }
 

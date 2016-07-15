@@ -11,6 +11,12 @@ imraw=load([p fn]);
 
 % imraw(imraw==-1)=nan;
 imraw=-imraw;
+imraw=imraw-min(imraw(:));
+figure(10)
+surf(imraw,'LineStyle','non')
+colorbar
+zlabel('nm')
+
 
 % imraw(1:30,:)=[];
 % imraw=imraw';
@@ -31,7 +37,8 @@ ps=linspace(1,size(imraw,1),20);
 px=px(:);
 py=py(:);
 im_flat=imraw;
-im_flat=image_adjust_plane(imraw,2,px,py);
+% im_flat=image_adjust_plane(imraw,1,px,py);
+im_flat=image_adjust_plane2(imraw,2,2);%
 % im_flat=medfilt2(im_flat,[3,3],'symmetric');
 im_flat=im_flat-min(im_flat(:));
 im_flat=im_flat-mean(im_flat(:));

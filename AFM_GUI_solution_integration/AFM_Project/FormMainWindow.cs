@@ -53,8 +53,8 @@ namespace NameSpace_AFM_Project
         const double BIT32MAX = (4294967295.0);
 
         public const int PIEZO_Z = (0);
-        public const int PIEZO_X = (1);
-        public const int PIEZO_Y = (2);
+        public const int PIEZO_X = (2);
+        public const int PIEZO_Y = (1);
         //public const int PIEZO_T = (3);
 
         //#define SCANNER_RANGE_Z_NM ( 7.299788679537674*1000.0)
@@ -218,12 +218,13 @@ namespace NameSpace_AFM_Project
             while (mThread_UI_Update_running == true)
             {
                 Function_UpdateUI();
-                for (int k = 0; k < 100; k++)
-                {
-                    MY_DEBUG(Sys_Inf);
-                    Sys_Inf = null;
-                    Thread.Sleep(5);
-                }
+                Thread.Sleep(600);
+                //for (int k = 0; k < 100; k++)
+                //{
+                //    //MY_DEBUG(Sys_Inf);
+                //    Sys_Inf = null;
+                //    Thread.Sleep(5);
+                //}
             }
         }
 
@@ -374,8 +375,8 @@ namespace NameSpace_AFM_Project
         {
             if (Sys_Inf != null)
                 update_UI_label(Sys_Inf);
-            if (mSWitchShowImage == true)
-                UpdateImageShow();
+            //if (mSWitchShowImage == true)
+            //    UpdateImageShow();
         }
 
         private void listBox_Axis_SelectedIndexChanged(object sender, EventArgs e)
@@ -1171,13 +1172,15 @@ namespace NameSpace_AFM_Project
                 s += "Vx, " + (v5 / BIT18MAX * 5.0).ToString("f4") + ", ";
                 s += "Vz, " + (v7 / BIT18MAX * 5.0).ToString("f4") + ", ";
                 //s += "T, " + textBox_TC.Text;
-                //s += ",pz, " + GetSensorPosition01(0, (int)v7, (int)v3).ToString("f6");
-                //s += ",px, " + GetSensorPosition01(0, (int)v4, (int)v2).ToString("f6");
-                //s += ",py, " + GetSensorPosition01(0, (int)v5, (int)v2).ToString("f6");
+                s += ",pz, " + GetSensorPosition01(PIEZO_Z, (int)v7, (int)v3).ToString("f6");
+                s += ",px, " + GetSensorPosition01(PIEZO_X, (int)v4, (int)v2).ToString("f6");
+                s += ",py, " + GetSensorPosition01(PIEZO_Y, (int)v5, (int)v2).ToString("f6");
 
                 s += ",Txy, " + Convert_VRadc2Temperature_xy(v2).ToString("f4");
                 s += ",Tz, " + Convert_VRadc2Temperature_z(v3).ToString("f4");
                 MY_DEBUG(s);
+                Sys_Inf = s;
+                
             }
 
 	
@@ -1221,11 +1224,11 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
 
 		float position_compensated =0;
-		if (mAxis==0)
+        if (mAxis == PIEZO_Z)
 		position_compensated= zp00 + positionADC18*zp10 + temperatureADC18*(zp01 + temperatureADC18*zp02 + positionADC18*zp11);
-		else if (mAxis==1)
+        else if (mAxis == PIEZO_X)
 		position_compensated= xp00 + positionADC18*xp10 + temperatureADC18*(xp01 + temperatureADC18*xp02 + positionADC18*xp11);
-		else if (mAxis==2)
+        else if (mAxis == PIEZO_Y)
 		position_compensated= yp00 + positionADC18*yp10 + temperatureADC18*(yp01 + temperatureADC18*yp02 + positionADC18*yp11);
     return position_compensated;
 	}
@@ -1320,7 +1323,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
                 + ",Txy," + vTxy.ToString()
                 );
             MY_DEBUG(Sys_Inf);
-            //update_UI_label(inf);
+            //update_UI_label(Sys_Inf);// call from another thread
 
             //MY_DEBUG(indx.ToString() + "\t" + indx_store_for_save_image.ToString() + "\t" + indy.ToString() + "\t" + indy_store_for_save_image.ToString());
             // index adjusted
@@ -2062,8 +2065,12 @@ float	zp02		=(float)	0.00000000014588477288958600	;
         }
 
         private void button_CoarseWithdraw_Click(object sender, EventArgs e)
+        { move_CoarseZLiftUp_FineZWidthdraw(); }
+        private void move_CoarseZLiftUp_FineZWidthdraw()
         {
-            mCCoarsePositioner.MoveDistance(mCaxis_z, SCANNER_RANGE_Z_NM * 2, 1000);// move away up for safety reason
+            send_Data_Frame_To_Arduino('C', 'A', 'C');// with draw Z axis
+            Thread.Sleep(10);
+            mCCoarsePositioner.MoveDistance(mCaxis_z, SCANNER_RANGE_Z_NM * 3, 1000);// move away up for safety reason
             Thread.Sleep(1000);
         }
 

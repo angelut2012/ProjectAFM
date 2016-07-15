@@ -152,27 +152,42 @@ class CScanner
 		//double p10 = 0.262622768185710;
 		//double p11 = -5.243487281607523e7;
 		//double p02 = 9.536792745046144e7;	 
-static	const	float	xp00		=	-1.25976130991591000000000000	;
-static	const	float	xp01		=	0.04064898312247370000000000	;
-static	const	float	xp10		=	0.00000774214599727934000000	;
-static	const	float	xp11		=	0.00000002591495044575960000	;
-static	const	float	xp02		=	-0.00027860784460091000000000	;
-static	const	float	yp00		=	-1.39306871111335000000000000	;
-static	const	float	yp01		=	0.04023992323571540000000000	;
-static	const	float	yp10		=	0.00000758641170006858000000	;
-static	const	float	yp11		=	0.00000009225240571389740000	;
-static	const	float	yp02		=	-0.00013983813379961800000000	;
-static	const	float	zp00		=	5.56940871292436000000000000	;
-static	const	float	zp01		=	-0.00006552734101777870000000	;
-static	const	float	zp10		=	0.00001553239623067130000000	;
-static	const	float	zp11		=	-0.00000000004439813004644080	;
-static	const	float	zp02		=	0.00000000014588477288958600	;
+//static	const	float	xp00		=	-1.25976130991591000000000000	;
+//static	const	float	xp01		=	0.04064898312247370000000000	;
+//static	const	float	xp10		=	0.00000774214599727934000000	;
+//static	const	float	xp11		=	0.00000002591495044575960000	;
+//static	const	float	xp02		=	-0.00027860784460091000000000	;
+//static	const	float	yp00		=	-1.39306871111335000000000000	;
+//static	const	float	yp01		=	0.04023992323571540000000000	;
+//static	const	float	yp10		=	0.00000758641170006858000000	;
+//static	const	float	yp11		=	0.00000009225240571389740000	;
+//static	const	float	yp02		=	-0.00013983813379961800000000	;
+//static	const	float	zp00		=	5.56940871292436000000000000	;
+//static	const	float	zp01		=	-0.00006552734101777870000000	;
+//static	const	float	zp10		=	0.00001553239623067130000000	;
+//static	const	float	zp11		=	-0.00000000004439813004644080	;
+//static	const	float	zp02		=	0.00000000014588477288958600	;
+		static	const	float	xp00		=	-1.25976130991591000000000000	*BIT18MAX;
+		static	const	float	xp01		=	0.04064898312247370000000000	*BIT18MAX;
+		static	const	float	xp10		=	0.00000774214599727934000000	*BIT18MAX;
+		static	const	float	xp11		=	0.00000002591495044575960000	*BIT18MAX;
+		static	const	float	xp02		=	-0.00027860784460091000000000	*BIT18MAX;
+		static	const	float	yp00		=	-1.39306871111335000000000000	*BIT18MAX;
+		static	const	float	yp01		=	0.04023992323571540000000000	*BIT18MAX;
+		static	const	float	yp10		=	0.00000758641170006858000000	*BIT18MAX;
+		static	const	float	yp11		=	0.00000009225240571389740000	*BIT18MAX;
+		static	const	float	yp02		=	-0.00013983813379961800000000	*BIT18MAX;
+		static	const	float	zp00		=	5.56940871292436000000000000	*BIT18MAX;
+		static	const	float	zp01		=	-0.00006552734101777870000000	*BIT18MAX;
+		static	const	float	zp10		=	0.00001553239623067130000000	*BIT18MAX;
+		static	const	float	zp11		=	-0.00000000004439813004644080	*BIT18MAX;
+		static	const	float	zp02		=	0.00000000014588477288958600	*BIT18MAX;
 
 
 
 		float position_compensated =positionADC18;
-//		if (mAxis==PIEZO_Z)
-//		position_compensated= zp00 + positionADC18*zp10 + mTemperature*(zp01 + mTemperature*zp02 + positionADC18*zp11);
+		if (mAxis==PIEZO_Z)
+			position_compensated= zp00 + positionADC18*zp10 + mTemperature*(zp01 + mTemperature*zp02 + positionADC18*zp11);
 		
 		
 		//else if (mAxis==PIEZO_X)
