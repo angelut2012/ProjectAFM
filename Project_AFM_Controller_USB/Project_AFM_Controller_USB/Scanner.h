@@ -92,6 +92,13 @@ class CScanner
 		return outputDAC18;		
 	}
 	;
+	
+	float GetDestinationPosition01()
+	{
+		return mScannerPosition01;
+	}
+	;
+	
 	// SetDestinationPosition01 only set reference position, let main cloop do PID 
 	void SetDestinationPosition01(float position01)
 	{
@@ -186,8 +193,8 @@ class CScanner
 
 
 		float position_compensated =positionADC18;
-		if (mAxis==PIEZO_Z)
-			position_compensated= zp00 + positionADC18*zp10 + mTemperature*(zp01 + mTemperature*zp02 + positionADC18*zp11);
+//		if (mAxis==PIEZO_Z)
+//			position_compensated= zp00 + positionADC18*zp10 + mTemperature*(zp01 + mTemperature*zp02 + positionADC18*zp11);
 		
 		
 		//else if (mAxis==PIEZO_X)

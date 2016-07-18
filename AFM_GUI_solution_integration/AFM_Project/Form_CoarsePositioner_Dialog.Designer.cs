@@ -40,6 +40,9 @@
             this.textBox_Frequency = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button_CoarsePositioner_Connect = new System.Windows.Forms.Button();
+            this.button_SensorMode_Disable = new System.Windows.Forms.Button();
+            this.button_SensorMode_Enable = new System.Windows.Forms.Button();
+            this.button_SensorMode_PowerSave = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button_XN
@@ -156,11 +159,44 @@
             this.button_CoarsePositioner_Connect.UseVisualStyleBackColor = true;
             this.button_CoarsePositioner_Connect.Click += new System.EventHandler(this.button_CoarsePositioner_Connect_Click);
             // 
-            // Form_CoarsePositioner
+            // button_SensorMode_Disable
+            // 
+            this.button_SensorMode_Disable.Location = new System.Drawing.Point(12, 413);
+            this.button_SensorMode_Disable.Name = "button_SensorMode_Disable";
+            this.button_SensorMode_Disable.Size = new System.Drawing.Size(72, 33);
+            this.button_SensorMode_Disable.TabIndex = 12;
+            this.button_SensorMode_Disable.Text = "disable";
+            this.button_SensorMode_Disable.UseVisualStyleBackColor = true;
+            this.button_SensorMode_Disable.Click += new System.EventHandler(this.button_SensorMode_Disable_Click);
+            // 
+            // button_SensorMode_Enable
+            // 
+            this.button_SensorMode_Enable.Location = new System.Drawing.Point(100, 413);
+            this.button_SensorMode_Enable.Name = "button_SensorMode_Enable";
+            this.button_SensorMode_Enable.Size = new System.Drawing.Size(72, 33);
+            this.button_SensorMode_Enable.TabIndex = 13;
+            this.button_SensorMode_Enable.Text = "enable";
+            this.button_SensorMode_Enable.UseVisualStyleBackColor = true;
+            this.button_SensorMode_Enable.Click += new System.EventHandler(this.button_SensorMode_Enable_Click);
+            // 
+            // button_SensorMode_PowerSave
+            // 
+            this.button_SensorMode_PowerSave.Location = new System.Drawing.Point(199, 413);
+            this.button_SensorMode_PowerSave.Name = "button_SensorMode_PowerSave";
+            this.button_SensorMode_PowerSave.Size = new System.Drawing.Size(72, 33);
+            this.button_SensorMode_PowerSave.TabIndex = 14;
+            this.button_SensorMode_PowerSave.Text = "power save";
+            this.button_SensorMode_PowerSave.UseVisualStyleBackColor = true;
+            this.button_SensorMode_PowerSave.Click += new System.EventHandler(this.button_SensorMode_PowerSave_Click);
+            // 
+            // Form_CoarsePositioner_Dialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(485, 390);
+            this.ClientSize = new System.Drawing.Size(485, 458);
+            this.Controls.Add(this.button_SensorMode_PowerSave);
+            this.Controls.Add(this.button_SensorMode_Enable);
+            this.Controls.Add(this.button_SensorMode_Disable);
             this.Controls.Add(this.button_CoarsePositioner_Connect);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox_Frequency);
@@ -174,7 +210,7 @@
             this.Controls.Add(this.button_XP);
             this.Controls.Add(this.button_XN);
             this.KeyPreview = true;
-            this.Name = "Form_CoarsePositioner";
+            this.Name = "Form_CoarsePositioner_Dialog";
             this.Text = "Form_CoarsePositioner";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -195,5 +231,8 @@
         private System.Windows.Forms.TextBox textBox_Frequency;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button_CoarsePositioner_Connect;
+        private System.Windows.Forms.Button button_SensorMode_Disable;
+        private System.Windows.Forms.Button button_SensorMode_Enable;
+        private System.Windows.Forms.Button button_SensorMode_PowerSave;
     }
 }

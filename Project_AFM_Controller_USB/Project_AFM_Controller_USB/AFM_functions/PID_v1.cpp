@@ -165,8 +165,8 @@ float CPID::ComputePI_PRC_Loop(float mInput)// for PID PRC sensor loop
 	
 //	if (ITerm > outMax) ITerm = outMax;
 //	else if (ITerm < outMin) ITerm = outMin;
-	if (ITerm > 1) ITerm = 1;
-	else if (ITerm < -1) ITerm = -1;
+	if (ITerm > 1) ITerm = 0.01;
+	else if (ITerm < -1) ITerm = -0.01;
 
 	/*Compute CPID Output*/
 	float output = 0;

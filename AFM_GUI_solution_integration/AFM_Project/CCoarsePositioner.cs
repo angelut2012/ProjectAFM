@@ -237,17 +237,17 @@ namespace NameSpace_AFM_Project
             }
         }
 
-        void SetSensorModeDisable()
+        public void SetSensorModeDisable()
         {
             SetSensorMode(CCoarseController.SA_SENSOR_DISABLED);
         }
 
-        void SetSensorModeEnable()
+        public void SetSensorModeEnable()
         {
             SetSensorMode(CCoarseController.SA_SENSOR_ENABLED);
         }
 
-        void SetSensorModePowerSave()
+        public void SetSensorModePowerSave()
         {
             SetSensorMode(CCoarseController.SA_SENSOR_POWERSAVE);
         }

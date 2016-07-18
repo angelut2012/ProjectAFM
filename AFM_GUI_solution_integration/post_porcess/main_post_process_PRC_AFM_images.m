@@ -4,19 +4,32 @@ clear
 close all
 % load('input_20150827031119.mat')
 %     imy=image_adjust_Y(imHL',123,128);
-p=('C:\AFMdata')
+p=('C:\AFMdata\')
 [fn,p]=uigetfile([p '\*.txt'])
 imraw=load([p fn]);
 % imraw=medfilt2(imraw,[3,3],'symmetric');
 
 % imraw(imraw==-1)=nan;
 imraw=-imraw;
-imraw=imraw-min(imraw(:));
-figure(10)
-surf(imraw,'LineStyle','non')
-colorbar
-zlabel('nm')
+% imraw=imraw-min(imraw(:));
+imraw=imraw-( -7.526316248554960e+03)
+% figure(10)
+% surf(imraw,'LineStyle','non')
+% colorbar
+% zlabel('nm')
+% ylabel('y<<--')
+% view([-82,14])
+% title(fn)
 
+
+L=mean(imraw,2);
+% L=mean(imraw(:,1:20),2);
+L=flipud(L);
+figure(20)
+plot(L)
+ylabel('nm')
+title(fn)
+% return
 
 % imraw(1:30,:)=[];
 % imraw=imraw';

@@ -2452,7 +2452,7 @@ public:
 			return;
 		}
 		////////////////// STEP MOVE
-#define TIME_Z_SCANNER_ENGAGE (10.0)//Second
+#define TIME_Z_SCANNER_ENGAGE (10.0)//10.0Second
 #define STEP_SIZE_Z_SCANNER_ENGAGE (BIT18MAX_0D75/(TIME_Z_SCANNER_ENGAGE*sampling_frequency_of_ZScannerEngage_Process))
 
 		Z_position_DAC_ZScannerEngage += (STEP_SIZE_Z_SCANNER_ENGAGE);	
@@ -3114,6 +3114,33 @@ public:
 	void process_Idle()
 	{
 
+//		int t = 1,N=50000;
+//		int ch = ADC_CHANNEL_Z;
+//		for (int k = 0;k < N;k++) 
+//		{mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);wait_us(1000);}
+//		mUSerial.print("1000:");
+//		mUSerial.println(mAFM_SEM.ADC_Read_N(ch, false));		
+//		
+//		                 
+//		for (int k = 0;k < N;k++) 
+//		{mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);wait_us(10);}
+//		mUSerial.print("10:");
+//		mUSerial.println(mAFM_SEM.ADC_Read_N(ch, false));		 
+//		
+//		
+//		for (int k = 0;k < N;k++) 
+//		{mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);wait_us(1);}
+//		mUSerial.print("1:");
+//		mUSerial.println(mAFM_SEM.ADC_Read_N(ch, false));
+//                
+//			
+//		for (int k = 0;k < N;k++) 
+//		{mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);wait_us(100);}
+//		mUSerial.print("100:");
+//		mUSerial.println(mAFM_SEM.ADC_Read_N(ch, false));		  	
+		
+		
+		
 //			while (1)
 //				{			*p_Tdio2 =1;
 //					mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);
@@ -3491,8 +3518,9 @@ public:
 	void console_PC2MCU_ScsgRangeCalibration(float data)
 	{
 
-		_Float_ ADC18_Min[NUM_OF_SCANNER] = {171390,  41608,24954};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
-		_Float_ ADC18_Max[NUM_OF_SCANNER] = {52684, 175280, 149892};//{241554, 244873, 61734};//{241802, 244504, 62131};
+		// without temp compensation
+		_Float_ ADC18_Min[NUM_OF_SCANNER] = {179922, 41608, 24954};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
+		_Float_ ADC18_Max[NUM_OF_SCANNER] = {56140, 175280, 149892};//{241554, 244873, 61734};//{241802, 244504, 62131};
 
 		GetPositionSensorRange(ADC18_Min, ADC18_Max);
 

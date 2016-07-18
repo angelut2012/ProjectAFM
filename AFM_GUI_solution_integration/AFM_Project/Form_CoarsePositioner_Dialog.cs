@@ -131,5 +131,22 @@ namespace NameSpace_AFM_Project
             pParent.mCCoarsePositioner.Initialize();
             //pParent.mCCoarsePositioner.SetChannelVoltage(0, 150);
         }
+
+        private void button_SensorMode_Disable_Click(object sender, EventArgs e)
+        {
+            //SetSensorModeDisable();
+            //SetSensorModeEnable();
+            pParent.mCCoarsePositioner.SetSensorModeDisable();
+        }
+
+        private void button_SensorMode_Enable_Click(object sender, EventArgs e)
+        {
+            pParent.mCCoarsePositioner.SetSensorModeEnable();
+        }
+
+        private void button_SensorMode_PowerSave_Click(object sender, EventArgs e)
+        {
+            pParent.mCCoarsePositioner.SetSensorModePowerSave();
+        }
     }
 }

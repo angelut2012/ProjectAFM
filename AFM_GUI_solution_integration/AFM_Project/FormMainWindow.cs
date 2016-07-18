@@ -62,7 +62,7 @@ namespace NameSpace_AFM_Project
         //const double SCANNER_RANGE_Z_NM = (21.04 * 1000.0);//(21.387973775678940 * 1000.0);
         //const double SCANNER_RANGE_X_NM = (71.72 * 1000.0);
         //const double SCANNER_RANGE_Y_NM = (95.18 * 1000.0);
-        const double SCANNER_RANGE_Z_NM = (10.98 * 1000.0);//(21.387973775678940 * 1000.0);
+        const double SCANNER_RANGE_Z_NM = (12.50465 * 1000.0);//10.98  (21.387973775678940 * 1000.0);
         const double SCANNER_RANGE_X_NM = (72.22 * 1000.0);
         const double SCANNER_RANGE_Y_NM = (74.815 * 1000.0);
         //        #define SCANNER_RANGE_Z_NM ( *1000.0)
