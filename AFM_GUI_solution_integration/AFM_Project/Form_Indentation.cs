@@ -88,7 +88,7 @@ namespace NameSpace_AFM_Project
                 + "\r\n";
 
             SaveIndentDataToTextFile(mDataPath,
-                "_" + pParent.mCParameter.SampleName,
+                "_" + pParent.textBox_FileName.Text,
                 "_" + pParent.GetCurrentTimeString(),
                 paras,
                 //"_step_size" + step_size.ToString() +
@@ -182,7 +182,7 @@ namespace NameSpace_AFM_Project
 
         //    string paras=pParent.mCParameter.GetParaString();
         //    SaveIndentDataToTextFile(pParent.GetCurrentTimeString(),
-        //        pParent.mCParameter.SampleName,
+        //        pParent.textBox_FileName.Text,
         //        paras,
         //        //"_step_size" + step_size.ToString() +
         //        //"_start_position" + start_position.ToString() +
@@ -262,6 +262,65 @@ namespace NameSpace_AFM_Project
                 pParent.MY_DEBUG("ShowindentData Error in MKernel.");
             }
         }
+
+        //----------------------------------------data capture max
+        Thread mThread_FastDataCapture;
+        void StartThread_FastDataCapture()
+        {
+            mThread_FastDataCapture = new Thread(ThreadFunction_FastDataCapture);// this will delete the previous thread
+            mThread_FastDataCapture.Start();
+
+        }
+
+        void ThreadFunction_FastDataCapture()
+        {
+
+            pParent.mIndentData = new double[3, 20000];//25*1024
+            pParent.mIndentData_index = -1;
+
+            mSwitch_CancelIndent = false;
+            pParent.mSwitch_IndentTrue_FinishFalse = true;
+
+            //pParent.send_Data_Frame_To_Arduino('C', 'I', 'D');
+            send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_DATA_CAPTURE, 0);
+            while (pParent.mSwitch_IndentTrue_FinishFalse == true)
+            {
+                Thread.Sleep(5);
+                if (mSwitch_CancelIndent == true)
+                    return;
+            }
+
+            string paras = pParent.mCParameter.GetParaString()
+                + pParent.para_XL.ToString() + "%XL\r\n"
+                + pParent.para_YL.ToString() + "%YL\r\n"
+                + "\r\n";
+
+            SaveIndentDataToTextFile(mDataPath,
+                "_" + pParent.textBox_FileName.Text,
+                "_" + pParent.GetCurrentTimeString(),
+                paras,
+                //"_step_size" + step_size.ToString() +
+                //"_start_position" + start_position.ToString() +
+                //"_depth" + depth.ToString() +
+                //"_time" + pParent.TOC().ToString() + "_",
+                pParent.mIndentData,
+                pParent.mIndentData.Rank + 1,
+                pParent.mIndentData_index
+                );
+
+            SaveIndentDataToTextFile(mDataPath, null,
+                null,
+                paras,
+                pParent.mIndentData,
+                pParent.mIndentData.Rank + 1,
+                pParent.mIndentData_index);
+            //button_StartIndent.Enabled = true;
+
+            System.Media.SystemSounds.Hand.Play();
+            Thread.Sleep(300);
+            System.Media.SystemSounds.Exclamation.Play();// ok
+        }
+     
 
     }
 }

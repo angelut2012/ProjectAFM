@@ -76,7 +76,7 @@ private:
 	DigitalOut *mSPI_CS_AFM;
 	DigitalOut *mSPI_CS_TF;
 	int  buffer_ADC_value_array[NUM_OF_ADC];// = {0};
-
+	//int  buffer_ADC_value_array[NUM_OF_ADC];// = {0};
 
 public:
 	CSEM(int frequencyHz=2000000)
@@ -145,6 +145,25 @@ public:
 		}
 		s /= number;
 		return s;
+	}
+	void ADC_Read_MultiChannel_Average(int axis)
+	{
+		int average[NUM_OF_ADC] = {0};
+		#define NofA (8)		
+		for (int n = 0;n < NofA;n++)	
+		{
+			ADC_Read_N(axis, true);
+			for (int k = 0;k < axis+1;k++)
+			{
+				average[k] += ADC_Read_N(k,false);
+			}
+		}	
+		//average and store to buffer_ADC_value_array[]
+		for (int k = 0;k < axis+1;k++)	
+		{
+			average[k] >>= 3;	
+			buffer_ADC_value_array[k] = average[k];
+		}
 	}
 	int ADC_Read_N(int axis, bool update=true)
 			// true read PRC=154 us, true read Y, 264 us

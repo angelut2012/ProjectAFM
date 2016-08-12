@@ -111,7 +111,14 @@ namespace NameSpace_AFM_Project
         public double[,] mImageArrayHR;//= new double[para_Nx, para_Ny];
         public double[,] mImageArrayER;//= new double[para_Nx, para_Ny];
         public double[,] mImageArrayTz;//= new double[para_Nx, para_Ny];
-        public double[,] mImageArrayTxy;//= new double[para_Nx, para_Ny];
+        public double[,] mImageArrayTx;//= new double[para_Nx, para_Ny];
+
+        double[,] mSaveImageArrayHL;
+        double[,] mSaveImageArrayEL;// 
+        double[,] mSaveImageArrayHR;//=
+        double[,] mSaveImageArrayER;//=
+        double[,] mSaveImageArrayTz;//=
+        double[,] mSaveImageArrayTx;//
 
         int point_now_x = 0;//+-(1~Nx) for MKernel
         public int point_now_y = 0;
@@ -136,9 +143,11 @@ namespace NameSpace_AFM_Project
         Thread mThread_UI_Update;
         bool mThread_UI_Update_running = true;
         bool mSWitchShowImage = false;// not show by default
-        bool mSwitch_ShowComDdata = true;
+        //bool mSwitch_ShowComDdata = true;
 
         Form_ImageShow_Realtime mForm_ImageShow_Realtime;
+
+        public double mSampleDistance_NM = 0;
 
         public MainWindow()
         {
@@ -166,8 +175,8 @@ namespace NameSpace_AFM_Project
                 SEM_Image_Initialize();
             }
             catch { MY_DEBUG("SEM image fail."); }
-          
-           
+
+
 
 
             // serialVirtual_Coarse = new SerialPort("COM12", 115200, Parity.None, 8, StopBits.One);
@@ -518,9 +527,9 @@ namespace NameSpace_AFM_Project
         }
 
         private void button_SetParameters_Click(object sender, EventArgs e)
-        { button_SetParameters_Click_function(); }
+        { AFM_UpdateMCUParameters(); }
 
-        void button_SetParameters_Click_function()
+        void AFM_UpdateMCUParameters()
         {
             if (button_SetParameters.Enabled == false)
                 return;
@@ -529,6 +538,11 @@ namespace NameSpace_AFM_Project
             MY_DEBUG("set parameters start.");
             //pid
             set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -100, 100);//0.001, 500)
+
+            set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0, 100);
+            set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0, 100);
+            set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0, 100);
+
             //set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0.00001, 100);
             //set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0.00001, 100);
             ////set_AFM_parameters('D', ref para_Z_PID_D, textBox_Z_PID_D, 0.00000001, 100);
@@ -685,7 +699,7 @@ namespace NameSpace_AFM_Project
         void CheckRange_TextBox(TextBox T, double limit_down, double limit_up)
         {
             double v = Convert.ToDouble(T.Text);
-            v = MIN_MAX(v, limit_down, limit_up);
+            v = LIMIT_MAX_MIN(v, limit_up, limit_down);
             v = v - v % 1;// convert to int
             T.Text = Convert.ToString(v);
         }
@@ -782,27 +796,27 @@ namespace NameSpace_AFM_Project
 
         void Updata_UI_Richtext(byte[] db)
         {
-            if (mSwitch_ShowComDdata == true)
-            {
-                try
-                {
-                    //this.richTextBox_serial_read.BeginInvoke((MethodInvoker)delegate()
-                    //{
-                    //    //richTextBox_serial_read.Text = System.Text.Encoding.UTF8.GetString(db);
-                    //    return;
+            //if (mSwitch_ShowComDdata == true)
+            //{
+            //    try
+            //    {
+            //        //this.richTextBox_serial_read.BeginInvoke((MethodInvoker)delegate()
+            //        //{
+            //        //    //richTextBox_serial_read.Text = System.Text.Encoding.UTF8.GetString(db);
+            //        //    return;
 
-                    //    if (richTextBox_serial_read.Text.Length < 2000)
-                    //        richTextBox_serial_read.Text += System.Text.Encoding.UTF8.GetString(db);
-                    //    else
-                    //        richTextBox_serial_read.Text = null;
-                    //    // auto roll down
-                    //    richTextBox_serial_read.SelectionStart = richTextBox_serial_read.Text.Length; //Set the current caret position at the end
-                    //    richTextBox_serial_read.ScrollToCaret(); //Now scroll it automatically
-                    //});
-                }
-                catch
-                { MY_DEBUG("Updata_UI_Richtext error"); }
-            }
+            //        //    if (richTextBox_serial_read.Text.Length < 2000)
+            //        //        richTextBox_serial_read.Text += System.Text.Encoding.UTF8.GetString(db);
+            //        //    else
+            //        //        richTextBox_serial_read.Text = null;
+            //        //    // auto roll down
+            //        //    richTextBox_serial_read.SelectionStart = richTextBox_serial_read.Text.Length; //Set the current caret position at the end
+            //        //    richTextBox_serial_read.ScrollToCaret(); //Now scroll it automatically
+            //        //});
+            //    }
+            //    catch
+            //    { MY_DEBUG("Updata_UI_Richtext error"); }
+            //}
         }
 
         //private void timerFunction_CheckCOM(object sender, EventArgs e)
@@ -1180,12 +1194,12 @@ namespace NameSpace_AFM_Project
                 s += ",Tz, " + Convert_VRadc2Temperature_z(v3).ToString("f4");
                 MY_DEBUG(s);
                 Sys_Inf = s;
-                
+
             }
 
-	
+
         }
-        double Convert_VRadc2Temperature_xy(double VRadc )
+        double Convert_VRadc2Temperature_xy(double VRadc)
         {
             // xy
             double p1 = 0.00000006348549803628420000;
@@ -1204,35 +1218,35 @@ namespace NameSpace_AFM_Project
 
 
 
-float GetSensorPosition01(int mAxis, int  positionADC18,int temperatureADC18)
-	{
-float	xp00		=(float)	-1.25976130991591000000000000	;
-float	xp01		=(float)	0.04064898312247370000000000	;
-float	xp10		=(float)	0.00000774214599727934000000	;
-float	xp11		=(float)	0.00000002591495044575960000	;
-float	xp02		=(float)	-0.00027860784460091000000000	;
-float	yp00		=(float)	-1.39306871111335000000000000	;
-float	yp01		=(float)	0.04023992323571540000000000	;
-float	yp10		=(float)	0.00000758641170006858000000	;
-float	yp11		=(float)	0.00000009225240571389740000	;
-float	yp02		=(float)	-0.00013983813379961800000000	;
-float	zp00		=(float)	5.56940871292436000000000000	;
-float	zp01		=(float)	-0.00006552734101777870000000	;
-float	zp10		=(float)	0.00001553239623067130000000	;
-float	zp11		=(float)	-0.00000000004439813004644080	;
-float	zp02		=(float)	0.00000000014588477288958600	;
+        float GetSensorPosition01(int mAxis, int positionADC18, int temperatureADC18)
+        {
+            float xp00 = (float)-1.25976130991591000000000000;
+            float xp01 = (float)0.04064898312247370000000000;
+            float xp10 = (float)0.00000774214599727934000000;
+            float xp11 = (float)0.00000002591495044575960000;
+            float xp02 = (float)-0.00027860784460091000000000;
+            float yp00 = (float)-1.39306871111335000000000000;
+            float yp01 = (float)0.04023992323571540000000000;
+            float yp10 = (float)0.00000758641170006858000000;
+            float yp11 = (float)0.00000009225240571389740000;
+            float yp02 = (float)-0.00013983813379961800000000;
+            float zp00 = (float)5.56940871292436000000000000;
+            float zp01 = (float)-0.00006552734101777870000000;
+            float zp10 = (float)0.00001553239623067130000000;
+            float zp11 = (float)-0.00000000004439813004644080;
+            float zp02 = (float)0.00000000014588477288958600;
 
 
-		float position_compensated =0;
-        if (mAxis == PIEZO_Z)
-		position_compensated= zp00 + positionADC18*zp10 + temperatureADC18*(zp01 + temperatureADC18*zp02 + positionADC18*zp11);
-        else if (mAxis == PIEZO_X)
-		position_compensated= xp00 + positionADC18*xp10 + temperatureADC18*(xp01 + temperatureADC18*xp02 + positionADC18*xp11);
-        else if (mAxis == PIEZO_Y)
-		position_compensated= yp00 + positionADC18*yp10 + temperatureADC18*(yp01 + temperatureADC18*yp02 + positionADC18*yp11);
-    return position_compensated;
-	}
-	
+            float position_compensated = 0;
+            if (mAxis == PIEZO_Z)
+                position_compensated = zp00 + positionADC18 * zp10 + temperatureADC18 * (zp01 + temperatureADC18 * zp02 + positionADC18 * zp11);
+            else if (mAxis == PIEZO_X)
+                position_compensated = xp00 + positionADC18 * xp10 + temperatureADC18 * (xp01 + temperatureADC18 * xp02 + positionADC18 * xp11);
+            else if (mAxis == PIEZO_Y)
+                position_compensated = yp00 + positionADC18 * yp10 + temperatureADC18 * (yp01 + temperatureADC18 * yp02 + positionADC18 * yp11);
+            return position_compensated;
+        }
+
         void on_Received_Package_Indent(byte[] com_buffer, int ind)
         {
             // AA 55 73 70 00   05 1E B8    00 FF E0    01 20 41    55 AA
@@ -1295,7 +1309,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             int indx = (int)convert_byte2_to_int16(com_buffer, ind + 4);// com_buffer[ind + 4] << 8 + com_buffer[ind + 5];
             int indy = (int)convert_byte2_to_int16(com_buffer, ind + 6); //com_buffer[ind + 6] << 8 + com_buffer[ind + 7];
             double vH = convert_byte3_to_uint32(com_buffer, ind + 8);
-            double vE = convert_byte3_to_uint32(com_buffer,          ind + 8 + 3*1);
+            double vE = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 1);
             double vDAC = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 2);
             double vTz = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 3);
             double vTxy = convert_byte3_to_uint32(com_buffer, ind + 8 + 3 * 4);
@@ -1307,6 +1321,10 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             vH = vH / BIT24MAX;// convert back to 01
             //vH = 1 - vH;// reverse direction
             vH *= SCANNER_RANGE_Z_NM;// convert to full range nm
+
+            mSampleDistance_NM = vH;// store the current sample distance
+
+            //MY_DEBUG("real time Sample distance: ", mSampleDistance_NM);
 
             vDAC /= BIT18MAX;
             vDAC *= 150;
@@ -1327,6 +1345,19 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
             //MY_DEBUG(indx.ToString() + "\t" + indx_store_for_save_image.ToString() + "\t" + indy.ToString() + "\t" + indy_store_for_save_image.ToString());
             // index adjusted
+
+            if (indx == 1000)//number of image scan finished 
+            {
+                AFM_HybridWithdraw();
+                button_User_ImageScan_StartStop.Invoke((MethodInvoker)delegate()
+                {
+                    button_User_ImageScan_StartStop.Text = "start";
+                    button_User_ImageScan_StartStop.Enabled = true;
+                });
+                return;
+            }
+
+
             point_now_x = (indx >= 0) ? indx + 1 : -indx;// +-(1~Nx)
             point_now_y = (indy >= 0) ? indy + 1 : -indy;
 
@@ -1368,13 +1399,13 @@ float	zp02		=(float)	0.00000000014588477288958600	;
                 mImageArrayEL[indx, indy] = vE;
 
                 mImageArrayTz[indx, indy] = vTz;
-                mImageArrayTxy[indx, indy] = vTxy;
+                mImageArrayTx[indx, indy] = vTxy;
             }
             else
             {
                 //indx = -indx - 1;
                 //indx = +indx;
-                indx = (-indx) % (int) para_Nx;
+                indx = (-indx) % (int)para_Nx;
                 mImageArrayHR[indx, indy] = vH;
                 mImageArrayER[indx, indy] = vE;
             }
@@ -1426,12 +1457,12 @@ float	zp02		=(float)	0.00000000014588477288958600	;
                 max_steps = fine_step;
                 //AFM_coarse_positioner_SetSpeed(20);//20
                 //AFM_coarse_positioner_MoveDistance(2, -SCANNER_RANGE_Z_NM * 0.7);// % BIT18MAX_0D9， use 0.7 only for safety
-                mCCoarsePositioner.MoveDistance(mCaxis_z, -SCANNER_RANGE_Z_NM * 0.6, 20);// move one step down to the sample. in each step fine scanner tested 0.9 of motion range.
+                mCCoarsePositioner.MoveDistance(mCaxis_z, -SCANNER_RANGE_Z_NM * 0.65, 100);//20 move one step down to the sample. in each step fine scanner tested 0.9 of motion range.
                 Thread.Sleep(300);
                 //Thread.Sleep(1000);// add wait
                 if (mApproach_state == true)
                 {
-                    timer_Approach.Stop();
+                    //timer_Approach.Stop();
                     timer_Approach.Start();// to monitor, in dt mcu will send back a signal
                     send_Data_Frame_To_Arduino('C', 'A', 'P');
                 }
@@ -1584,13 +1615,13 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         private void button_Apporach_Click(object sender, EventArgs e)
         {
-            Apporach_start_multi();
+            Apporach_start_multi(1);
         }
 
-        public void Apporach_start_multi()
+        public void Apporach_start_multi(int times)
         {
             mApproach_state = true;
-            mApproach_TimesCounter = 1;//4
+            mApproach_TimesCounter = times;
             Apporach_start();
             //on_Received_Package_Approach
         }
@@ -1615,14 +1646,17 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             //AFM_coarse_positioner_SetSpeed(250);
             //AFM_coarse_positioner_MoveDistance(2, SCANNER_RANGE_Z_NM * 1.21);// % for safety reason, first move up 25*1.2 um
 
-            mCCoarsePositioner.MoveDistance(mCaxis_z, SCANNER_RANGE_Z_NM * 1.21, 250);// move away up for safety reason
+            AFM_SetSystemIdle();
+            mCCoarsePositioner.MoveDistance(mCaxis_z, SCANNER_RANGE_Z_NM * 3.21, 1000);// move away up for safety reason
             //Thread.Sleep(1500);
             Thread.Sleep(3000);
             //AFM_coarse_positioner_SetSpeed(10);
 
             send_Data_Frame_To_Arduino('C', 'A', 'P');
-            timer_Approach.Interval = 10000; //6512;
-            timer_Approach.Stop();
+            //timer_Approach.Interval = 6000; //6512;
+
+            // reset the timer
+            timer_Approach.Enabled = true;
             timer_Approach.Start();//trigger function   timerFunction_Appraoch
             mApproach_CoarseStepCounter = 0;
 
@@ -1682,11 +1716,11 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             }
         }
 
-        private void button_Z_Engage_Click(object sender, EventArgs e)
+        private void button_Z_EngageTest_Click(object sender, EventArgs e)
         {
             MY_DEBUG("start engage.");
-            send_Data_Frame_To_Arduino('C', 'Z', 'E');//AA 55 43 5A 45 00 00 00 55 AA 
-            mSwitch_ShowComDdata = false;
+            //mSwitch_ShowComDdata = false;
+            AFM_ZFineScannerEngage();
         }
 
         private void button_Z_Withdraw_Click(object sender, EventArgs e)
@@ -1698,12 +1732,23 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         }
 
+        public void AFM_ZFineScannerEngage()
+        {
+            send_Data_Frame_To_Arduino('C', 'Z', 'E');//AA 55 43 5A 45 00 00 00 55 AA 
+        }
+        public void AFM_SetSystemIdle()
+        {
+            send_Data_Frame_To_Arduino('C', 'Z', 'W');
+        }
         public void send_Data_Frame_To_Arduino_SetSystemIdle_Multi()
         {
             MY_DEBUG("reset.");
-            mSwitch_ShowComDdata = true;
+            //mSwitch_ShowComDdata = true;
             // for (int k = 0; k < 10; k++)
-            { send_Data_Frame_To_Arduino('C', 'Z', 'W'); Thread.Sleep(100); }
+            {
+                AFM_SetSystemIdle();
+                //Thread.Sleep(100); 
+            }
             serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC;
             timer_ScaningImageShow_RealTime.Enabled = false;
         }
@@ -1720,11 +1765,17 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         private void button_XY_Scan_Click(object sender, EventArgs e)
         {
+            send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
+            AFM_XYScan_Reset();
+            AFM_XYScan_Start(); }
+
+        public void AFM_XYScan_Start()
+        {
             serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC * 40;// 100;
             button_XY_Scan_Function();
-            mSwitch_ShowComDdata = false;
+            //mSwitch_ShowComDdata = false;
             timer_ScaningImageShow_RealTime.Interval = 2000;
-            timer_ScaningImageShow_RealTime.Enabled = true;
+            //timer_ScaningImageShow_RealTime.Enabled = true;
         }
 
         void button_XY_Scan_Function()
@@ -1745,10 +1796,12 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             //AA 55 43 53 52 00 00 00 55 AA 
 
             send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
-            send_Data_Frame_To_Arduino('C', 'S', 'R');
+            AFM_XYScan_Reset();
             //with draw Z, stop Zloop PID, and stop xy scan and xy move to XL YL
         }
 
+        public void AFM_XYScan_Reset()
+        { send_Data_Frame_To_Arduino('C', 'S', 'R'); }
         private void button_CoarseLiftUp_Click()
         {
             send_Data_Frame_To_Arduino('C', 'A', 'C');// with draw Z axis
@@ -1813,6 +1866,22 @@ float	zp02		=(float)	0.00000000014588477288958600	;
         {
             if (mThread_SaveImage.IsAlive == false)// avoid multi start
             {
+
+                MY_DEBUG("st");
+                mSaveImageArrayHL = (double[,])mImageArrayHL.Clone();
+                mSaveImageArrayEL = (double[,])mImageArrayEL.Clone();
+                mSaveImageArrayHR = (double[,])mImageArrayHR.Clone();
+                mSaveImageArrayER = (double[,])mImageArrayER.Clone();
+                mSaveImageArrayTz = (double[,])mImageArrayTz.Clone();
+                mSaveImageArrayTx = (double[,])mImageArrayTx.Clone();
+                MY_DEBUG("end");
+                //mImageArrayHL.CopyTo(mSaveImageArrayHL, 0);
+                //mImageArrayEL.CopyTo(mSaveImageArrayHR, 0);
+                //mImageArrayHR.CopyTo(mSaveImageArrayEL, 0);
+                //mImageArrayER.CopyTo(mSaveImageArrayER, 0);
+                //mImageArrayTz.CopyTo(mSaveImageArrayTz, 0);
+                //mImageArrayTx.CopyTo(mSaveImageArrayTx, 0);      
+
                 System.Media.SystemSounds.Exclamation.Play();// ok
                 Thread.Sleep(300);
                 System.Media.SystemSounds.Hand.Play();
@@ -1829,14 +1898,14 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             SaveImageToTextFile_Multi(file_name, t);
             SaveImageToTextFile_Multi(file_name, null);
         }
-        void SaveImageToTextFile_Multi(string file_name,string time)
+        void SaveImageToTextFile_Multi(string file_name, string time)
         {
-            SaveImageToTextFile(file_name, time, "HL", mImageArrayHL);
-            SaveImageToTextFile(file_name, time, "HR", mImageArrayHR);
-            SaveImageToTextFile(file_name, time, "EL", mImageArrayEL);
-            SaveImageToTextFile(file_name, time, "ER", mImageArrayER);
-            SaveImageToTextFile(file_name, time, "Tz", mImageArrayTz);
-            SaveImageToTextFile(file_name, time, "Txy", mImageArrayTxy);
+            SaveImageToTextFile(file_name, time, "HL", mSaveImageArrayHL);
+            SaveImageToTextFile(file_name, time, "HR", mSaveImageArrayHR);
+            SaveImageToTextFile(file_name, time, "EL", mSaveImageArrayEL);
+            SaveImageToTextFile(file_name, time, "ER", mSaveImageArrayER);
+            SaveImageToTextFile(file_name, time, "Tz", mSaveImageArrayTz);
+           SaveImageToTextFile(file_name, time, "Txy", mSaveImageArrayTx);
             SaveAFMParaToTextFile(time);
         }
         double inc = 0;
@@ -1858,7 +1927,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         void SaveAFMParaToTextFile(string time)
         {
-            string path = mDataPath+"AFM" + "_" + "parameter" + time + ".txt";
+            string path = mDataPath + "AFM" + "_" + "parameter" + time + ".txt";
             string text = Convert.ToString(point_now_x + 1) + "\t%point_now_x\r\n"
                     + Convert.ToString(point_now_y + 1) + "\t%point_now_y\r\n"
                     + Convert.ToString(para_Nx) + "\t%N_x\r\n"
@@ -1903,7 +1972,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             mImageArrayER = new double[(int)para_Nx, (int)para_Ny];
 
             mImageArrayTz = new double[(int)para_Nx, (int)para_Ny];
-            mImageArrayTxy = new double[(int)para_Nx, (int)para_Ny];           
+            mImageArrayTx = new double[(int)para_Nx, (int)para_Ny];
         }
 
         void ImageArray_ValueReset(double initial_value = -1)
@@ -1916,7 +1985,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             mImageArrayER = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
 
             mImageArrayTz = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
-            mImageArrayTxy = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
+            mImageArrayTx = GetNew2DArray((int)para_Nx, (int)para_Ny, initial_value);// initial value =-1
 
             //Array.Clear(mImageArrayEL, 0, L);
             //Array.Clear(mImageArrayER, 0, L);
@@ -2011,27 +2080,33 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         void ThreadFunction_MultiTask()
         {
-            int N = 1; // number of points
-            int P = 1;// P times for each point
-            for (int n = 0; n < N; n++)
-            {
-                for (int p = 0; p < P; p++)
-                {
-                    Indent_StartThread();
 
-                    int time = (int)(Convert.ToDouble(textBox_TaskTime.Text) * 1000);
-                    Thread.Sleep(time);
-                    P = Convert.ToInt32(textBox_TaskNumber.Text);
-                    N = Convert.ToInt32(textBox_Task_PointsNumber.Text);
-                }
-                SoundNotice(4, 1000);
-                //AFM_coarse_positioner_SetSpeed(250);
-                //AFM_coarse_positioner_MoveDistance(1, -20000);// % for safety reason, first move up 25*1.2 um
-                SoundNotice(5, 1000);
-                //Thread.Sleep(5000);
-            }
-            SoundNotice(4, 1000);
-            SoundNotice(6, 1000);
+            para_NumberOfFrameFinished = 0;
+
+
+
+
+            //int N = 1; // number of points
+            //int P = 1;// P times for each point
+            //for (int n = 0; n < N; n++)
+            //{
+            //    for (int p = 0; p < P; p++)
+            //    {
+            //        Indent_StartThread();
+
+            //        int time = (int)(Convert.ToDouble(textBox_TaskTime.Text) * 1000);
+            //        Thread.Sleep(time);
+            //        P = Convert.ToInt32(textBox_TaskNumber.Text);
+            //        N = Convert.ToInt32(textBox_Task_PointsNumber.Text);
+            //    }
+            //    SoundNotice(4, 1000);
+            //    //AFM_coarse_positioner_SetSpeed(250);
+            //    //AFM_coarse_positioner_MoveDistance(1, -20000);// % for safety reason, first move up 25*1.2 um
+            //    SoundNotice(5, 1000);
+            //    //Thread.Sleep(5000);
+            //}
+            //SoundNotice(4, 1000);
+            //SoundNotice(6, 1000);
         }
 
         private void button_Form_CoarsePositioner_Click(object sender, EventArgs e)
@@ -2056,7 +2131,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         private void button_AutoApproach_Click(object sender, EventArgs e)
         {
-            Apporach_start_multi();
+            Apporach_start_multi(1);
         }
 
         private void button_Coarse_MoveToHomePosition_Click(object sender, EventArgs e)
@@ -2076,7 +2151,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         private void button_DataCapture_Click(object sender, EventArgs e)
         {
-            send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_DATA_CAPTURE, 50);
+            StartThread_FastDataCapture();
         }
 
         private void button_WaveTest_Click(object sender, EventArgs e)
@@ -2115,7 +2190,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
 
         }
         Thread mThread_ScaningImageShow_RealTime;
-        bool mLock_ScaningImageShow_RealTime=false;
+        bool mLock_ScaningImageShow_RealTime = false;
         private void timer_ScaningImageShow_RealTime_Tick(object sender, EventArgs e)
         {
             timer_ScaningImageShow_RealTime.Interval = 2000;
@@ -2131,7 +2206,7 @@ float	zp02		=(float)	0.00000000014588477288958600	;
             //MY_DEBUG("start afm image dip");
             AFM_ScaningImageShow_RealTime();
             //MY_DEBUG("end afm image dip");
-            mLock_ScaningImageShow_RealTime = false;           
+            mLock_ScaningImageShow_RealTime = false;
         }
         void AFM_ScaningImageShow_RealTime()
         {
@@ -2228,5 +2303,207 @@ float	zp02		=(float)	0.00000000014588477288958600	;
         }
 
 
+        //------------------------------------------------------------
+        public void AFM_MoveZFineScanner_MultiStepSlow(double Nstep)
+        {
+            // move fine Z to 0.5
+            double p = 0;
+            // double Nstep = 20;
+            for (int k = 0; k < Nstep; k++)
+            {
+                p += 0.5 / Nstep;
+                set_output_Position_Value_01(PIEZO_Z + 100, p);// SET z move close loop to position
+                Thread.Sleep(10);
+            }
+        }
+        private void button_Z_HybridWithdraw_Click(object sender, EventArgs e)
+        { AFM_HybridWithdraw(); }
+
+        public void AFM_HybridWithdraw()
+        {
+            AFM_SetSystemIdle();// fine Z move up
+            mCCoarsePositioner.MoveDistance(mCaxis_z, SCANNER_RANGE_Z_NM * 1 + SCANNER_RANGE_Z_NM * 0.5 - mSampleDistance_NM, 3000);// CP move up, 1000 nm more
+            Thread.Sleep(10);
+            AFM_MoveZFineScanner_MultiStepSlow(3);
+        }
+
+        private void button_Z_HybridEngage_Click(object sender, EventArgs e)
+        { AFM_HybridEngage(); }
+        public void AFM_HybridEngage()
+        {
+            AFM_InitialParameter_ZLoop();
+            //AFM_SetSystemIdle();
+            mCCoarsePositioner.MoveDistance(mCaxis_z, -SCANNER_RANGE_Z_NM - 300, 1000);// CP move up, 1000 nm more
+            Thread.Sleep(1000);
+            //AFM_MoveZFineScanner_MultiStepSlow(20);
+            send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_StartZLoop, 0);
+        }
+
+
+        #region// User_ImageScan_StartStop
+        /// <summary>
+        ///  User_ImageScan_StartStop
+        /// </summary>
+        Thread mThread_User_ImageScan_StartStop;
+        bool mBusy_User_ImageScan_StartStop = false;
+        private void button_User_ImageScan_StartStop_Click(object sender, EventArgs e)
+        { AFM_User_ImageScan_StartStop(); }
+        public void AFM_User_ImageScan_StartStop()
+        {
+            if (mBusy_User_ImageScan_StartStop == true)
+                return;
+            mBusy_User_ImageScan_StartStop = true;
+            mThread_User_ImageScan_StartStop = new Thread(ThreadFunction_User_ImageScan_StartStop);
+            mThread_User_ImageScan_StartStop.Start();
+        }
+
+
+        public void ThreadFunction_User_ImageScan_StartStop()
+        {
+
+            if (button_User_ImageScan_StartStop.Text == "start")
+            {
+                button_User_ImageScan_StartStop.Invoke((MethodInvoker)delegate()
+                {
+                    button_User_ImageScan_StartStop.Text = "starting...";
+                    button_User_ImageScan_StartStop.Enabled = false;
+                });
+
+                AFM_HybridEngage();
+                Thread.Sleep(17000);
+                AFM_XYScan_Start();
+
+                button_User_ImageScan_StartStop.Invoke((MethodInvoker)delegate()
+               {
+                   button_User_ImageScan_StartStop.Text = "stop";
+                   button_User_ImageScan_StartStop.Enabled = true;
+               });
+            }
+            else
+            {
+                button_User_ImageScan_StartStop.Invoke((MethodInvoker)delegate()
+               {
+                   button_User_ImageScan_StartStop.Text = "start";
+                   button_User_ImageScan_StartStop.Enabled = false;
+               });
+
+                
+                AFM_HybridWithdraw();
+                Thread.Sleep(5000);
+                AFM_XYScan_Reset();
+                //Thread.Sleep(5000);
+
+                button_User_ImageScan_StartStop.Invoke((MethodInvoker)delegate()
+                {
+                    button_User_ImageScan_StartStop.Enabled = true;
+                });
+            }
+
+            mBusy_User_ImageScan_StartStop = false;
+        }
+        #endregion// User_ImageScan_StartStop
+
+        #region// User_AutoEngage
+        /// <summary>
+        ///  User_AutoEngage
+        /// </summary>
+        Thread mThread_User_AutoEngage;
+        public int mState_User_AutoEngage = 0;// 0 idle, 1 in progress, 2 done, 3 cancel
+        private void button_User_AutoEngage_Click(object sender, EventArgs e)
+        {
+            AFM_UpdateMCUParameters();
+            Thread.Sleep(1000);
+
+            mState_User_AutoEngage = 1;
+            mThread_User_AutoEngage = new Thread(ThreadFunction_User_AutoEngage);
+            mThread_User_AutoEngage.Start();
+
+            var form = new Form_User_AutoEngageWaiting(this);
+            form.ShowDialog();// here use ShowDialog to block the main window
+
+
+            if (mState_User_AutoEngage == 2)
+            {
+                button_User_ImageScan_StartStop.Text = "start";
+                button_User_ImageScan_StartStop.Enabled = true;
+            }
+            else
+                button_User_ImageScan_StartStop.Enabled = false;
+        }
+
+
+        public void ThreadFunction_User_AutoEngage()
+        {
+
+            //do
+            //{
+                do
+                {
+                    Apporach_start_multi(1);
+                    //wait for Approach to finish
+                    while (mApproach_TimesCounter > 0)
+                    {
+                        Thread.Sleep(100);
+                        if (mState_User_AutoEngage != 1)
+                        {
+                            Appraoch_cancel();
+                            return;
+                        }
+                    }
+
+                    // test final position
+                    mSampleDistance_NM = 0;
+                    AFM_ZFineScannerEngage();
+                    while (mSampleDistance_NM == 0)
+                    {
+                        Thread.Sleep(100);
+                        if (mState_User_AutoEngage != 1)
+                        {
+                            AFM_SetSystemIdle();
+                            return;
+                        }
+                    }
+                    MY_DEBUG("Sample distance: ", mSampleDistance_NM);
+
+                } while (mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.7 && mState_User_AutoEngage == 1);
+
+
+            //    AFM_ZFineScannerEngage();
+            //    Thread.Sleep(6 * 1000);// 
+            //    MY_DEBUG("SampleDistance_NM:", mSampleDistance_NM);
+            //}
+            while (mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.7);
+
+
+            AFM_HybridWithdraw();
+            Thread.Sleep(1 * 1000);// force to wait 60 min for the sensors to be stable
+            for (int k = 0; k < 5; k++)
+            {
+                //AFM_User_ImageScan_StartStop();
+                AFM_HybridEngage();
+                Thread.Sleep(5000);
+                if (mState_User_AutoEngage != 1)
+                {
+                    AFM_SetSystemIdle();
+                    return;
+                }
+                //AFM_User_ImageScan_StartStop();
+                AFM_HybridWithdraw();
+                Thread.Sleep(3000);
+                if (mState_User_AutoEngage != 1)
+                {
+                    AFM_SetSystemIdle();
+                    return;
+                }
+            }
+            mState_User_AutoEngage = 2;
+
+            //mCCoarsePositioner.SetSensorModeDisable();
+            if (checkBox_User_AutoStartScanAfterEngage.Checked == true)
+                AFM_User_ImageScan_StartStop();
+                ;
+        }
+
+        #endregion
     }
 }

@@ -68,7 +68,7 @@ namespace NameSpace_AFM_Project
             //{
             //    MY_DEBUG("coarse nanopositioner  initial error!");
             //}
-            for (int k = 0; k < 10; k++)
+            for (int k = 0; k < 2; k++)
             {
                 try
                 {
@@ -100,13 +100,14 @@ namespace NameSpace_AFM_Project
             SetSpeedCloseLoop(X_CP_AXIS, 0);
             SetSpeedCloseLoop(Y_CP_AXIS, 0);
             SetSpeedCloseLoop(Z_CP_AXIS, 0);
+
             //SetSensorModeDisable();
-            //SetSensorModeEnable();
-            SetSensorModePowerSave();
+            SetSensorModeEnable();
+            //SetSensorModePowerSave();
 
             int position = 0;
             uint sensor_type = 1;    // linear positioners with nanosensor
-            for (uint channelIndex = X_CP_AXIS; channelIndex < NUM_OF_AXIS; channelIndex++)
+            for (uint channelIndex = X_CP_AXIS; channelIndex < X_CP_AXIS+3; channelIndex++)
             {
                 CCoarseController.SA_SetSensorType_S(mSystemIndex, channelIndex, sensor_type);   // Set Sensor Type
                 CCoarseController.SA_SetClosedLoopMaxFrequency_S(mSystemIndex, channelIndex, 100);   // Set Frequency
@@ -156,7 +157,6 @@ namespace NameSpace_AFM_Project
         public void MoveDistance_OpenLoop(uint channel, double distance, uint frequency)
         {
             distance *= mDirection[(uint)channel];
-
             if (moving == true)
             {
                 MY_DEBUG("Coarse positioner busy.");
@@ -211,20 +211,20 @@ namespace NameSpace_AFM_Project
             moving = false;
         }
 
-        void MoveToPosition(double x, double y, double z, double t)
-        {
+        //void MoveToPosition(double x, double y, double z, double t)
+        //{
 
-        }
+        //}
 
-        void MoveToPosition(int channel, double position)
-        {
+        //void MoveToPosition(int channel, double position)
+        //{
 
-        }
+        //}
 
-        double GetPosition(int axis)
-        {
-            return 0;
-        }
+        //double GetPosition(int axis)
+        //{
+        //    return 0;
+        //}
 
         void SetSensorMode(uint mode)
         {
@@ -335,9 +335,11 @@ namespace NameSpace_AFM_Project
         // 	}
         // }
         // 
+
+
+        // for Z, distance>0, move up, but sensor position readout increase.
         public void MoveDistance(uint channel, double distance, uint frequency)
         {
-            distance *= mDirection[(uint)channel];
             if (mSensorMode == CCoarseController.SA_SENSOR_DISABLED)
                 MoveDistance_OpenLoop(channel, distance, frequency);
             else
@@ -345,6 +347,7 @@ namespace NameSpace_AFM_Project
         }
         public void MoveDistance_CloseLoop(uint channel, double distance, uint frequency)//uint channelIndex, int stepsize, int speed)// close loop
         {
+            distance *= mDirection[(uint)channel];
             CCoarseController.SA_GotoPositionRelative_S(mSystemIndex, channel, (int)distance, 1000);
             //SetSpeedCloseLoop((uint)channelIndex,abs(stepsize)*100);
             //SetSpeedCloseLoop((uint)channel, (uint)Math.Abs(frequency));
@@ -367,7 +370,7 @@ namespace NameSpace_AFM_Project
             }
         }
 
-        uint GetFinePosition(uint channelIndex)
+        public uint GetFinePosition(uint channelIndex)
         {
             uint level = 0;
             mResult = CCoarseController.SA_GetVoltageLevel_S((uint)mSystemIndex, (uint)channelIndex, ref level);
@@ -379,8 +382,11 @@ namespace NameSpace_AFM_Project
             return level;
         }
 
-        int GetPosition(uint channelIndex)
+        public int GetPosition(uint channelIndex)
         {
+            if (mSensorMode == CCoarseController.SA_SENSOR_DISABLED)
+                return 0;
+
             int position = 0;
             mResult = CCoarseController.SA_GetPosition_S((uint)mSystemIndex, (uint)channelIndex, ref position);
             if (mResult != CCoarseController.SA_OK)
@@ -388,6 +394,7 @@ namespace NameSpace_AFM_Project
                 //Initialize();
                 MY_DEBUG("GetPosition error!\n");
             }
+            position *=  (int)mDirection[(uint)channelIndex];
             return position;
         }
 
@@ -444,7 +451,7 @@ namespace NameSpace_AFM_Project
                 Initialize();
 
                 MY_DEBUG("redo initialize=" + redo_count.ToString());
-                if (redo_count++ < 10)
+                if (redo_count++ < 2)
                 {
                     SetChannelVoltage(channelIndex, V_0_150);
                 }

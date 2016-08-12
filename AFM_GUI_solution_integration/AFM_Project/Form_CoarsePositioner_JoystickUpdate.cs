@@ -841,22 +841,22 @@ namespace NameSpace_AFM_Project
 
             mLock_GUI_UpdateCoarsePositionerEncoder = true;
 
-                    int CoarsePositionX = 0;
-        int CoarsePositionY = 0;
-        int CoarsePositionZ = 0;
+            //int CoarsePositionX = 0;
+            //int CoarsePositionY = 0;
+            //int CoarsePositionZ = 0;
 
-            JSmResult = CCoarseController.SA_GetPosition_S(mSystemIndex, channel_x, ref CoarsePositionX);        // X axis
-            //label_Encoder_X.Text = Convert.ToString(mCoarsePositionX);
+            //JSmResult = CCoarseController.SA_GetPosition_S(mSystemIndex, channel_x, ref CoarsePositionX);        // X axis
+            ////label_Encoder_X.Text = Convert.ToString(mCoarsePositionX);
 
-            JSmResult = CCoarseController.SA_GetPosition_S(mSystemIndex, channel_y, ref CoarsePositionY);        // Y axis
-            //label_Encoder_Y.Text = Convert.ToString(mCoarsePositionY);
+            //JSmResult = CCoarseController.SA_GetPosition_S(mSystemIndex, channel_y, ref CoarsePositionY);        // Y axis
+            ////label_Encoder_Y.Text = Convert.ToString(mCoarsePositionY);
 
-            JSmResult = CCoarseController.SA_GetPosition_S(mSystemIndex, channel_z, ref CoarsePositionZ);        // Z axis
-            //label_Encoder_Z.Text = Convert.ToString(mCoarsePositionZ);
+            //JSmResult = CCoarseController.SA_GetPosition_S(mSystemIndex, channel_z, ref CoarsePositionZ);        // Z axis
+            ////label_Encoder_Z.Text = Convert.ToString(mCoarsePositionZ);
 
-            mCoarsePositionX=CoarsePositionX/1000.0;
-            mCoarsePositionY=CoarsePositionY/1000.0;
-            mCoarsePositionZ=CoarsePositionZ/1000.0;
+            mCoarsePositionZ = mCCoarsePositioner.GetPosition(mCaxis_z) / 1000.0;
+            mCoarsePositionX = mCCoarsePositioner.GetPosition(mCaxis_x) / 1000.0;
+            mCoarsePositionY = mCCoarsePositioner.GetPosition(mCaxis_y) / 1000.0;
 
             mLock_GUI_UpdateCoarsePositionerEncoder = false;
         }

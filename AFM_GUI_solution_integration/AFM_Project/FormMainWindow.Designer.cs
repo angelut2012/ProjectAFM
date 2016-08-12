@@ -66,10 +66,12 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.button_Z_HybridWithdraw = new System.Windows.Forms.Button();
             this.button_XY_Scan = new System.Windows.Forms.Button();
+            this.button_Z_HybridEngage = new System.Windows.Forms.Button();
             this.button_XY_pause = new System.Windows.Forms.Button();
             this.button_ClearImage = new System.Windows.Forms.Button();
-            this.button_Z_Engage = new System.Windows.Forms.Button();
+            this.button_Z_Engage_Test = new System.Windows.Forms.Button();
             this.button_Z_Withdraw = new System.Windows.Forms.Button();
             this.checkBox_Y_ScanEnable = new System.Windows.Forms.CheckBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -112,6 +114,9 @@
             this.pictureBox_AFM_Real_Image = new System.Windows.Forms.PictureBox();
             this.button_ExportData = new System.Windows.Forms.Button();
             this.groupBox_AFMImage = new System.Windows.Forms.GroupBox();
+            this.checkBox_User_AutoStartScanAfterEngage = new System.Windows.Forms.CheckBox();
+            this.button_User_AutoEngage = new System.Windows.Forms.Button();
+            this.button_User_ImageScan_StartStop = new System.Windows.Forms.Button();
             this.radioButton_Deflection = new System.Windows.Forms.RadioButton();
             this.button_Coarse_MoveToHomePosition = new System.Windows.Forms.Button();
             this.label_Speed_Z = new System.Windows.Forms.Label();
@@ -224,7 +229,7 @@
             // 
             // textBox_Z_PID_P
             // 
-            this.textBox_Z_PID_P.Location = new System.Drawing.Point(410, 541);
+            this.textBox_Z_PID_P.Location = new System.Drawing.Point(182, 276);
             this.textBox_Z_PID_P.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Z_PID_P.Name = "textBox_Z_PID_P";
             this.textBox_Z_PID_P.Size = new System.Drawing.Size(54, 20);
@@ -234,17 +239,17 @@
             // 
             // textBox_Z_PID_I
             // 
-            this.textBox_Z_PID_I.Location = new System.Drawing.Point(410, 567);
+            this.textBox_Z_PID_I.Location = new System.Drawing.Point(182, 302);
             this.textBox_Z_PID_I.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Z_PID_I.Name = "textBox_Z_PID_I";
             this.textBox_Z_PID_I.Size = new System.Drawing.Size(54, 20);
             this.textBox_Z_PID_I.TabIndex = 26;
-            this.textBox_Z_PID_I.Text = "15";
+            this.textBox_Z_PID_I.Text = "0.3";
             this.toolTip_Help.SetToolTip(this.textBox_Z_PID_I, "Enter the step length here.");
             // 
             // textBox_Z_PID_D
             // 
-            this.textBox_Z_PID_D.Location = new System.Drawing.Point(410, 593);
+            this.textBox_Z_PID_D.Location = new System.Drawing.Point(182, 328);
             this.textBox_Z_PID_D.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Z_PID_D.Name = "textBox_Z_PID_D";
             this.textBox_Z_PID_D.Size = new System.Drawing.Size(54, 20);
@@ -257,7 +262,7 @@
             this.button_SetParameters.BackColor = System.Drawing.Color.Transparent;
             this.button_SetParameters.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button_SetParameters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_SetParameters.Location = new System.Drawing.Point(471, 295);
+            this.button_SetParameters.Location = new System.Drawing.Point(163, 190);
             this.button_SetParameters.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_SetParameters.Name = "button_SetParameters";
             this.button_SetParameters.Size = new System.Drawing.Size(81, 41);
@@ -391,7 +396,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "30.9";
+            this.textBox_Sensitivity.Text = "94";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm
@@ -411,7 +416,7 @@
             this.textBox_NumberOfFrameToScan.Name = "textBox_NumberOfFrameToScan";
             this.textBox_NumberOfFrameToScan.Size = new System.Drawing.Size(38, 20);
             this.textBox_NumberOfFrameToScan.TabIndex = 75;
-            this.textBox_NumberOfFrameToScan.Text = "1";
+            this.textBox_NumberOfFrameToScan.Text = "10";
             this.toolTip_Help.SetToolTip(this.textBox_NumberOfFrameToScan, "Enter the step length here.");
             // 
             // textBox_TF_DC_Gain
@@ -426,7 +431,7 @@
             // 
             // textBox_TaskTime
             // 
-            this.textBox_TaskTime.Location = new System.Drawing.Point(44, 278);
+            this.textBox_TaskTime.Location = new System.Drawing.Point(12, 276);
             this.textBox_TaskTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_TaskTime.Name = "textBox_TaskTime";
             this.textBox_TaskTime.Size = new System.Drawing.Size(60, 20);
@@ -436,7 +441,7 @@
             // 
             // textBox_TaskNumber
             // 
-            this.textBox_TaskNumber.Location = new System.Drawing.Point(44, 319);
+            this.textBox_TaskNumber.Location = new System.Drawing.Point(12, 317);
             this.textBox_TaskNumber.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_TaskNumber.Name = "textBox_TaskNumber";
             this.textBox_TaskNumber.Size = new System.Drawing.Size(60, 20);
@@ -446,7 +451,7 @@
             // 
             // textBox_Task_PointsNumber
             // 
-            this.textBox_Task_PointsNumber.Location = new System.Drawing.Point(44, 369);
+            this.textBox_Task_PointsNumber.Location = new System.Drawing.Point(12, 367);
             this.textBox_Task_PointsNumber.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_Task_PointsNumber.Name = "textBox_Task_PointsNumber";
             this.textBox_Task_PointsNumber.Size = new System.Drawing.Size(60, 20);
@@ -456,7 +461,7 @@
             // 
             // textBox_T
             // 
-            this.textBox_T.Location = new System.Drawing.Point(44, 421);
+            this.textBox_T.Location = new System.Drawing.Point(12, 419);
             this.textBox_T.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_T.Name = "textBox_T";
             this.textBox_T.Size = new System.Drawing.Size(60, 20);
@@ -469,7 +474,7 @@
             this.button_Update_ParaPID.BackColor = System.Drawing.Color.Transparent;
             this.button_Update_ParaPID.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.button_Update_ParaPID.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button_Update_ParaPID.Location = new System.Drawing.Point(498, 554);
+            this.button_Update_ParaPID.Location = new System.Drawing.Point(143, 376);
             this.button_Update_ParaPID.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button_Update_ParaPID.Name = "button_Update_ParaPID";
             this.button_Update_ParaPID.Size = new System.Drawing.Size(81, 41);
@@ -497,7 +502,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
-            this.label1.Location = new System.Drawing.Point(364, 541);
+            this.label1.Location = new System.Drawing.Point(136, 276);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 27;
@@ -507,7 +512,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.BackColor = System.Drawing.Color.Transparent;
-            this.label5.Location = new System.Drawing.Point(364, 567);
+            this.label5.Location = new System.Drawing.Point(136, 302);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 28;
@@ -517,7 +522,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Location = new System.Drawing.Point(364, 595);
+            this.label6.Location = new System.Drawing.Point(136, 330);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(42, 13);
             this.label6.TabIndex = 29;
@@ -526,21 +531,34 @@
             // groupBox6
             // 
             this.groupBox6.BackColor = System.Drawing.Color.Transparent;
+            this.groupBox6.Controls.Add(this.button_Z_HybridWithdraw);
             this.groupBox6.Controls.Add(this.button_XY_Scan);
+            this.groupBox6.Controls.Add(this.button_Z_HybridEngage);
             this.groupBox6.Controls.Add(this.button_XY_Reset);
             this.groupBox6.Controls.Add(this.button_XY_pause);
             this.groupBox6.Controls.Add(this.button_ClearImage);
-            this.groupBox6.Controls.Add(this.button_Z_Engage);
+            this.groupBox6.Controls.Add(this.button_Z_Engage_Test);
             this.groupBox6.Controls.Add(this.button_Z_Withdraw);
             this.groupBox6.Controls.Add(this.checkBox_Y_ScanEnable);
-            this.groupBox6.Location = new System.Drawing.Point(367, 78);
+            this.groupBox6.Location = new System.Drawing.Point(365, 77);
             this.groupBox6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.groupBox6.Size = new System.Drawing.Size(212, 209);
+            this.groupBox6.Size = new System.Drawing.Size(214, 269);
             this.groupBox6.TabIndex = 21;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Scanning";
+            // 
+            // button_Z_HybridWithdraw
+            // 
+            this.button_Z_HybridWithdraw.Location = new System.Drawing.Point(118, 204);
+            this.button_Z_HybridWithdraw.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Z_HybridWithdraw.Name = "button_Z_HybridWithdraw";
+            this.button_Z_HybridWithdraw.Size = new System.Drawing.Size(67, 35);
+            this.button_Z_HybridWithdraw.TabIndex = 71;
+            this.button_Z_HybridWithdraw.Text = "hybrid withdraw";
+            this.button_Z_HybridWithdraw.UseVisualStyleBackColor = true;
+            this.button_Z_HybridWithdraw.Click += new System.EventHandler(this.button_Z_HybridWithdraw_Click);
             // 
             // button_XY_Scan
             // 
@@ -549,13 +567,24 @@
             this.button_XY_Scan.Name = "button_XY_Scan";
             this.button_XY_Scan.Size = new System.Drawing.Size(67, 35);
             this.button_XY_Scan.TabIndex = 46;
-            this.button_XY_Scan.Text = "Start";
+            this.button_XY_Scan.Text = "start XY scan";
             this.button_XY_Scan.UseVisualStyleBackColor = true;
             this.button_XY_Scan.Click += new System.EventHandler(this.button_XY_Scan_Click);
             // 
+            // button_Z_HybridEngage
+            // 
+            this.button_Z_HybridEngage.Location = new System.Drawing.Point(14, 204);
+            this.button_Z_HybridEngage.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Z_HybridEngage.Name = "button_Z_HybridEngage";
+            this.button_Z_HybridEngage.Size = new System.Drawing.Size(96, 35);
+            this.button_Z_HybridEngage.TabIndex = 72;
+            this.button_Z_HybridEngage.Text = "hybrid engage scan";
+            this.button_Z_HybridEngage.UseVisualStyleBackColor = true;
+            this.button_Z_HybridEngage.Click += new System.EventHandler(this.button_Z_HybridEngage_Click);
+            // 
             // button_XY_pause
             // 
-            this.button_XY_pause.Location = new System.Drawing.Point(14, 67);
+            this.button_XY_pause.Location = new System.Drawing.Point(14, 66);
             this.button_XY_pause.Margin = new System.Windows.Forms.Padding(2);
             this.button_XY_pause.Name = "button_XY_pause";
             this.button_XY_pause.Size = new System.Drawing.Size(67, 35);
@@ -575,16 +604,16 @@
             this.button_ClearImage.UseVisualStyleBackColor = true;
             this.button_ClearImage.Click += new System.EventHandler(this.button_ClearImage_Click);
             // 
-            // button_Z_Engage
+            // button_Z_Engage_Test
             // 
-            this.button_Z_Engage.Location = new System.Drawing.Point(118, 16);
-            this.button_Z_Engage.Margin = new System.Windows.Forms.Padding(2);
-            this.button_Z_Engage.Name = "button_Z_Engage";
-            this.button_Z_Engage.Size = new System.Drawing.Size(67, 35);
-            this.button_Z_Engage.TabIndex = 44;
-            this.button_Z_Engage.Text = "engage";
-            this.button_Z_Engage.UseVisualStyleBackColor = true;
-            this.button_Z_Engage.Click += new System.EventHandler(this.button_Z_Engage_Click);
+            this.button_Z_Engage_Test.Location = new System.Drawing.Point(118, 16);
+            this.button_Z_Engage_Test.Margin = new System.Windows.Forms.Padding(2);
+            this.button_Z_Engage_Test.Name = "button_Z_Engage_Test";
+            this.button_Z_Engage_Test.Size = new System.Drawing.Size(67, 35);
+            this.button_Z_Engage_Test.TabIndex = 44;
+            this.button_Z_Engage_Test.Text = "test engage";
+            this.button_Z_Engage_Test.UseVisualStyleBackColor = true;
+            this.button_Z_Engage_Test.Click += new System.EventHandler(this.button_Z_EngageTest_Click);
             // 
             // button_Z_Withdraw
             // 
@@ -605,9 +634,9 @@
             this.checkBox_Y_ScanEnable.Location = new System.Drawing.Point(14, 171);
             this.checkBox_Y_ScanEnable.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.checkBox_Y_ScanEnable.Name = "checkBox_Y_ScanEnable";
-            this.checkBox_Y_ScanEnable.Size = new System.Drawing.Size(112, 17);
+            this.checkBox_Y_ScanEnable.Size = new System.Drawing.Size(76, 17);
             this.checkBox_Y_ScanEnable.TabIndex = 45;
-            this.checkBox_Y_ScanEnable.Text = "Enable Area Scan";
+            this.checkBox_Y_ScanEnable.Text = "Area Scan";
             this.checkBox_Y_ScanEnable.UseVisualStyleBackColor = true;
             this.checkBox_Y_ScanEnable.CheckedChanged += new System.EventHandler(this.checkBox_Y_ScanEnable_CheckedChanged);
             // 
@@ -929,7 +958,7 @@
             // 
             this.label25.AutoSize = true;
             this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Location = new System.Drawing.Point(50, 263);
+            this.label25.Location = new System.Drawing.Point(18, 261);
             this.label25.Name = "label25";
             this.label25.Size = new System.Drawing.Size(63, 13);
             this.label25.TabIndex = 88;
@@ -939,7 +968,7 @@
             // 
             this.label26.AutoSize = true;
             this.label26.BackColor = System.Drawing.Color.Transparent;
-            this.label26.Location = new System.Drawing.Point(50, 302);
+            this.label26.Location = new System.Drawing.Point(18, 300);
             this.label26.Name = "label26";
             this.label26.Size = new System.Drawing.Size(65, 13);
             this.label26.TabIndex = 90;
@@ -949,7 +978,7 @@
             // 
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Location = new System.Drawing.Point(39, 352);
+            this.label27.Location = new System.Drawing.Point(7, 350);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(111, 13);
             this.label27.TabIndex = 92;
@@ -959,7 +988,7 @@
             // 
             this.label28.AutoSize = true;
             this.label28.BackColor = System.Drawing.Color.Transparent;
-            this.label28.Location = new System.Drawing.Point(50, 406);
+            this.label28.Location = new System.Drawing.Point(18, 404);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(30, 13);
             this.label28.TabIndex = 94;
@@ -1025,19 +1054,14 @@
             // groupBox_AFMImage
             // 
             this.groupBox_AFMImage.BackColor = System.Drawing.Color.LightGray;
-            this.groupBox_AFMImage.Controls.Add(this.button_Update_ParaPID);
-            this.groupBox_AFMImage.Controls.Add(this.textBox_Z_PID_P);
+            this.groupBox_AFMImage.Controls.Add(this.checkBox_User_AutoStartScanAfterEngage);
+            this.groupBox_AFMImage.Controls.Add(this.button_User_AutoEngage);
+            this.groupBox_AFMImage.Controls.Add(this.button_User_ImageScan_StartStop);
             this.groupBox_AFMImage.Controls.Add(this.button_CancelIndent);
             this.groupBox_AFMImage.Controls.Add(this.button_StartIndent);
             this.groupBox_AFMImage.Controls.Add(this.propertyGrid_AFM_Parameter);
             this.groupBox_AFMImage.Controls.Add(this.groupBox6);
-            this.groupBox_AFMImage.Controls.Add(this.button_SetParameters);
             this.groupBox_AFMImage.Controls.Add(this.groupBox7);
-            this.groupBox_AFMImage.Controls.Add(this.label1);
-            this.groupBox_AFMImage.Controls.Add(this.label5);
-            this.groupBox_AFMImage.Controls.Add(this.textBox_Z_PID_I);
-            this.groupBox_AFMImage.Controls.Add(this.textBox_Z_PID_D);
-            this.groupBox_AFMImage.Controls.Add(this.label6);
             this.groupBox_AFMImage.Location = new System.Drawing.Point(294, 168);
             this.groupBox_AFMImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox_AFMImage.Name = "groupBox_AFMImage";
@@ -1046,6 +1070,41 @@
             this.groupBox_AFMImage.TabIndex = 103;
             this.groupBox_AFMImage.TabStop = false;
             this.groupBox_AFMImage.Text = "AFM Imaging Result";
+            // 
+            // checkBox_User_AutoStartScanAfterEngage
+            // 
+            this.checkBox_User_AutoStartScanAfterEngage.AutoSize = true;
+            this.checkBox_User_AutoStartScanAfterEngage.Checked = true;
+            this.checkBox_User_AutoStartScanAfterEngage.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_User_AutoStartScanAfterEngage.Location = new System.Drawing.Point(379, 522);
+            this.checkBox_User_AutoStartScanAfterEngage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.checkBox_User_AutoStartScanAfterEngage.Name = "checkBox_User_AutoStartScanAfterEngage";
+            this.checkBox_User_AutoStartScanAfterEngage.Size = new System.Drawing.Size(159, 17);
+            this.checkBox_User_AutoStartScanAfterEngage.TabIndex = 45;
+            this.checkBox_User_AutoStartScanAfterEngage.Text = "auto start scan after engage";
+            this.checkBox_User_AutoStartScanAfterEngage.UseVisualStyleBackColor = true;
+            // 
+            // button_User_AutoEngage
+            // 
+            this.button_User_AutoEngage.Location = new System.Drawing.Point(379, 478);
+            this.button_User_AutoEngage.Margin = new System.Windows.Forms.Padding(2);
+            this.button_User_AutoEngage.Name = "button_User_AutoEngage";
+            this.button_User_AutoEngage.Size = new System.Drawing.Size(63, 35);
+            this.button_User_AutoEngage.TabIndex = 44;
+            this.button_User_AutoEngage.Text = "auto engage";
+            this.button_User_AutoEngage.UseVisualStyleBackColor = true;
+            this.button_User_AutoEngage.Click += new System.EventHandler(this.button_User_AutoEngage_Click);
+            // 
+            // button_User_ImageScan_StartStop
+            // 
+            this.button_User_ImageScan_StartStop.Location = new System.Drawing.Point(492, 478);
+            this.button_User_ImageScan_StartStop.Margin = new System.Windows.Forms.Padding(2);
+            this.button_User_ImageScan_StartStop.Name = "button_User_ImageScan_StartStop";
+            this.button_User_ImageScan_StartStop.Size = new System.Drawing.Size(67, 35);
+            this.button_User_ImageScan_StartStop.TabIndex = 73;
+            this.button_User_ImageScan_StartStop.Text = "start";
+            this.button_User_ImageScan_StartStop.UseVisualStyleBackColor = true;
+            this.button_User_ImageScan_StartStop.Click += new System.EventHandler(this.button_User_ImageScan_StartStop_Click);
             // 
             // radioButton_Deflection
             // 
@@ -1656,15 +1715,23 @@
             // 
             this.tabPage_backup.Controls.Add(this.label15);
             this.tabPage_backup.Controls.Add(this.textBox_T);
+            this.tabPage_backup.Controls.Add(this.button_Update_ParaPID);
             this.tabPage_backup.Controls.Add(this.textBox_Dy);
+            this.tabPage_backup.Controls.Add(this.textBox_Z_PID_P);
             this.tabPage_backup.Controls.Add(this.textBox_TaskTime);
             this.tabPage_backup.Controls.Add(this.checkBox_ForceSetAll);
             this.tabPage_backup.Controls.Add(this.label25);
             this.tabPage_backup.Controls.Add(this.label16);
             this.tabPage_backup.Controls.Add(this.textBox_TaskNumber);
+            this.tabPage_backup.Controls.Add(this.button_SetParameters);
+            this.tabPage_backup.Controls.Add(this.label1);
+            this.tabPage_backup.Controls.Add(this.label5);
             this.tabPage_backup.Controls.Add(this.label26);
+            this.tabPage_backup.Controls.Add(this.textBox_Z_PID_I);
             this.tabPage_backup.Controls.Add(this.textBox_Dx);
+            this.tabPage_backup.Controls.Add(this.textBox_Z_PID_D);
             this.tabPage_backup.Controls.Add(this.label28);
+            this.tabPage_backup.Controls.Add(this.label6);
             this.tabPage_backup.Controls.Add(this.textBox_XL);
             this.tabPage_backup.Controls.Add(this.textBox_Task_PointsNumber);
             this.tabPage_backup.Controls.Add(this.label27);
@@ -1917,7 +1984,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox checkBox_COM_Transfer;
         private System.Windows.Forms.Button button_Z_Withdraw;
-        private System.Windows.Forms.Button button_Z_Engage;
+        private System.Windows.Forms.Button button_Z_Engage_Test;
         private System.Windows.Forms.CheckBox checkBox_Y_ScanEnable;
         private System.Windows.Forms.Button button_XY_pause;
         private System.Windows.Forms.Button button_XY_Scan;
@@ -2039,6 +2106,11 @@
         private System.Windows.Forms.Timer timer_ScaningImageShow_RealTime;
         private System.Windows.Forms.Button button_Update_ParaPID;
         private System.Windows.Forms.Label label_SystemState;
+        private System.Windows.Forms.Button button_Z_HybridWithdraw;
+        private System.Windows.Forms.Button button_Z_HybridEngage;
+        private System.Windows.Forms.Button button_User_ImageScan_StartStop;
+        private System.Windows.Forms.Button button_User_AutoEngage;
+        private System.Windows.Forms.CheckBox checkBox_User_AutoStartScanAfterEngage;
     }
 }
 

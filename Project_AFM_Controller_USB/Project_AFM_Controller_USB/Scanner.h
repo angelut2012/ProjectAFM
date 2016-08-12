@@ -22,9 +22,13 @@ class CScanner
 	float mPositionFromSensorNow01;
 	int mAxis;
 	
-	bool mDirection_PID = true;// if Vpiezo increase, sensor readout increase,==> set derection true
-	CScanner(void);
-	~CScanner(void);
+	bool mDirection_PID;
+	~CScanner(void) {}	;
+	CScanner(void)
+	{
+		mDirection_PID = true;// if Vpiezo increase, sensor readout increase,==> set derection true
+	}
+	;
 	void Initial(int axis,float mPeriod_Realtime_us)
 	{
 		mAxis = axis;
@@ -49,10 +53,10 @@ class CScanner
 //		const float pid_i [] = {0.01, 0.01, 0.01};
 //		const float pid_d [] = {0.00001,0,0};
 		
-		const float step_size [] = {0.001, 0.001, 0.001};
-		const float pid_p [] = {0.02, 0.02, 0.02};
-		const float pid_i [] = {0.01, 0.01, 0.01};
-		const float pid_d [] = {0.00001, 0.00001, 0.00001};		
+		const float step_size [] = {0.05, 0.05, 0.05};
+		const float pid_p [] = {0.2, 0.07, 0.07};
+		const float pid_i [] = {0.01, 0.0051, 0.0051};
+		const float pid_d [] = {0.0001, 0.00001, 0.00001};		
 		
 		mPID_Scanner->SetStepSize(step_size[mAxis]);
 		mPID_Scanner->SetPID_P(pid_p[mAxis]);//use P=0.01, I=0.002 OK, 20160416

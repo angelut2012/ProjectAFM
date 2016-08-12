@@ -300,13 +300,14 @@ public:
 
 
 #define  sampling_period_us_of_Approach_Process (250.0)//old;//2000.0
-	//#endif
+#define  sampling_period_us_of_ZScannerEngage_Process (370)//(1000.0)
+#define SamplingTime_ZLoop_us (422)//(350) //200(500)// measured by experiments	
 #define  sampling_frequency_of_Approach_Process ( 1000000.0/ sampling_period_us_of_Approach_Process)
 	// z scanner engage
-#define  sampling_period_us_of_ZScannerEngage_Process (1000.0)
+
 #define  sampling_frequency_of_ZScannerEngage_Process ( 1000000.0/ sampling_period_us_of_ZScannerEngage_Process)	
 	//// Zloop
-#define SamplingTime_ZLoop_us (422)//(350) //200(500)// measured by experiments
+
 
 #define SamplingFrequency_ZLoop_Hz  (1000000.0/SamplingTime_ZLoop_us)// Hz
 
@@ -378,7 +379,7 @@ public:
 #define mI_Withdraw_Done_Threshold_nm (1)// should not be smaller than noise level
 	float mI_Withdraw_Done_Threshold_ADC;// mI_PRC_ADCValue_per_nm*mI_Withdraw_Done_Threshold_nm;
 
-#define mI_MaxStep (4096)//(25*1024) is max
+#define mI_MaxStep (10000)//(4096)//(25*1024) is max
 	uint32_t mIndentData[3][mI_MaxStep];// {0};
 
 	uint32_t mZLoopPID_WorkingDistance_nm;// 500 / 4;// set working voltage;// receive from rs232
@@ -557,7 +558,7 @@ public:
 		//mIndentData[3][mI_MaxStep] = {0};
 
 		mZLoopPID_WorkingDistance_nm = 5;// set working voltage;// receive from rs232
-		DTS_Sensitivity_B18_per_nm = 40; //192/2;// nm/V   // receive from rs232
+		DTS_Sensitivity_B18_per_nm = 110;//@gain205,  40@gain65.6; //192/2;// nm/V   // receive from rs232
 		VWset_deltaV_ADC_b18 = 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZLoopPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZLoopPID_WorkingDistance_nm
 		//		mTF_DC_Gain = 1;// gain for tf DC actuation
 
@@ -1110,15 +1111,15 @@ public:
 
 	void process_data_capture_blocking(float time_delay)
 	{
-		for (int k = 0;k < mI_MaxStep;k++)
+		for (int k = 0;k < 10000;k++)
 		{
-			wait_us(time_delay);
+//			wait_us(time_delay);
 			toggle_pin_p(p_Tdio4);
 			sendToPC_system_data_package(20,
 				k,
 				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, false),
-				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true),
-				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
+				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true),
 				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
 				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
 				mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));			
@@ -1128,27 +1129,34 @@ public:
 
 
 
-	void process_data_capture_blocking_old(float time_delay)
+	void process_data_capture_blocking_MaxSpeed()
 	{
 		for (int k = 0;k < mI_MaxStep;k++)
-			//int k=0;
-				//while(1)
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+		for (int k = 0;k < mI_MaxStep;k++)
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+//		int k = 0;
+//			while(1)
 		{
-			//if (mTaskScheduler != SystemTask_DataCapture) return;// to interrupt during indentation
-			//*p_Tdio4 = 1;
-			wait_us(time_delay);
 			toggle_pin_p(p_Tdio4);
-			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);// 7.84 kHz-->6.076kHz
-			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);
-			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);// 7.84 kHz-->6.076kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
 
-			//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);//4.78 kHz
-			//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
-			//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);	
-
-			//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);//4.78 kHz-->11.934kHz
-			//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
-			//			mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);			 
+//						mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);//2.31*2=4.62 kHz 20160802
+//						mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
+//						mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);	
+//
+//			mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_PRC);// read to ADC_CHANNEL_PRC, multi channel average=1.64kHz*2=3.28kHz
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);//5.714*2 kHz=11.428kHz, 20160802
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);
+//			mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false); 
+			//if (k == mI_MaxStep/2)
+						//wait(300);
+			
+						mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);//5.714*2 kHz=11.428kHz, 20160802
+						mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false); 
+						mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);			 
 			//*p_Tdio4 = 0;
 
 		}
@@ -1159,7 +1167,7 @@ public:
 			//if (mTaskScheduler != SystemTask_DataCapture) return;// to interrupt during indentation
 			index_send = MOD_range(k, mI_MaxStep); //here % operator has problem with int
 			sendToPC_IndentData_Package(mIndentData[0][index_send], mIndentData[1][index_send], mIndentData[2][index_send]);
-			wait_us(1000);//7ms old delay=4 , but lose point sometimes
+			wait_us(7000);//7ms old delay=4 , but lose point sometimes
 			*p_Tdio5 = 0;
 		}
 		for (int m = 0;m < 4;m++)// send finish signal multi times, to make sure PC receive it
@@ -1261,7 +1269,7 @@ public:
 		
 //		threshold_approach_delta_B18 = DTS_Sensitivity_B18_per_nm * (mZLoopPID_WorkingDistance_nm+3);
 		// add 3, because of vibrations,   7nm  threashold to avoid peak-to-peak noise //112*5;// vpp*5 102*4;//87*11;//;3nm112*3;
-		threshold_approach_delta_B18 = 30 * 8;// DTS_Sensitivity_B18_per_nm * (mZLoopPID_WorkingDistance_nm + 3);
+		threshold_approach_delta_B18 = 110/2* 8;// DTS_Sensitivity_B18_per_nm * (mZLoopPID_WorkingDistance_nm + 3);
 		
 #else
 		threshold_approach_delta_B18 = (150.0 / SCANNER_RANGE_Z_NM*BIT18MAX);//1638;//0.025V/4*bit18=5nm;
@@ -1304,7 +1312,7 @@ public:
 //
 	}
 
-	int XYScanning_y_reverse(int u)
+	int XYscanning_y_reverse(int u)
 	{
 		static int t = 0, yt = -1;
 		if (u == 0 && t == 1)
@@ -1319,9 +1327,9 @@ public:
 		return yt;
 	}
 
-	int XYscanning()
+	int XYscanning_WaveGenerator()
 	{
-		diry_input =  XYScanning_y_reverse(diry_input);
+		diry_input =  XYscanning_y_reverse(diry_input);
 		//  static int px = XL, py = YL;
 		//	static int sawx = XL, sawy = YL;
 		static int frame_counter = 0;
@@ -1390,7 +1398,18 @@ public:
 				{
 					frame_counter = frame_counter + 1;
 					if (frame_counter >= N_FramesToScan)// finished predefined frames, stop scanning
+					{
 						console_XYScanReset();
+						float Z_sensor_height01 = mCScanner[PIEZO_Z].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));	
+						sendToPC_image_package(1000,
+							1000, 
+							Z_sensor_height01, 
+							0, 
+							mAFM_DAC.ReadDACValue(PIEZO_Z),
+							mCScanner[PIEZO_Z].mTemperature,
+							mCScanner[PIEZO_X].mTemperature);// tell PC that scan is done. 
+					}
+					
 				}
 				diry_core = -diry_input;
 			}
@@ -1465,9 +1484,10 @@ public:
 		//SX = sx;
 		//SY = sy;
 
-
-		
-		
+		return mDDS_XY_Scanner_State;
+	}
+	void XYscanning_MovePositioner()
+	{
 		if (mSystemScanMode_Openloop0_CloseloopXY1_CloseloopXYZ2 == 0)
 		{
 			// open loop scan
@@ -1478,6 +1498,36 @@ public:
 		{		//	close loop scan,  only set position reference, 
 			mCScanner[PIEZO_X].SetDestinationPosition01((_Float_)VDACx / (_Float_)BIT18MAX);	// only set position reference, real move be be done in AFM_ProcessScheduler_Realtime while calculate PID
 			mCScanner[PIEZO_Y].SetDestinationPosition01((_Float_)VDACy / (_Float_)BIT18MAX);			
+			
+// hold XY DDS generator if PID have not arrive.
+			
+
+				
+			static int hold_count = 0;
+			hold_count++;
+			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X)
+			  // ||
+			  // Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y)
+			{
+				if (indx == -N_x || indx == 0)// hold when change direction
+//				scan: 0-->127, change direction, -128-->-1, change direction again
+//				if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)
+				{
+					if (hold_count < 3000)
+						modeXYScanning_pause0_scan1_pending2 = 0;
+					else
+					{
+						modeXYScanning_pause0_scan1_pending2 = 1;
+						hold_count = 0;
+					}
+				}
+			}
+			else
+			{
+				modeXYScanning_pause0_scan1_pending2 = 1;
+				hold_count = 0;
+			}
+
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false)));// 3.745 kHz
 		}
@@ -1488,9 +1538,6 @@ public:
 		//	mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true)));// 3.745 kHz
 		//	mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
 		//}	
-
-
-		return mDDS_XY_Scanner_State;
 	}
 	void XYscanning_Initialize()
 		// also call initialize when change dds parameters XL YL DX DY
@@ -1499,11 +1546,11 @@ public:
 		modeXYScanning_pause0_scan1_pending2 = 0;
 
 		mTaskScheduler = SystemTask_XYScanReset;
-//		XYscanning();
+//		XYscanning_WaveGenerator();
 //		 put this into main loop, execute once each loop
 //		for (int k = 0;k < 2000;k++)
 //		{	
-//			XYscanning();
+//			XYscanning_WaveGenerator();
 //			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) < (20.0 / SCANNER_RANGE_X_NM)  && 
 //			     Math_Abs(mCScanner[PIEZO_Y].GetPositionError01())< (20.0 / SCANNER_RANGE_Y_NM))
 //				break;
@@ -1513,7 +1560,8 @@ public:
 	void process_XYscanningReset()
 	{
 		*p_Tdio3 = 1;
-		int state = XYscanning();
+		int state = XYscanning_WaveGenerator();
+		XYscanning_MovePositioner();
 		wait_ms(1);// otherwise, it is too fast
 		if (state == DDS_XY_Idle)
 			mTaskScheduler = SystemTask_Idle;// then use Idle process to continue to move PID
@@ -1548,13 +1596,11 @@ public:
 		float distance_tip_sample_error = mPID_ZLOOP->GetError();
 		//		mHoldXYScanner = true;// for test only  to test zero scan
 		mHoldXYScanner = Math_Abs(distance_tip_sample_error) > mZLoopPID_WorkingDistance_Threshold_01;
-		int	xy_state = 0;
 		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
 		{
-			xy_state = XYscanning();
-		}
-				
-				
+		XYscanning_WaveGenerator();// compute the next XY position		
+		XYscanning_MovePositioner();
+		}		
 
 		float Z_sensor_height01 = mCScanner[PIEZO_Z].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));		
 		
@@ -1975,17 +2021,27 @@ public:
 		console_WithDrawZScanner_SetSystemIdle();
 	}
 
-	void console_StartZScannerEngage()
+	
+	void console_PC2MCU_InitialParameter_ZLoop(float data=0)
 	{
-		console_ResetScannerModel(PIEZO_Z);
-		wait_ms(100);
-		PRCSensorAdc18_FarAway = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100);
+//		console_ResetScannerModel(PIEZO_Z);
+//		wait_ms(20);
+		PRCSensorAdc18_FarAway = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR, true);//  here read average will change the sampling rate
+//		ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100);
 
 		//		PRCSensorAdc18_FarAway = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100)-1000;
 		//#warning "PRCSensorAdc18_FarAway = ADC_read_average(ADC_PORT_ZlOOP_SENSOR, 50, 100)-1000; for remote debug only"
-		mTaskScheduler = SystemTask_Engage;
 		Z_position_DAC_ZScannerEngage = 0;
-		calculate_scan_parameter();
+		calculate_scan_parameter();		
+	}
+	
+	void console_StartZScannerEngage()
+	{
+		console_WithDrawZScanner_SetSystemIdle();
+		wait_us(30000);
+		console_PC2MCU_InitialParameter_ZLoop();
+		mTaskScheduler = SystemTask_Engage;
+
 	}
 
 	//#define console_YScan_Enable() y_enable = 1 
@@ -1995,7 +2051,7 @@ public:
 
 	inline void  console_XYScanReset()
 	{
-		console_WithDrawZScanner_SetSystemIdle();
+		//console_WithDrawZScanner_SetSystemIdle();
 		calculate_scan_parameter();
 		XYscanning_Initialize();
 	} 
@@ -2157,10 +2213,12 @@ public:
 
 	void console_PC2MCU_Command(byte* com)
 	{
-#define CMD_PC2MCU_BASE	(32768)//2^15
-#define CMD_PC2MCU_DATA_CAPTURE		(CMD_PC2MCU_BASE+1)
-#define CMD_PC2MCU_WAVE_TEST		(CMD_PC2MCU_BASE+2)
-#define CMD_PC2MCU_SCSG_RANGE_CALIBRATION		(CMD_PC2MCU_BASE+3)
+	 	const  int CMD_PC2MCU_BASE =  (32768);//2^15
+		const  int CMD_PC2MCU_DATA_CAPTURE	=  (CMD_PC2MCU_BASE + 1);
+		const  int CMD_PC2MCU_WAVE_TEST	=  (CMD_PC2MCU_BASE + 2);
+		const  int CMD_PC2MCU_SCSG_RANGE_CALIBRATION	=  (CMD_PC2MCU_BASE + 3);
+		const  int CMD_PC2MCU_StartZLoop	=  (CMD_PC2MCU_BASE + 4);
+		const  int CMD_PC2MCU_InitialParameter_ZLoop	=  (CMD_PC2MCU_BASE + 5);
 
 		int cmd_value = com[0];
 		cmd_value <<= 8;
@@ -2175,9 +2233,18 @@ public:
 			console_PC2MCU_StartWaveTest(cmd_dataf);	break;
 		case CMD_PC2MCU_SCSG_RANGE_CALIBRATION:
 			console_PC2MCU_ScsgRangeCalibration(cmd_dataf);	break;
+		case CMD_PC2MCU_StartZLoop:
+			console_PC2MCU_StartZLoop(cmd_dataf);	break;
+		case CMD_PC2MCU_InitialParameter_ZLoop:
+			console_PC2MCU_InitialParameter_ZLoop(cmd_dataf); break;
 		default: break;
 		}
 	}	
+	
+	void console_PC2MCU_StartZLoop(float data)
+	{
+		mTaskScheduler = SystemTask_Scan;
+	}
 	void console_PC2MCU_StartWaveTest(float data)
 	{
 		mTaskScheduler = SystemTask_WaveTest;
@@ -2185,7 +2252,8 @@ public:
 	void console_PC2MCU_StartCaptureData(float data)
 	{
 		//mTaskScheduler = SystemTask_DataCapture;
-		process_data_capture_blocking(data);
+//		process_data_capture_blocking(data);
+		process_data_capture_blocking_MaxSpeed();
 	}
 	//////////////////////// console end
 	//void test()
@@ -2370,6 +2438,7 @@ public:
 			convert_uint32_to_byte4(v, &com[3]);
 			convert_uint32_to_byte4(step, &com[3 + 4]);
 			sendToPC_Data_Into_Frame(com);
+//			sendToPC_Data_Into_Frame(com);
 			//			wait_ms(2);
 		}
 	}
@@ -2425,7 +2494,7 @@ public:
 		//if (PERIOD_CHECK_TIME_US_DUE_ZSCANNERENGAGE(sampling_period_us_of_ZScannerEngage_Process) == false) return;
 
 		//DIGITAL_PIN_TOGGLE(23);
-		*p_Tdio1 = 1;
+		*p_Tdio2 = 1;
 
 		//static uint32_t Z_position_DAC_ZScannerEngage=0;
 		V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR);
@@ -2452,7 +2521,7 @@ public:
 			return;
 		}
 		////////////////// STEP MOVE
-#define TIME_Z_SCANNER_ENGAGE (10.0)//10.0Second
+#define TIME_Z_SCANNER_ENGAGE (0.50)//2.0 10.0Second
 #define STEP_SIZE_Z_SCANNER_ENGAGE (BIT18MAX_0D75/(TIME_Z_SCANNER_ENGAGE*sampling_frequency_of_ZScannerEngage_Process))
 
 		Z_position_DAC_ZScannerEngage += (STEP_SIZE_Z_SCANNER_ENGAGE);	
@@ -2467,7 +2536,7 @@ public:
 //		}
 
 		
-		if (Z_position_DAC_ZScannerEngage > BIT18MAX_0D75)	
+		if (Z_position_DAC_ZScannerEngage > BIT18MAX_0D9)	//BIT18MAX_0D75
 		{
 			mTaskScheduler = SystemTask_Scan;
 			sendToPC_system_string_package("CZEdone");
@@ -2480,12 +2549,12 @@ public:
 			Z_position_DAC_ZScannerEngage = 0;
 		}
 		
-		
+		*p_Tdio2 = 0;		
 		
 		mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, Z_position_DAC_ZScannerEngage);
 		V18_Dac[PIEZO_Z] = Z_position_DAC_ZScannerEngage;
 
-		*p_Tdio1 = 0;
+		
 	}
 	//void process_Approach_only_coarse_move()// only coarse move
 	//{
@@ -3113,6 +3182,7 @@ public:
 	}
 	void process_Idle()
 	{
+		XYscanning_WaveGenerator();
 
 //		int t = 1,N=50000;
 //		int ch = ADC_CHANNEL_Z;
@@ -3165,7 +3235,7 @@ public:
 		
 		if (mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 == 2)
 		{		
-			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true)));
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false)));
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false)));	
 		
@@ -3174,7 +3244,7 @@ public:
 	
 		if (mSystemScanMode_Openloop0_CloseloopXY1_CloseloopXYZ2 > 0)
 		{// keep XY position during idle
-			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true)));
+			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false)));// 3.745 kHz
 		}
 		
@@ -3185,34 +3255,34 @@ public:
 		//		test_sensor_drift();		
 		//		test_scanner_wave_output_CloseLoopPosition();
 
-		//		test_scanner_wave_output_DAC();
-		//		return;
+//				test_scanner_wave_output_DAC();
+//				return;
 		//		
 		//----------------------------------------------
+
+
+
+
+		//UpdateScannerTemperature();
+
+		//float  pz =		mCScanner[PIEZO_Z].GetSensorPosition01( mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+		//float  px =		mCScanner[PIEZO_X].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false));
+		//float  py =		mCScanner[PIEZO_Y].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false));
+
+		//mUSerial.println();
+		//mUSerial.println(pz );
+		//mUSerial.println(px );
+		//mUSerial.println(py );
+		//mUSerial.println();
+		//return;
 
 		extern CTemperature mCTemperature;
 		uint32_t Temperature_MCU = mCTemperature.Read(false);
 
-
-
-		UpdateScannerTemperature();
-
-		float  pz =		mCScanner[PIEZO_Z].GetSensorPosition01( mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
-		float  px =		mCScanner[PIEZO_X].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false));
-		float  py =		mCScanner[PIEZO_Y].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false));
-
-		mUSerial.println();
-		mUSerial.println(pz );
-		mUSerial.println(px );
-		mUSerial.println(py );
-		mUSerial.println();
-		//return;
-
-
 		sendToPC_system_data_package(20,
-			pz,
-			//Temperature_MCU,
-			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true),
+			//pz,
+			Temperature_MCU,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, false),
 			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
 			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
 			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
@@ -3406,10 +3476,37 @@ public:
 			wait(0.1);
 		}
 	}
+
 	void AFM_main_setup() 
 	{	
 		CAFM_ClockDefine mCAFM_ClockDefine;
 		mCAFM_ClockDefine.AFM_SystemInit(); 
+//		while (1)
+//		{
+//					
+//		*p_Tdio2 = 0;
+//		*p_Tdio2 = 1;
+//	}
+		
+//	FastOut<PE_1> *q;
+//    while(1)
+//    {
+////		p.write(0);
+////		p.write(1);// 4.61MHz*2
+////	    p = 1;// 2.58MHz*2
+////	    *p = 1;// 2.60MHz*2
+////	    p->write(1);// 4.50*2 MHz
+//		//p.output();
+////	    *p = 0;
+////	    *p = 1;// 2.58MHz*2
+//	    q->write(0);
+//	    q->write(1);
+//	   
+//        
+//        }	
+		
+		
+		
 		//		test_usb_hardware();
 		mAFM_DAC.Initialize();
 		mAFM_DAC.DAC_write(PIEZO_X, 0);
@@ -3435,6 +3532,7 @@ public:
 		//			FOR_REPEAT(1, x = x/y ;);
 		//			MY_Debug_LN(x);
 		//		}
+
 
 
 		mCTickTimer_RealTime.start();
@@ -3509,43 +3607,74 @@ public:
 		////			toggle_pin_p(p_Tdio2);
 		//		}
 	}
+	
+	_Float_ mSCSG_B18_Min[NUM_OF_SCANNER]  = {179922, 175280, 149892};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
+	_Float_ mSCSG_B18_Max[NUM_OF_SCANNER]  = {56140, 41608, 24954};//{241554, 244873, 61734};//{241802, 244504, 62131};
+	
+	
+//	[12808] SCSG min : 43430 
+//[12808] SCSG min : 142590 
+//[12808] SCSG min : 174586 
+//[12808] SCSG max : 152606 
+//[12808] SCSG max : 13944 
+//[12808] SCSG max : 39198 
+//
+	
+	
+	
+	float mThreshold01_XYscanning_X = 0;
+	float mThreshold01_XYscanning_Y = 0;
 	void Initialze_XYZScanner_CloseLoop()
 	{
+				// without temp compensation
+	const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {179922, 41608, 24954};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
+	const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {56140, 175280, 149892};//{241554, 244873, 61734};//{241802, 244504, 62131};
+
+		
 		// here, we should call realtimeScanProcess to evaluate the time. and set mPeriod_RealtimePID_us
 		for (int k = 0;k < NUM_OF_SCANNER;k++)
-			mCScanner[k].Initial(k, mPeriod_RealtimePID_us);
+		{	
+			mCScanner[k].Initial(k, mPeriod_RealtimePID_us);	
+			mSCSG_B18_Min[k] = ADC18_Min[k];//non-static data member initializers only available with -std=c++11 or -std=gnu++11
+			mSCSG_B18_Max[k] = ADC18_Max[k];
+			mCScanner[k].SetSensorRange(mSCSG_B18_Min[k], mSCSG_B18_Max[k]);
+			mCScanner[k].SetDestinationPosition01(0);//0.5
+		}
+		
 	}
 	void console_PC2MCU_ScsgRangeCalibration(float data)
 	{
+		GetPositionSensorRange(mSCSG_B18_Min, mSCSG_B18_Max);
 
-		// without temp compensation
-		_Float_ ADC18_Min[NUM_OF_SCANNER] = {179922, 41608, 24954};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
-		_Float_ ADC18_Max[NUM_OF_SCANNER] = {56140, 175280, 149892};//{241554, 244873, 61734};//{241802, 244504, 62131};
+		MY_Debug_StringValue_LN("ADC18_Min[0]", mSCSG_B18_Min[0]);
+		MY_Debug_StringValue_LN("ADC18_Min[1]", mSCSG_B18_Min[1]);
+		MY_Debug_StringValue_LN("ADC18_Min[2]", mSCSG_B18_Min[2]);
 
-		GetPositionSensorRange(ADC18_Min, ADC18_Max);
-
-		MY_Debug_StringValue_LN("ADC18_Min[0]", ADC18_Min[0]);
-		MY_Debug_StringValue_LN("ADC18_Min[1]", ADC18_Min[1]);
-		MY_Debug_StringValue_LN("ADC18_Min[2]", ADC18_Min[2]);
-
-		MY_Debug_StringValue_LN("ADC18_Max[0]", ADC18_Max[0]);
-		MY_Debug_StringValue_LN("ADC18_Max[1]", ADC18_Max[1]);
-		MY_Debug_StringValue_LN("ADC18_Max[2]", ADC18_Max[2]);
+		MY_Debug_StringValue_LN("ADC18_Max[0]", mSCSG_B18_Max[0]);
+		MY_Debug_StringValue_LN("ADC18_Max[1]", mSCSG_B18_Max[1]);
+		MY_Debug_StringValue_LN("ADC18_Max[2]", mSCSG_B18_Max[2]);
 		// send twice to make sure PC will receive
-		sendToPC_system_data_package(13, ADC18_Min[0], ADC18_Min[1], ADC18_Min[2]);
-		sendToPC_system_data_package(13, ADC18_Min[0], ADC18_Min[1], ADC18_Min[2]);		
-		sendToPC_system_data_package(14, ADC18_Max[0], ADC18_Max[1], ADC18_Max[2]);
-		sendToPC_system_data_package(14, ADC18_Max[0], ADC18_Max[1], ADC18_Max[2]);
+		sendToPC_system_data_package(13, mSCSG_B18_Min[0], mSCSG_B18_Min[1], mSCSG_B18_Min[2]);
+		sendToPC_system_data_package(13, mSCSG_B18_Min[0], mSCSG_B18_Min[1], mSCSG_B18_Min[2]);		
+		sendToPC_system_data_package(14, mSCSG_B18_Max[0], mSCSG_B18_Max[1], mSCSG_B18_Max[2]);
+		sendToPC_system_data_package(14, mSCSG_B18_Max[0], mSCSG_B18_Max[1], mSCSG_B18_Max[2]);
 
 		for (int k = 0;k < NUM_OF_SCANNER;k++)
 		{
-			mCScanner[k].SetSensorRange(ADC18_Min[k], ADC18_Max[k]);
+			mCScanner[k].SetSensorRange(mSCSG_B18_Min[k], mSCSG_B18_Max[k]);
 			//		mCScanner[PIEZO_Z].SetSensorRange(ADC18_Min[PIEZO_Z], ADC18_Max[PIEZO_Z]);
 			//		mCScanner[PIEZO_Z].SetSensorRange(ADC18_Min[PIEZO_Z], ADC18_Max[PIEZO_Z]);
 			mCScanner[k].SetDestinationPosition01(0);//0.5
 		}
 		
 		console_WithDrawZScanner_SetSystemIdle();
+		
+		const float noise_STD_B18_X = 2.9997;
+		const float noise_STD_B18_Y = 5.2362;
+		//			10.3889};
+
+		mThreshold01_XYscanning_X = 5.0*noise_STD_B18_X / Math_Abs( (mSCSG_B18_Max[PIEZO_X] - mSCSG_B18_Min[PIEZO_X]));
+		mThreshold01_XYscanning_Y = 40.0*noise_STD_B18_Y / Math_Abs( (mSCSG_B18_Max[PIEZO_Y] - mSCSG_B18_Min[PIEZO_Y]));
 		
 	}
 	bool GetPositionSensorRange(_Float_ *ADC18_Min, _Float_ *ADC18_Max)
@@ -3578,7 +3707,7 @@ public:
 		{
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_ALL, 0);
 			wait(20);//5
-
+			
 			ADC18_Min[PIEZO_Z] = mCScanner[PIEZO_Z].GetSensorPosition01_raw(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z,true));		
 			ADC18_Min[PIEZO_X] = mCScanner[PIEZO_X].GetSensorPosition01_raw(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true));				
 			ADC18_Min[PIEZO_Y] = mCScanner[PIEZO_Y].GetSensorPosition01_raw(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true));		

@@ -88,10 +88,17 @@ namespace NameSpace_AFM_Project
                 //byte axis = Convert.ToByte(textBox_Position_Axis.Text);
                 //for (int k = 0; k < N; k++)
                 {
-                    pParent.set_output_DAC_Value_0_5(axis_wave, 5);
+                    //pParent.set_output_DAC_Value_0_5(axis_wave, 5);
+                    //Thread.Sleep(dt);
+                    //pParent.set_output_DAC_Value_0_5(axis_wave, 0);
+                    //Thread.Sleep(dt);
+
+                    pParent.set_output_Position_Value_01(axis_wave + 100, 0.2);
                     Thread.Sleep(dt);
-                    pParent.set_output_DAC_Value_0_5(axis_wave, 0);
+                    pParent.set_output_Position_Value_01(axis_wave + 100, 0.8);
                     Thread.Sleep(dt);
+
+
                 }
             }
         }
@@ -150,7 +157,7 @@ namespace NameSpace_AFM_Project
             int axis = listBox_ScannerAxis.SelectedIndex;
             double value_01 = Convert.ToDouble(textBox_Position_Value.Text);
             value_01 += 0.1;
-            value_01 = pParent.MIN_MAX(value_01, 0, 1);
+            value_01 = pParent.LIMIT_MAX_MIN(value_01, 1, 0);
             textBox_Position_Value.Text = value_01.ToString();
             pParent.set_output_Position_Value_01(axis + 100, value_01);
         }
@@ -160,7 +167,7 @@ namespace NameSpace_AFM_Project
             int axis = listBox_ScannerAxis.SelectedIndex;
             double value_01 = Convert.ToDouble(textBox_Position_Value.Text);
             value_01 -= 0.1;
-            value_01 = pParent.MIN_MAX(value_01, 0, 1);
+            value_01 = pParent.LIMIT_MAX_MIN(value_01, 1, 0);
             textBox_Position_Value.Text = value_01.ToString();
             pParent.set_output_Position_Value_01(axis + 100, value_01);
         }

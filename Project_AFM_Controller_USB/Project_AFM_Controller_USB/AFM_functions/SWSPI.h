@@ -66,6 +66,7 @@
 #include "PinNames.h"
 #include "DigitalOut.h"
 #include "DigitalIn.h"
+#include "FastIO.h"
 
 #define SPI_WAIT
 
@@ -86,6 +87,10 @@ public:
 	DigitalOut* mosi;
     DigitalIn* miso;
     DigitalOut* sclk;
+//	FastOut* mosi;
+//	FastIn* miso;
+//    FastOut* sclk;
+	
     /** Create SWSPI object
      *
      *  @param mosi_pin

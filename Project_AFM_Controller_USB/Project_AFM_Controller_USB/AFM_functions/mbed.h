@@ -10,6 +10,6 @@
 #include "PinNames.h"
 #include "DigitalOut.h"
 #include "DigitalIn.h"
-
+#include  "FastIO.h"
 
 #endif // !__MBED_INCLUDE__

@@ -5,31 +5,35 @@ close all
 % load('input_20150827031119.mat')
 %     imy=image_adjust_Y(imHL',123,128);
 p=('C:\AFMdata\')
-[fn,p]=uigetfile([p '\*.txt'])
+[fn,p]=uigetfile([p '*ReHybridGrid22um2_HL*.txt'])
+
+% for 
+
 imraw=load([p fn]);
 % imraw=medfilt2(imraw,[3,3],'symmetric');
 
-% imraw(imraw==-1)=nan;
+imraw(imraw==-1)=nan;
 imraw=-imraw;
 % imraw=imraw-min(imraw(:));
-imraw=imraw-( -7.526316248554960e+03)
-% figure(10)
-% surf(imraw,'LineStyle','non')
-% colorbar
-% zlabel('nm')
-% ylabel('y<<--')
-% view([-82,14])
-% title(fn)
+imraw=imraw-( -7.526316248554960e+03+1100)
+figure(10)
+surf(imraw,'LineStyle','non')
+colorbar
+zlabel('nm')
+ylabel('y<<--')
+view([-112,18])
+% title(fn)   
 
 
 L=mean(imraw,2);
-% L=mean(imraw(:,1:20),2);
-L=flipud(L);
+L=mean(imraw(:,1:20),2);
+% L=flipud(L);
 figure(20)
-plot(L)
+plot(L,'*-')
 ylabel('nm')
-title(fn)
-% return
+xlabel('y -->>')
+% title(fn)
+return
 
 % imraw(1:30,:)=[];
 % imraw=imraw';
@@ -50,8 +54,9 @@ ps=linspace(1,size(imraw,1),20);
 px=px(:);
 py=py(:);
 im_flat=imraw;
-% im_flat=image_adjust_plane(imraw,1,px,py);
-im_flat=image_adjust_plane2(imraw,2,2);%
+load point_select.mat
+im_flat=image_adjust_plane(imraw,1,px,py);
+% im_flat=image_adjust_plane2(imraw,1,1);%
 % im_flat=medfilt2(im_flat,[3,3],'symmetric');
 im_flat=im_flat-min(im_flat(:));
 im_flat=im_flat-mean(im_flat(:));

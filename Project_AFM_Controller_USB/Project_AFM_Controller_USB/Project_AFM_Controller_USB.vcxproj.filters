@@ -660,6 +660,9 @@
     <ClInclude Include="AFM_functions\AFM_clock.h">
       <Filter>Header files\AFM</Filter>
     </ClInclude>
+    <ClInclude Include="AFM_functions\FastIO.h">
+      <Filter>Header files\AFM</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

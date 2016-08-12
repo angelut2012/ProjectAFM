@@ -132,6 +132,12 @@
     <Compile Include="Form_SEM_ImageShow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form_User_AutoEngageWaiting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_User_AutoEngageWaiting.Designer.cs">
+      <DependentUpon>Form_User_AutoEngageWaiting.cs</DependentUpon>
+    </Compile>
     <Compile Include="ParameterSettingForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageShow_Realtime.resx">
       <DependentUpon>Form_ImageShow_Realtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_User_AutoEngageWaiting.resx">
+      <DependentUpon>Form_User_AutoEngageWaiting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ParameterSettingForm.resx">
       <DependentUpon>ParameterSettingForm.cs</DependentUpon>

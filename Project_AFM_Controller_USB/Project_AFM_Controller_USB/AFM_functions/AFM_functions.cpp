@@ -61,7 +61,7 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 		case  AFM_Core::SystemTask_Approach:		mAFM_Core.process_Approach();break;//		
 			//			case  AFM_Core::SystemTask_Indent :		mAFM_Core.process_Indent_First_SendDataThen_vibration_test(); break;	
 		case  AFM_Core::SystemTask_Indent:		mAFM_Core.process_Indent_First_SendDataThen(); break;		
-		//case  AFM_Core::SystemTask_DataCapture:		mAFM_Core.process_data_capture(); break;		
+//		case  AFM_Core::SystemTask_Indent:		mAFM_Core.process_data_capture_blocking_MaxSpeed(); break;		
 
 		case  AFM_Core::SystemTask_Idle:			mAFM_Core.process_Idle(); 			break;			
 		case  AFM_Core::SystemTask_WaveTest:			mAFM_Core.process_WaveTest(); 			break;

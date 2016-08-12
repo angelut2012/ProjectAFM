@@ -66,25 +66,36 @@ void Initialize(int clock_Hz = 2000000)
 	//To change clock phase [Math_Max: Change on rising edge] and polarity [Math_Max: Idles low] (see SPI Lib reference)
 }
 //////////////////////////////////
-void FinePositioner_MoveToPositionB18(byte channel, uint32_t value)// real move , write dac
-{
-	int32_t position=value;
-	if (channel == PIEZO_Z)
+	void FinePositioner_MoveToPositionB18_old(byte channel, uint32_t value)// real move , write dac
 	{
-		position = (int32_t)BIT18MAX - (int32_t)value;
-		DAC_write(channel, position);
+		int32_t position=value;
+		if (channel == PIEZO_Z )
+		{
+			position = (int32_t)BIT18MAX - (int32_t)value;
+			DAC_write(channel, position);
+		}
+		else if (channel == PIEZO_ALL)
+		{
+			DAC_write(PIEZO_Y, position);
+			DAC_write(PIEZO_X, position);
+			position = (int32_t)BIT18MAX - (int32_t)value;
+			DAC_write(PIEZO_Z, position);
+		}
+		else// simple XY
+			DAC_write(channel,position);
 	}
-	else if (channel == PIEZO_ALL)
+	void FinePositioner_MoveToPositionB18(byte channel, uint32_t value)// real move , write dac, reverse all axis
 	{
-		DAC_write(PIEZO_Y, position);
-		DAC_write(PIEZO_X, position);
-		position = (int32_t)BIT18MAX - (int32_t)value;
-		DAC_write(PIEZO_Z, position);
+		uint32_t	position = (int32_t)BIT18MAX - (int32_t)value;
+		if (channel == PIEZO_ALL)
+		{
+			DAC_write(PIEZO_Y, position);
+			DAC_write(PIEZO_X, position);
+			DAC_write(PIEZO_Z, position);
+		}
+		else// simple XY
+			DAC_write(channel, position);
 	}
-	else// simple XY
-		DAC_write(channel,position);
-}
-
 int  DAC_write_all(uint32_t value) 
 {
 	DAC_write(PIEZO_Y, value);

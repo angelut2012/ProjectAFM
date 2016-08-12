@@ -162,6 +162,7 @@
     <ClInclude Include="AFM_functions\DigitalIn.h" />
     <ClInclude Include="AFM_functions\DigitalIO_API.h" />
     <ClInclude Include="AFM_functions\DigitalOut.h" />
+    <ClInclude Include="AFM_functions\FastIO.h" />
     <ClInclude Include="AFM_functions\function_tests.h" />
     <ClInclude Include="AFM_functions\main.h" />
     <ClInclude Include="AFM_functions\main_AFM.h" />

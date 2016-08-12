@@ -14,10 +14,13 @@ namespace NameSpace_AFM_Project
 {
     public struct CMD_PC2MCU
     {
-        private const int CMD_PC2MCU_BASE = (32768);     //2^15
-        public const int CMD_PC2MCU_DATA_CAPTURE = (CMD_PC2MCU_BASE + 1);
-        public const int CMD_PC2MCU_WAVE_TEST = (CMD_PC2MCU_BASE + 2);
-        public const int CMD_PC2MCU_SCSG_RANGE_CALIBRATION = (CMD_PC2MCU_BASE + 3);
+	// to be compitable with c#
+private 	const int CMD_PC2MCU_BASE =  (32768);//2^15
+public  const int CMD_PC2MCU_DATA_CAPTURE	=  (CMD_PC2MCU_BASE + 1);
+public  const int CMD_PC2MCU_WAVE_TEST	=  (CMD_PC2MCU_BASE + 2);
+public  const int CMD_PC2MCU_SCSG_RANGE_CALIBRATION	=  (CMD_PC2MCU_BASE + 3);
+public 	const int CMD_PC2MCU_StartZLoop	=  (CMD_PC2MCU_BASE + 4);
+public 	const int CMD_PC2MCU_InitialParameter_ZLoop	=  (CMD_PC2MCU_BASE + 5);
     }
 
     public partial class MainWindow : Form
@@ -35,6 +38,10 @@ namespace NameSpace_AFM_Project
             Thread.Sleep(50);
         }
 
+        public void AFM_InitialParameter_ZLoop()
+        {
+            send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_InitialParameter_ZLoop, 0);
+        }
 
         private void button_ScannerCalibration_Click(object sender, EventArgs e)
         {
@@ -93,6 +100,7 @@ namespace NameSpace_AFM_Project
 
         public void set_output_Position_Value_01(int in_axis, double value_01)
         {
+            value_01 = LIMIT_MAX_MIN(value_01, 1, 0);
             UInt32 value_position_FF32 = (UInt32)(value_01 * BIT32MAX);
             set_output_parameters('F', in_axis, value_position_FF32);
         }

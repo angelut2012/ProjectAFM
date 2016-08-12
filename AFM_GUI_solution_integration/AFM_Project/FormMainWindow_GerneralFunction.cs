@@ -80,7 +80,20 @@ namespace NameSpace_AFM_Project
             if (v < down) v = down;
             return v;
         }
+        //public static T LIMIT_MAX_MIN<T>(T v, T UpperLimit, T LowerLimit) where T : System.IComparable<T>
+        //{
+        //    //v=Math.Max(v, UpperLimit);
+        //    if (v > UpperLimit) v = UpperLimit;
+        //    if (v < LowerLimit) v = LowerLimit;
+        //    return v;
+        //}
 
+        public  double LIMIT_MAX_MIN(double v, double UpperLimit, double LowerLimit)
+        {
+            if (v > UpperLimit) v = UpperLimit;
+            if (v < LowerLimit) v = LowerLimit;
+            return v;
+        }
         public void MY_DEBUG(string inf)
         {
             if (string.IsNullOrEmpty(inf) == false)
