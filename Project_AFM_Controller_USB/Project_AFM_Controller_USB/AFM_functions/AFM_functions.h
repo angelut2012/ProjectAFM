@@ -1499,35 +1499,37 @@ public:
 			mCScanner[PIEZO_X].SetDestinationPosition01((_Float_)VDACx / (_Float_)BIT18MAX);	// only set position reference, real move be be done in AFM_ProcessScheduler_Realtime while calculate PID
 			mCScanner[PIEZO_Y].SetDestinationPosition01((_Float_)VDACy / (_Float_)BIT18MAX);			
 			
-// hold XY DDS generator if PID have not arrive.
 			
-
-				
+			
+// hold XY DDS generator if PID have not arrive.	
 			static int hold_count = 0;
 			hold_count++;
-			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X)
+			static int last_state_xy = 2;
+			
 			  // ||
 			  // Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y)
-			{
-				if (indx == -N_x || indx == 0)// hold when change direction
+
+
 //				scan: 0-->127, change direction, -128-->-1, change direction again
 //				if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)
+			if (indx == -N_x || indx == 0)// hold when change direction				
+			{
+				if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X)
 				{
 					if (hold_count < 3000)
-						modeXYScanning_pause0_scan1_pending2 = 0;
-					else
 					{
-						modeXYScanning_pause0_scan1_pending2 = 1;
-						hold_count = 0;
+						last_state_xy = modeXYScanning_pause0_scan1_pending2;
+						modeXYScanning_pause0_scan1_pending2 = 0;
 					}
 				}
-			}
-			else
-			{
-				modeXYScanning_pause0_scan1_pending2 = 1;
-				hold_count = 0;
+				else
+				{
+					modeXYScanning_pause0_scan1_pending2 = last_state_xy;
+					hold_count = 0;
+				}
 			}
 
+			
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, mCScanner[PIEZO_X].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)));
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, mCScanner[PIEZO_Y].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false)));// 3.745 kHz
 		}
@@ -1596,7 +1598,7 @@ public:
 		float distance_tip_sample_error = mPID_ZLOOP->GetError();
 		//		mHoldXYScanner = true;// for test only  to test zero scan
 		mHoldXYScanner = Math_Abs(distance_tip_sample_error) > mZLoopPID_WorkingDistance_Threshold_01;
-		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
+//		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
 		{
 		XYscanning_WaveGenerator();// compute the next XY position		
 		XYscanning_MovePositioner();
@@ -3606,29 +3608,25 @@ public:
 		//			p_Tdio2->write(0);
 		////			toggle_pin_p(p_Tdio2);
 		//		}
-	}
-	
-	_Float_ mSCSG_B18_Min[NUM_OF_SCANNER]  = {179922, 175280, 149892};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
-	_Float_ mSCSG_B18_Max[NUM_OF_SCANNER]  = {56140, 41608, 24954};//{241554, 244873, 61734};//{241802, 244504, 62131};
-	
-	
-//	[12808] SCSG min : 43430 
+	}	
+
+	_Float_ mSCSG_B18_Min[NUM_OF_SCANNER];
+	_Float_ mSCSG_B18_Max[NUM_OF_SCANNER];
+
+	float mThreshold01_XYscanning_X =  0.0001554653856318891;
+	float mThreshold01_XYscanning_Y =  0.0001554653856318891;
+	void Initialze_XYZScanner_CloseLoop()
+	{
+//[12808] SCSG min : 43430 
 //[12808] SCSG min : 142590 
 //[12808] SCSG min : 174586 
+//		
 //[12808] SCSG max : 152606 
 //[12808] SCSG max : 13944 
 //[12808] SCSG max : 39198 
-//
-	
-	
-	
-	float mThreshold01_XYscanning_X = 0;
-	float mThreshold01_XYscanning_Y = 0;
-	void Initialze_XYZScanner_CloseLoop()
-	{
 				// without temp compensation
-	const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {179922, 41608, 24954};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
-	const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {56140, 175280, 149892};//{241554, 244873, 61734};//{241802, 244504, 62131};
+		const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {43430, 174586, 142590};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
+		const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {152606, 39198, 13944};//{241554, 244873, 61734};//{241802, 244504, 62131};
 
 		
 		// here, we should call realtimeScanProcess to evaluate the time. and set mPeriod_RealtimePID_us
@@ -3673,7 +3671,7 @@ public:
 		const float noise_STD_B18_Y = 5.2362;
 		//			10.3889};
 
-		mThreshold01_XYscanning_X = 5.0*noise_STD_B18_X / Math_Abs( (mSCSG_B18_Max[PIEZO_X] - mSCSG_B18_Min[PIEZO_X]));
+		mThreshold01_XYscanning_X = 10.0*noise_STD_B18_X / Math_Abs( (mSCSG_B18_Max[PIEZO_X] - mSCSG_B18_Min[PIEZO_X]));
 		mThreshold01_XYscanning_Y = 40.0*noise_STD_B18_Y / Math_Abs( (mSCSG_B18_Max[PIEZO_Y] - mSCSG_B18_Min[PIEZO_Y]));
 		
 	}

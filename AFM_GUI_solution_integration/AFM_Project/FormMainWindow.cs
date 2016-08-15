@@ -2370,7 +2370,9 @@ namespace NameSpace_AFM_Project
                 });
 
                 AFM_HybridEngage();
-                Thread.Sleep(17000);
+                Thread.Sleep(7000);
+                AFM_XYScan_Reset();
+                Thread.Sleep(10000);
                 AFM_XYScan_Start();
 
                 button_User_ImageScan_StartStop.Invoke((MethodInvoker)delegate()
