@@ -64,6 +64,7 @@ void AFM_Core::AFM_ProcessScheduler_Realtime()
 //		case  AFM_Core::SystemTask_Indent:		mAFM_Core.process_data_capture_blocking_MaxSpeed(); break;		
 
 		case  AFM_Core::SystemTask_Idle:			mAFM_Core.process_Idle(); 			break;			
+		case  AFM_Core::SystemTask_SystemDebug :			mAFM_Core.process_SystemDebug(); 			break;					
 		case  AFM_Core::SystemTask_WaveTest:			mAFM_Core.process_WaveTest(); 			break;
 			
 			

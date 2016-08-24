@@ -105,6 +105,7 @@ int  DAC_write_all(uint32_t value)
 int  DAC_write(byte channel, uint32_t value) // long is 4 bytes for ARM32bit
 //		data rate = 20k Hz
 {
+	value >>=1;// half of the maximum voltage;75 V 
 	value = LIMIT_MAX_MIN(value,BIT18MAX,0);
 
 	mDAC_Value[channel]=value;

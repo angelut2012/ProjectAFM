@@ -62,9 +62,16 @@ namespace NameSpace_AFM_Project
         //const double SCANNER_RANGE_Z_NM = (21.04 * 1000.0);//(21.387973775678940 * 1000.0);
         //const double SCANNER_RANGE_X_NM = (71.72 * 1000.0);
         //const double SCANNER_RANGE_Y_NM = (95.18 * 1000.0);
-        const double SCANNER_RANGE_Z_NM = (12.50465 * 1000.0);//10.98  (21.387973775678940 * 1000.0);
-        const double SCANNER_RANGE_X_NM = (72.22 * 1000.0);
-        const double SCANNER_RANGE_Y_NM = (74.815 * 1000.0);
+
+
+        //const double SCANNER_RANGE_Z_NM = (12.50465 * 1000.0);//10.98  (21.387973775678940 * 1000.0);
+        //const double SCANNER_RANGE_X_NM = (72.22 * 1000.0);
+        //const double SCANNER_RANGE_Y_NM = (74.815 * 1000.0);
+
+        const double SCANNER_RANGE_Z_NM = (12.50465 * 1000.0 / 2.0);//10.98
+        const double SCANNER_RANGE_X_NM = (83.717 * 1000.0 / 2.0);
+        const double SCANNER_RANGE_Y_NM = (70.532 * 1000.0 / 2.0);
+
         //        #define SCANNER_RANGE_Z_NM ( *1000.0)
         //#define SCANNER_RANGE_X_NM (92.509*1000.0)
         //#define SCANNER_RANGE_Y_NM (71.816*1000.0)
@@ -566,10 +573,18 @@ namespace NameSpace_AFM_Project
                 ImageArray_ValueReset();
             }
 
+
             // xy scan range nm
             set_AFM_parameters('x', ref para_Dx, textBox_Dx, 1, SCANNER_RANGE_X_NM);
             set_AFM_parameters('y', ref para_Dy, textBox_Dy, 1, SCANNER_RANGE_Y_NM);
             // start point of XY
+
+            double xl = SCANNER_RANGE_X_NM / 2 - Convert.ToDouble(textBox_Dx.Text) / 2;
+            textBox_XL.Text = xl.ToString();
+
+            double yl = SCANNER_RANGE_Y_NM / 2 - Convert.ToDouble(textBox_Dy.Text) / 2;
+            textBox_YL.Text = yl.ToString();
+
             set_AFM_parameters('m', ref para_XL, textBox_XL, 1, SCANNER_RANGE_X_NM);
             set_AFM_parameters('n', ref para_YL, textBox_YL, 1, SCANNER_RANGE_Y_NM);
             // 
@@ -1765,9 +1780,12 @@ namespace NameSpace_AFM_Project
 
         private void button_XY_Scan_Click(object sender, EventArgs e)
         {
-            send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
-            AFM_XYScan_Reset();
-            AFM_XYScan_Start(); }
+            //send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
+            //Thread.Sleep(500);
+            //AFM_XYScan_Reset();
+            //Thread.Sleep(500);
+            AFM_XYScan_Start(); 
+        }
 
         public void AFM_XYScan_Start()
         {
@@ -2334,7 +2352,9 @@ namespace NameSpace_AFM_Project
             AFM_InitialParameter_ZLoop();
             //AFM_SetSystemIdle();
             mCCoarsePositioner.MoveDistance(mCaxis_z, -SCANNER_RANGE_Z_NM - 300, 1000);// CP move up, 1000 nm more
-            Thread.Sleep(1000);
+            Thread.Sleep(900);
+            AFM_InitialParameter_ZLoop();
+            Thread.Sleep(300);
             //AFM_MoveZFineScanner_MultiStepSlow(20);
             send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_StartZLoop, 0);
         }
@@ -2467,14 +2487,25 @@ namespace NameSpace_AFM_Project
                     }
                     MY_DEBUG("Sample distance: ", mSampleDistance_NM);
 
-                } while (mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.7 && mState_User_AutoEngage == 1);
+                    Thread.Sleep(1 * 1000);// 
+                    AFM_ZFineScannerEngage();
+                    for (int k=0;k<3000;k++)
+                    { MY_DEBUG("SampleDistance_NM:", mSampleDistance_NM);
+                        Thread.Sleep(6);// 
+                    }
+
+                    if (mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.85)//mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.7 
+                        break;
+
+
+                } while (mState_User_AutoEngage == 1);
 
 
             //    AFM_ZFineScannerEngage();
             //    Thread.Sleep(6 * 1000);// 
             //    MY_DEBUG("SampleDistance_NM:", mSampleDistance_NM);
             //}
-            while (mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.7);
+            //while (mSampleDistance_NM / SCANNER_RANGE_Z_NM < 0.7);
 
 
             AFM_HybridWithdraw();

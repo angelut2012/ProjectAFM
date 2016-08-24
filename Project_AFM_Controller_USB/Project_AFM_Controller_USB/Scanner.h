@@ -57,6 +57,10 @@ class CScanner
 		const float pid_p [] = {0.2, 0.07, 0.07};
 		const float pid_i [] = {0.01, 0.0051, 0.0051};
 		const float pid_d [] = {0.0001, 0.00001, 0.00001};		
+//		const float step_size [] = {0.05, 0.05, 0.05};
+//		const float pid_p [] = {0.2, 0.1, 0.1};
+//		const float pid_i [] = {0.01, 0.0151, 0.0151};
+//		const float pid_d [] = {0.0001, 0.00001, 0.00001};		
 		
 		mPID_Scanner->SetStepSize(step_size[mAxis]);
 		mPID_Scanner->SetPID_P(pid_p[mAxis]);//use P=0.01, I=0.002 OK, 20160416
