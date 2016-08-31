@@ -146,10 +146,11 @@ public:
 		s /= number;
 		return s;
 	}
-	void ADC_Read_MultiChannel_Average(int axis)
+	int ADC_Read_MultiChannel_Average(int axis)
 	{
 		int average[NUM_OF_ADC] = {0};
-		#define NofA (8)		
+		#define NofA_Shift (3)
+		#define NofA (BIT_N1(NofA_Shift))	// max 2^(32-18)	
 		for (int n = 0;n < NofA;n++)	
 		{
 			ADC_Read_N(axis, true);
@@ -161,10 +162,32 @@ public:
 		//average and store to buffer_ADC_value_array[]
 		for (int k = 0;k < axis+1;k++)	
 		{
-			average[k] >>= 3;	
+			average[k] >>= NofA_Shift;	
 			buffer_ADC_value_array[k] = average[k];
 		}
+		return buffer_ADC_value_array[axis];
 	}
+	int ADC_Read_LPF(int axis,bool initial=false)
+	{
+		static int last_value[NUM_OF_ADC] = {0};
+		if (initial == true)
+		{
+			FOR_REPEAT(axis, last_value[k] = ADC_Read_N(k, true));
+			return last_value[axis];
+		}				
+		ADC_Read_MultiChannel_Average(axis);
+		buffer_ADC_value_array[axis] =
+			last_value[axis] + 
+			buffer_ADC_value_array[axis] +
+			buffer_ADC_value_array[axis] +
+			buffer_ADC_value_array[axis];
+		buffer_ADC_value_array[axis] >>= 2;// alpha=0.75
+		last_value[axis] = buffer_ADC_value_array[axis];
+	
+		return buffer_ADC_value_array[axis];
+	}
+	
+	
 	int ADC_Read_N(int axis, bool update=true)
 			// true read PRC=154 us, true read Y, 264 us
 			// new read only, true read Y  207us
@@ -245,6 +268,35 @@ public:
 		for (int k=0;k<length;k++)
 			out|=bit_array[k]<<(length-k-1);
 		return out;
+	}
+	
+	void RunFIRFilter(double *FirCoeff, int NumTaps, double *Signal, double *FilteredSignal, int NumSigPts)
+	{
+		int j, k, n, Top = 0;
+		double y, Reg[256];  // This assumes <= 256 taps.
+
+		for (j = 0; j < NumTaps; j++)Reg[j] = 0.0;
+
+		for (j = 0; j < NumSigPts; j++)
+		{
+			Reg[Top] = Signal[j];
+			y = 0.0;
+			n = 0;
+
+			    // The FirCoeff index increases while the Reg index decreases.
+			for (k = Top; k >= 0; k--)
+			{
+				y += FirCoeff[n++] * Reg[k];
+			}
+			for (k = NumTaps - 1; k > Top; k--)
+			{
+				y += FirCoeff[n++] * Reg[k];
+			}
+			FilteredSignal[j] = y;
+
+			Top++;
+			if (Top >= NumTaps)Top = 0;
+		}
 	}
 //-----------------------------------------------------------------------
 	//void ADC_read_int_old(int* value_array,int number_of_ADC=NUM_OF_ADC,int mode_0123=2)

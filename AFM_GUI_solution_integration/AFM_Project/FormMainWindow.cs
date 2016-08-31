@@ -68,9 +68,16 @@ namespace NameSpace_AFM_Project
         //const double SCANNER_RANGE_X_NM = (72.22 * 1000.0);
         //const double SCANNER_RANGE_Y_NM = (74.815 * 1000.0);
 
-        const double SCANNER_RANGE_Z_NM = (12.50465 * 1000.0 / 2.0);//10.98
-        const double SCANNER_RANGE_X_NM = (83.717 * 1000.0 / 2.0);
-        const double SCANNER_RANGE_Y_NM = (70.532 * 1000.0 / 2.0);
+        //const double SCANNER_RANGE_Z_NM = (12.50465 * 1000.0 / 2.0);//10.98
+        //const double SCANNER_RANGE_X_NM = (83.717 * 1000.0 / 2.0);
+        //const double SCANNER_RANGE_Y_NM = (70.532 * 1000.0 / 2.0);
+
+        // calibrated by SEM 20160825  // calibrated by SEM, 20160831
+        const double SCANNER_RANGE_Z_NM =  9365;
+        const double SCANNER_RANGE_X_NM = 45748;
+        const double SCANNER_RANGE_Y_NM = 39800;
+        
+
 
         //        #define SCANNER_RANGE_Z_NM ( *1000.0)
         //#define SCANNER_RANGE_X_NM (92.509*1000.0)
@@ -544,7 +551,7 @@ namespace NameSpace_AFM_Project
             button_SetParameters.Visible = false;
             MY_DEBUG("set parameters start.");
             //pid
-            set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -100, 100);//0.001, 500)
+            set_AFM_parameters('R', ref para_Sensitivity, textBox_Sensitivity, -200, 200);//0.001, 500)
 
             set_AFM_parameters('P', ref para_Z_PID_P, textBox_Z_PID_P, 0, 100);
             set_AFM_parameters('I', ref para_Z_PID_I, textBox_Z_PID_I, 0, 100);
@@ -1144,9 +1151,9 @@ namespace NameSpace_AFM_Project
                 MY_DEBUG("SCSG max:", v2);
                 MY_DEBUG("SCSG max:", v3);
 
-                MY_DEBUG("SCSG range x:", mSensorADC18_Max[PIEZO_X] - mSensorADC18_Min[PIEZO_X]);
+                MY_DEBUG("SCSG range z:", mSensorADC18_Max[PIEZO_X] - mSensorADC18_Min[PIEZO_X]);
                 MY_DEBUG("SCSG range y:", mSensorADC18_Max[PIEZO_Y] - mSensorADC18_Min[PIEZO_Y]);
-                MY_DEBUG("SCSG range z:", mSensorADC18_Max[PIEZO_Z] - mSensorADC18_Min[PIEZO_Z]);
+                MY_DEBUG("SCSG range x:", mSensorADC18_Max[PIEZO_Z] - mSensorADC18_Min[PIEZO_Z]);
             }
 
             //------------------drift 
@@ -1310,7 +1317,7 @@ namespace NameSpace_AFM_Project
 
         int indx_store_for_save_image = 0;
         int indy_store_for_save_image = 0;
-
+        int count_im = 0;
         void on_Received_Package_Image(byte[] com_buffer, int ind)
         {
             //test point x=127,y=65,height=65536,error=256
@@ -1354,8 +1361,14 @@ namespace NameSpace_AFM_Project
                 + ",V," + vDAC.ToString("f1")
                 + ",Tz," + vTz.ToString()
                 + ",Txy," + vTxy.ToString()
+
+                 //+",Z,"+label_Encoder_Z.Text
+                  //+ ",Tz, " + Convert_VRadc2Temperature_z(vTz).ToString("f4")
                 );
-            MY_DEBUG(Sys_Inf);
+            count_im++;
+            count_im %= 100;
+            if (count_im==0)
+                MY_DEBUG(Sys_Inf);
             //update_UI_label(Sys_Inf);// call from another thread
 
             //MY_DEBUG(indx.ToString() + "\t" + indx_store_for_save_image.ToString() + "\t" + indy.ToString() + "\t" + indy_store_for_save_image.ToString());

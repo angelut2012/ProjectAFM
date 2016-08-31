@@ -396,7 +396,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "82";
+            this.textBox_Sensitivity.Text = "140";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm

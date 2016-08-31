@@ -10,6 +10,7 @@ namespace NameSpace_AFM_Project
 {
     public class CCoarsePositioner
     {
+        bool mConnected = false;
         uint mSensorMode;
         private bool moving;
         const int NUM_OF_AXIS = (3);
@@ -116,6 +117,7 @@ namespace NameSpace_AFM_Project
             SetChannelVoltage(X_CP_AXIS, 0);
             SetChannelVoltage(Y_CP_AXIS, 0);
             SetChannelVoltage(Z_CP_AXIS, 0);
+            mConnected = true;
             return 0;
         }
 
@@ -384,6 +386,7 @@ namespace NameSpace_AFM_Project
 
         public int GetPosition(uint channelIndex)
         {
+            if (mConnected == false) return 0;
             if (mSensorMode == CCoarseController.SA_SENSOR_DISABLED)
                 return 0;
 
@@ -393,6 +396,7 @@ namespace NameSpace_AFM_Project
             {
                 //Initialize();
                 MY_DEBUG("GetPosition error!\n");
+                Initialize();
             }
             position *=  (int)mDirection[(uint)channelIndex];
             return position;

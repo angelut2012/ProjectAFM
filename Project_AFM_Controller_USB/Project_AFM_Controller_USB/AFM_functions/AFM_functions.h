@@ -1133,14 +1133,21 @@ public:
 
 	void process_data_capture_blocking_MaxSpeed()
 	{
-		for (int k = 0;k < mI_MaxStep;k++)
-			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+//		for (int k = 0;k < mI_MaxStep;k++)
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+		
+		
+//		mAFM_DAC.DAC_write_all(0);
+//		wait(10);
+//		mAFM_DAC.DAC_write_all(BIT18MAX_0D33);
+//		
+		mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z, true);
 		for (int k = 0;k < mI_MaxStep;k++)
 //			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
 //		int k = 0;
 //			while(1)
 		{
-			toggle_pin_p(p_Tdio4);
+//			toggle_pin_p(p_Tdio4);
 //			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);// 7.84 kHz-->6.076kHz
 //			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
 //			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
@@ -1156,11 +1163,26 @@ public:
 			//if (k == mI_MaxStep/2)
 						//wait(300);
 			
-						mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);//5.714*2 kHz=11.428kHz, 20160802
-						mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false); 
-						mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);			 
+//						mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);//5.714*2 kHz=11.428kHz, 20160802
+//						mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false); 
+//						mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);			 
 			//*p_Tdio4 = 0;
-
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); // 4.206*3*2= 25.236kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); // 234.8*3*2= 1408Hz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
+			
+			mIndentData[0][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); // 509.78*3*2= 3kHz
+			mIndentData[1][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
+			mIndentData[2][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
+			
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); // 2.203*3*2= 13.218kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); 
 		}
 		int index_send = 0;
 		for (int k = 0;k < mI_MaxStep;k++)
@@ -1499,34 +1521,34 @@ public:
 //		  				scan: 0-->127, change direction, -128-->-1, change direction again
 //		  				if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)
 			  				
-		if (indx == -N_x || indx == 0)// hold when change direction				
-		{
-			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
-//			    ||
-//		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y
-			    )
-			{
-				if (hold_count > 3000)
-				{
-					status=XYscanning_WaveGenerator();
-					hold_count = 0;
-				}
-				
-				// in this case, hold scan to wait for X axis
-			}
-			else
-			{
-				status=XYscanning_WaveGenerator();
-				hold_count = 0;
-			}
-		}
-		else
-		{
-			status=XYscanning_WaveGenerator();
-			hold_count = 0;
-		}
+//		if (indx == -N_x || indx == 0)// hold when change direction				
+//		{
+//			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
+////			    ||
+////		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y
+//			    )
+//			{
+//				if (hold_count > 3000)
+//				{
+//					status=XYscanning_WaveGenerator();
+//					hold_count = 0;
+//				}
+//				
+//				// in this case, hold scan to wait for X axis
+//			}
+//			else
+//			{
+//				status=XYscanning_WaveGenerator();
+//				hold_count = 0;
+//			}
+//		}
+//		else
+//		{
+//			status=XYscanning_WaveGenerator();
+//			hold_count = 0;
+//		}
 		
-//		status = XYscanning_WaveGenerator();
+		status = XYscanning_WaveGenerator();
 		XYscanning_MovePositioner();
 		return status;
 	}
@@ -3201,6 +3223,16 @@ public:
 
 	void process_SystemDebug()
 	{
+//		while(1)
+//		for (int k = 0;k < BIT18MAX / 1024 * 40;k++)
+//		{
+//			int value = wave_triangle_0ToMax(1024, BIT18MAX, false);//2048
+//			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, value);
+//			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, value);
+//			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, BIT18MAX - value);
+//		}
+//		
+		
 				
 		if (mSW_Idle_Scanner_DAC0_OpenLoop1_CloseLoop2 == 2)
 		{		
@@ -3209,6 +3241,24 @@ public:
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, mCScanner[PIEZO_Z].ComputePID(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false)));	
 		
 		}
+		
+			
+		CHECK_COUNT_DUE(2000);
+
+		extern CTemperature mCTemperature;
+		uint32_t Temperature_MCU = mCTemperature.Read(false);
+
+		sendToPC_system_data_package(20,
+			//pz,
+			Temperature_MCU,
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false),
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));
+
+		
 	}
 	void process_Idle()
 	{
@@ -3861,7 +3911,9 @@ public:
 
 		Communication_Command_Console();
 		*p_Tdio4 = 1;
+		//wait_ms(6);
 		mAFM_SEM.ADC_Read_N(ADC_CHANNEL_CALIBRATION, true);// keep constant speed to ADC sampling. 
+		//mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z);
 		*p_Tdio4 = 0;
 		AFM_ProcessScheduler_Realtime();
 //	// move positioners
