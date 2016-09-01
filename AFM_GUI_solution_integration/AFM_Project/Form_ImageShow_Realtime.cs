@@ -99,10 +99,13 @@ namespace NameSpace_AFM_Project
             {
                 pParent.MY_DEBUG("show line:", pParent.point_now_y);
                 ShowLine(pParent.mImageArrayHL, pParent.point_now_y, zedGraphControl_Height, true, Color.Red);
-                ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height2, true, Color.Blue);
+                ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height, true, Color.Blue);
+                //ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height2, true, Color.Blue);
 
                 ShowLine(pParent.mImageArrayEL, pParent.point_now_y, zedGraphControl_Error, true, Color.Red);
-                ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error2, true, Color.Blue);
+                ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error, true, Color.Blue);
+                //ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error2, true, Color.Blue);
+
 
                 //pictureBox_Height.Image = ConvertArray2Image(pParent.mImageArrayHL);// time =170 ms
                 //pictureBox_Error.Image = ConvertArray2Image(pParent.mImageArrayEL);// time =170 ms

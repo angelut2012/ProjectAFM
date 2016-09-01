@@ -983,7 +983,7 @@ public:
 		//float mI_step_size_pre_step=0;
 		position_feedforward_output_01[PIEZO_Z] = 10.0 / SCANNER_RANGE_Z_NM;
 
-		for (int k = 0;k < MAX_INDENT_STEPS;k++)
+		for (int k = 0;k < MAX_INDENT_STEPS;k++)// 7.4kHz, 20160901, 135 us
 		{
 			if (mTaskScheduler != SystemTask_Indent) return;// to interrupt during indentation
 
@@ -1012,6 +1012,7 @@ public:
 				(PIEZO_Z, position_feedforward_output_01[PIEZO_Z]);//,&V18_Adc[ADC_PORT_ZlOOP_SENSOR]);// time=80 uS
 			wait_us(mI_LoopDelay_uS);
 
+			*p_Tdio4 = 0;
 			//for noise rms test
 			V18_Adc[ADC_PORT_ZlOOP_SENSOR] = mAFM_SEM.ADC_Read_N(ADC_PORT_ZlOOP_SENSOR, true);
 			//use for indent
@@ -1077,7 +1078,7 @@ public:
 				//	break;// withdraw data are too much and write over indent part.
 			}
 
-			*p_Tdio4 = 0;
+//			*p_Tdio4 = 0;
 		}// fore loop
 
 		//------------------------------------------------------------------
@@ -1136,21 +1137,21 @@ public:
 //		for (int k = 0;k < mI_MaxStep;k++)
 //			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
 		
-		
-//		mAFM_DAC.DAC_write_all(0);
-//		wait(10);
-//		mAFM_DAC.DAC_write_all(BIT18MAX_0D33);
+		// measure step response
+		mAFM_DAC.DAC_write_all(0);
+		wait(10);
+		mAFM_DAC.DAC_write_all(BIT18MAX_0D33);
 //		
-		mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z, true);
+		//mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z, true);
 		for (int k = 0;k < mI_MaxStep;k++)
 //			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
 //		int k = 0;
 //			while(1)
 		{
 //			toggle_pin_p(p_Tdio4);
-//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);// 7.84 kHz-->6.076kHz
-//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
-//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
+			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);// 7.84 kHz-->6.076kHz,;  3.156*2=6.3kHz, 20160901
+			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
+			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
 
 //						mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);//2.31*2=4.62 kHz 20160802
 //						mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
@@ -1175,9 +1176,9 @@ public:
 //			mIndentData[1][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
 //			mIndentData[2][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
 			
-			mIndentData[0][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); // 509.78*3*2= 3kHz
-			mIndentData[1][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
-			mIndentData[2][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); // 509.78*3*2= 3kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
 			
 			
 //			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); // 2.203*3*2= 13.218kHz
@@ -1521,34 +1522,35 @@ public:
 //		  				scan: 0-->127, change direction, -128-->-1, change direction again
 //		  				if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)
 			  				
-//		if (indx == -N_x || indx == 0)// hold when change direction				
-//		{
-//			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
-////			    ||
-////		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y
-//			    )
-//			{
-//				if (hold_count > 3000)
-//				{
-//					status=XYscanning_WaveGenerator();
-//					hold_count = 0;
-//				}
-//				
-//				// in this case, hold scan to wait for X axis
-//			}
-//			else
-//			{
-//				status=XYscanning_WaveGenerator();
-//				hold_count = 0;
-//			}
-//		}
-//		else
-//		{
-//			status=XYscanning_WaveGenerator();
-//			hold_count = 0;
-//		}
+		if (indx == -N_x || indx == 0)// hold when change direction				
+		{
+			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
+			    ||
+		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y
+			    )
+			{
+				if (hold_count > 20)
+				{
+					status=XYscanning_WaveGenerator();
+					hold_count = 0;
+				}
+				
+				// in this case, hold scan to wait for X axis
+			}
+			else
+			{
+				status=XYscanning_WaveGenerator();
+				hold_count = 0;
+			}
+		}
+		else
+		{
+			status=XYscanning_WaveGenerator();
+			hold_count = 0;
+		}
 		
-		status = XYscanning_WaveGenerator();
+//		status = XYscanning_WaveGenerator();
+		
 		XYscanning_MovePositioner();
 		return status;
 	}
@@ -1632,7 +1634,7 @@ public:
 		float distance_tip_sample_error = mPID_ZLOOP->GetError();
 		//		mHoldXYScanner = true;// for test only  to test zero scan
 		mHoldXYScanner = Math_Abs(distance_tip_sample_error) > mZLoopPID_WorkingDistance_Threshold_01;
-		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
+//		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
 			XYscanning_EachLoop();	
 
 		float Z_sensor_height01 = mCScanner[PIEZO_Z].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));		
@@ -3743,7 +3745,7 @@ public:
 		//			10.3889};
 
 		mThreshold01_XYscanning_X = 10.0*noise_STD_B18_X / Math_Abs( (mSCSG_B18_Max[PIEZO_X] - mSCSG_B18_Min[PIEZO_X]));
-		mThreshold01_XYscanning_Y = 50.0*noise_STD_B18_Y / Math_Abs( (mSCSG_B18_Max[PIEZO_Y] - mSCSG_B18_Min[PIEZO_Y]));
+		mThreshold01_XYscanning_Y = 30.0*noise_STD_B18_Y / Math_Abs( (mSCSG_B18_Max[PIEZO_Y] - mSCSG_B18_Min[PIEZO_Y]));
 		
 	}
 	bool GetPositionSensorRange(_Float_ *ADC18_Min, _Float_ *ADC18_Max)

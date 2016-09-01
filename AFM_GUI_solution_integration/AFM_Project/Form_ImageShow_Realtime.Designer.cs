@@ -112,7 +112,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1348, 607);
+            this.ClientSize = new System.Drawing.Size(1348, 289);
             this.Controls.Add(this.pictureBox_Error);
             this.Controls.Add(this.zedGraphControl_Error);
             this.Controls.Add(this.zedGraphControl_Height2);
@@ -125,6 +125,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Height)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Error)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion

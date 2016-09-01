@@ -15,14 +15,14 @@ namespace NameSpace_AFM_Project
     public class CParameter
     {
         const int mI_MaxStep = 4096;//6000;
-        public const int mI_LoopDelay_Min_uS = 104;
+        public const int mI_LoopDelay_Min_uS = 135;//20160901        old:  104;
 
         enum ParaName { Sun, Mon, Tue, Wed, Thu, Fri, Sat };
         // indentation parameters, input from GUI
-        double mI_MaxDepth = 6000;//SCANNER_RANGE_Z_NM for savety reason only
-        double mI_step_size_nm = 0.1;
+        double mI_MaxDepth = 9000;//SCANNER_RANGE_Z_NM for savety reason only
+        double mI_step_size_nm = 0.2;
         double mI_StiffnessPRC_nN_per_nm = 40.0;//30~40N/m, 40 nN/nm
-        double mI_PRC_ADCValue_per_nm = 37.5270000321971;// prc6
+        double mI_PRC_ADCValue_per_nm = 113.75;//37.5270000321971;// prc6
         //89.602534853964968;//68.2331;//102 86.9;//
 
         double mI_TriggerForce_nN = 1500;//mI_StiffnessPRC_nN_per_nm * 100;// 100nm

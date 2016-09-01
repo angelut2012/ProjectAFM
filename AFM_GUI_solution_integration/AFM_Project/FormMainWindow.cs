@@ -1363,7 +1363,7 @@ namespace NameSpace_AFM_Project
                 + ",Txy," + vTxy.ToString()
 
                  //+",Z,"+label_Encoder_Z.Text
-                  //+ ",Tz, " + Convert_VRadc2Temperature_z(vTz).ToString("f4")
+                  + ",Tz, " + Convert_VRadc2Temperature_z(vTz).ToString("f4")
                 );
             count_im++;
             count_im %= 100;
@@ -1560,6 +1560,7 @@ namespace NameSpace_AFM_Project
                     //                             MessageBoxButtons.YesNo);
                     //if (result == DialogResult.No)
                     //    ;
+                    mCCoarsePositioner.SetSensorModeDisable();
                 }
             }
         }
@@ -1670,6 +1671,7 @@ namespace NameSpace_AFM_Project
         public void Apporach_start()
         {
             MY_DEBUG("start approach.");
+            mCCoarsePositioner.SetSensorModeEnable();
             serialPort_Arduino.ReceivedBytesThreshold = LENGTH_COM_FRAME_MCU2PC;
             //AFM_coarse_positioner_SetSpeed(250);
             //AFM_coarse_positioner_MoveDistance(2, SCANNER_RANGE_Z_NM * 1.21);// % for safety reason, first move up 25*1.2 um

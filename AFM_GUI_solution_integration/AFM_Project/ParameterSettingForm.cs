@@ -19,6 +19,7 @@ namespace NameSpace_AFM_Project
             InitializeComponent();
             pParent = pmain;
             listBox_ScannerAxis.SelectedIndex = 0;
+            listBox_ScannerMode.SelectedIndex = 0;
         }
 
         private void button_DAC_Output_Click(object sender, EventArgs e)
@@ -57,16 +58,31 @@ namespace NameSpace_AFM_Project
 
         private void trackBar_PositionZ_Scroll(object sender, EventArgs e)
         {
-            double value = (double)trackBar_PositionZ.Value / (double)trackBar_PositionZ.Maximum;
+            double value = (double)trackBar_PositionOutput.Value / (double)trackBar_PositionOutput.Maximum;
+            double value_01 = value;
             //byte axis = Convert.ToByte(textBox_Position_Axis.Text);
             int axis = listBox_ScannerAxis.SelectedIndex;
-            textBox_Position_Value.Text = value.ToString();
-            textBox_DAC_Value.Text = Convert.ToString(value * 150);
 
-            value = Convert.ToDouble(textBox_DAC_Value.Text);
-            value = value * 5.0 / 150.0;
-            //pParent.set_output_parameters('D', (byte)axis, (UInt32)value);
-            pParent.set_output_DAC_Value_0_5((byte)axis, value);
+            if (listBox_ScannerMode.SelectedIndex == 0)// DAC
+            {
+                textBox_Position_Value.Text = value.ToString();
+                textBox_DAC_Value.Text = Convert.ToString(value * 150);
+
+                value = Convert.ToDouble(textBox_DAC_Value.Text);
+                value = value * 5.0 / 150.0;
+                //pParent.set_output_parameters('D', (byte)axis, (UInt32)value);
+                pParent.set_output_DAC_Value_0_5((byte)axis, value);
+
+            }
+
+            if (listBox_ScannerMode.SelectedIndex == 1)
+            {
+                pParent.set_output_Position_Value_01(axis, value_01);
+            }
+            if (listBox_ScannerMode.SelectedIndex == 2)
+            {
+                pParent.set_output_Position_Value_01(axis + 100, value_01);
+            }
         }
 
         Thread mThread_wave_generator;
@@ -92,10 +108,16 @@ namespace NameSpace_AFM_Project
                     //Thread.Sleep(dt);
                     //pParent.set_output_DAC_Value_0_5(axis_wave, 0);
                     //Thread.Sleep(dt);
-
-                    pParent.set_output_Position_Value_01(axis_wave + 100, 0.2);
+                    if (listBox_ScannerMode.SelectedIndex == 2)
+                        pParent.set_output_Position_Value_01(axis_wave + 100, 0.8);                 
+                    if (listBox_ScannerMode.SelectedIndex == 0)
+                        pParent.set_output_DAC_Value_0_5(axis_wave, 5);
                     Thread.Sleep(dt);
-                    pParent.set_output_Position_Value_01(axis_wave + 100, 0.8);
+
+                    if (listBox_ScannerMode.SelectedIndex == 2)
+                        pParent.set_output_Position_Value_01(axis_wave + 100, 0.2);
+                    if (listBox_ScannerMode.SelectedIndex == 0)
+                        pParent.set_output_DAC_Value_0_5(axis_wave, 0);
                     Thread.Sleep(dt);
 
 

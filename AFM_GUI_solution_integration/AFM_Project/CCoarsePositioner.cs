@@ -102,8 +102,8 @@ namespace NameSpace_AFM_Project
             SetSpeedCloseLoop(Y_CP_AXIS, 0);
             SetSpeedCloseLoop(Z_CP_AXIS, 0);
 
-            //SetSensorModeDisable();
-            SetSensorModeEnable();
+            SetSensorModeDisable();
+            //SetSensorModeEnable();
             //SetSensorModePowerSave();
 
             int position = 0;

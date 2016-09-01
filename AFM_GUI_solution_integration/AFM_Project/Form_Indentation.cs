@@ -74,6 +74,7 @@ namespace NameSpace_AFM_Project
             pParent.mIndentData_index = -1;
             mSwitch_CancelIndent = false;
             pParent.mSwitch_IndentTrue_FinishFalse = true;
+            Thread.Sleep(500);
             pParent.send_Data_Frame_To_Arduino('C', 'I', 'D');
             while (pParent.mSwitch_IndentTrue_FinishFalse == true)
             {

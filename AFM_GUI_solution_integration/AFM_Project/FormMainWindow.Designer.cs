@@ -346,7 +346,7 @@
             this.textBox_Dy.Name = "textBox_Dy";
             this.textBox_Dy.Size = new System.Drawing.Size(38, 20);
             this.textBox_Dy.TabIndex = 57;
-            this.textBox_Dy.Text = "22000";
+            this.textBox_Dy.Text = "20000";
             this.toolTip_Help.SetToolTip(this.textBox_Dy, "Enter the step length here.");
             // 
             // textBox_Dx
@@ -356,7 +356,7 @@
             this.textBox_Dx.Name = "textBox_Dx";
             this.textBox_Dx.Size = new System.Drawing.Size(38, 20);
             this.textBox_Dx.TabIndex = 55;
-            this.textBox_Dx.Text = "22000";
+            this.textBox_Dx.Text = "20000";
             this.toolTip_Help.SetToolTip(this.textBox_Dx, "Enter the step length here.");
             // 
             // textBox_YL
@@ -386,7 +386,7 @@
             this.textBox_ScanRate.Name = "textBox_ScanRate";
             this.textBox_ScanRate.Size = new System.Drawing.Size(38, 20);
             this.textBox_ScanRate.TabIndex = 63;
-            this.textBox_ScanRate.Text = "1";
+            this.textBox_ScanRate.Text = "0.5";
             this.toolTip_Help.SetToolTip(this.textBox_ScanRate, "Enter the step length here.");
             // 
             // textBox_Sensitivity
@@ -396,7 +396,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "140";
+            this.textBox_Sensitivity.Text = "113";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm

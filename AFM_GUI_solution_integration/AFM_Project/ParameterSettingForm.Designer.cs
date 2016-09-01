@@ -37,7 +37,7 @@
             this.button_Read_StrainGauge_Stop = new System.Windows.Forms.Button();
             this.button_Read_StrainGauge_Once = new System.Windows.Forms.Button();
             this.button_Read_StrainGauge_Continue = new System.Windows.Forms.Button();
-            this.trackBar_PositionZ = new System.Windows.Forms.TrackBar();
+            this.trackBar_PositionOutput = new System.Windows.Forms.TrackBar();
             this.button_T_debug = new System.Windows.Forms.Button();
             this.textBox_T_Test_cycles = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -49,12 +49,13 @@
             this.button_N = new System.Windows.Forms.Button();
             this.button_P = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_PositionZ)).BeginInit();
+            this.listBox_ScannerMode = new System.Windows.Forms.ListBox();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_PositionOutput)).BeginInit();
             this.SuspendLayout();
             // 
             // button_DAC_Output
             // 
-            this.button_DAC_Output.Location = new System.Drawing.Point(231, 141);
+            this.button_DAC_Output.Location = new System.Drawing.Point(25, 12);
             this.button_DAC_Output.Name = "button_DAC_Output";
             this.button_DAC_Output.Size = new System.Drawing.Size(70, 32);
             this.button_DAC_Output.TabIndex = 0;
@@ -64,7 +65,7 @@
             // 
             // textBox_DAC_Value
             // 
-            this.textBox_DAC_Value.Location = new System.Drawing.Point(168, 149);
+            this.textBox_DAC_Value.Location = new System.Drawing.Point(413, 63);
             this.textBox_DAC_Value.Name = "textBox_DAC_Value";
             this.textBox_DAC_Value.Size = new System.Drawing.Size(57, 20);
             this.textBox_DAC_Value.TabIndex = 2;
@@ -73,7 +74,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(76, 152);
+            this.label2.Location = new System.Drawing.Point(321, 66);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(86, 13);
             this.label2.TabIndex = 4;
@@ -81,7 +82,7 @@
             // 
             // button_SetPosition_OpenLoop
             // 
-            this.button_SetPosition_OpenLoop.Location = new System.Drawing.Point(225, 48);
+            this.button_SetPosition_OpenLoop.Location = new System.Drawing.Point(101, 12);
             this.button_SetPosition_OpenLoop.Name = "button_SetPosition_OpenLoop";
             this.button_SetPosition_OpenLoop.Size = new System.Drawing.Size(70, 32);
             this.button_SetPosition_OpenLoop.TabIndex = 5;
@@ -92,7 +93,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(125, 30);
+            this.label3.Location = new System.Drawing.Point(283, 22);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(115, 13);
             this.label3.TabIndex = 9;
@@ -100,7 +101,7 @@
             // 
             // textBox_Position_Value
             // 
-            this.textBox_Position_Value.Location = new System.Drawing.Point(138, 55);
+            this.textBox_Position_Value.Location = new System.Drawing.Point(413, 24);
             this.textBox_Position_Value.Name = "textBox_Position_Value";
             this.textBox_Position_Value.Size = new System.Drawing.Size(57, 20);
             this.textBox_Position_Value.TabIndex = 7;
@@ -136,14 +137,14 @@
             this.button_Read_StrainGauge_Continue.UseVisualStyleBackColor = true;
             this.button_Read_StrainGauge_Continue.Click += new System.EventHandler(this.button_Read_StrainGauge_Continue_Click);
             // 
-            // trackBar_PositionZ
+            // trackBar_PositionOutput
             // 
-            this.trackBar_PositionZ.Location = new System.Drawing.Point(3, 179);
-            this.trackBar_PositionZ.Maximum = 100000;
-            this.trackBar_PositionZ.Name = "trackBar_PositionZ";
-            this.trackBar_PositionZ.Size = new System.Drawing.Size(496, 42);
-            this.trackBar_PositionZ.TabIndex = 13;
-            this.trackBar_PositionZ.Scroll += new System.EventHandler(this.trackBar_PositionZ_Scroll);
+            this.trackBar_PositionOutput.Location = new System.Drawing.Point(3, 179);
+            this.trackBar_PositionOutput.Maximum = 100000;
+            this.trackBar_PositionOutput.Name = "trackBar_PositionOutput";
+            this.trackBar_PositionOutput.Size = new System.Drawing.Size(496, 42);
+            this.trackBar_PositionOutput.TabIndex = 13;
+            this.trackBar_PositionOutput.Scroll += new System.EventHandler(this.trackBar_PositionZ_Scroll);
             // 
             // button_T_debug
             // 
@@ -201,11 +202,11 @@
             // 
             // button_SetPositioin_CloseLoop
             // 
-            this.button_SetPositioin_CloseLoop.Location = new System.Drawing.Point(301, 48);
+            this.button_SetPositioin_CloseLoop.Location = new System.Drawing.Point(177, 12);
             this.button_SetPositioin_CloseLoop.Name = "button_SetPositioin_CloseLoop";
             this.button_SetPositioin_CloseLoop.Size = new System.Drawing.Size(70, 32);
             this.button_SetPositioin_CloseLoop.TabIndex = 21;
-            this.button_SetPositioin_CloseLoop.Text = "close loop";
+            this.button_SetPositioin_CloseLoop.Text = "closed loop";
             this.button_SetPositioin_CloseLoop.UseVisualStyleBackColor = true;
             this.button_SetPositioin_CloseLoop.Click += new System.EventHandler(this.button_SetPositioin_CloseLoop_Click);
             // 
@@ -224,7 +225,7 @@
             // 
             // button_N
             // 
-            this.button_N.Location = new System.Drawing.Point(413, 96);
+            this.button_N.Location = new System.Drawing.Point(337, 110);
             this.button_N.Name = "button_N";
             this.button_N.Size = new System.Drawing.Size(70, 32);
             this.button_N.TabIndex = 24;
@@ -234,7 +235,7 @@
             // 
             // button_P
             // 
-            this.button_P.Location = new System.Drawing.Point(328, 96);
+            this.button_P.Location = new System.Drawing.Point(257, 110);
             this.button_P.Name = "button_P";
             this.button_P.Size = new System.Drawing.Size(70, 32);
             this.button_P.TabIndex = 23;
@@ -245,17 +246,30 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 152);
+            this.label1.Location = new System.Drawing.Point(257, 66);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(58, 13);
             this.label1.TabIndex = 25;
             this.label1.Text = "DAC value";
+            // 
+            // listBox_ScannerMode
+            // 
+            this.listBox_ScannerMode.FormattingEnabled = true;
+            this.listBox_ScannerMode.Items.AddRange(new object[] {
+            "DAC",
+            "OpenLoop",
+            "ClosedLoop"});
+            this.listBox_ScannerMode.Location = new System.Drawing.Point(120, 63);
+            this.listBox_ScannerMode.Name = "listBox_ScannerMode";
+            this.listBox_ScannerMode.Size = new System.Drawing.Size(82, 56);
+            this.listBox_ScannerMode.TabIndex = 26;
             // 
             // ParameterSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(513, 432);
+            this.Controls.Add(this.listBox_ScannerMode);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_N);
             this.Controls.Add(this.button_P);
@@ -267,7 +281,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.textBox_T_Test_cycles);
             this.Controls.Add(this.button_T_debug);
-            this.Controls.Add(this.trackBar_PositionZ);
+            this.Controls.Add(this.trackBar_PositionOutput);
             this.Controls.Add(this.button_Read_StrainGauge_Continue);
             this.Controls.Add(this.button_Read_StrainGauge_Once);
             this.Controls.Add(this.button_Read_StrainGauge_Stop);
@@ -279,7 +293,7 @@
             this.Controls.Add(this.button_DAC_Output);
             this.Name = "ParameterSettingForm";
             this.Text = "ParameterSettingForm";
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_PositionZ)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_PositionOutput)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,7 +310,7 @@
         private System.Windows.Forms.Button button_Read_StrainGauge_Stop;
         private System.Windows.Forms.Button button_Read_StrainGauge_Once;
         private System.Windows.Forms.Button button_Read_StrainGauge_Continue;
-        private System.Windows.Forms.TrackBar trackBar_PositionZ;
+        private System.Windows.Forms.TrackBar trackBar_PositionOutput;
         private System.Windows.Forms.Button button_T_debug;
         private System.Windows.Forms.TextBox textBox_T_Test_cycles;
         private System.Windows.Forms.Label label5;
@@ -308,5 +322,6 @@
         private System.Windows.Forms.Button button_N;
         private System.Windows.Forms.Button button_P;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListBox listBox_ScannerMode;
     }
 }
