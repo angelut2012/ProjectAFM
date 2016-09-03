@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6DA0F2B6-9CDB-4A3C-B263-A2BD9809C90F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AutoTask_Project</RootNamespace>
+    <AssemblyName>AutoTask_Project</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CCoarseController.cs" />
+    <Compile Include="CCoarsePositioner.cs" />
+    <Compile Include="CIniFile.cs" />
+    <Compile Include="CParameter.cs" />
+    <Compile Include="FormMainWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMainWindow.Designer.cs" />
+    <Compile Include="FormMainWindow_DynamicCompilation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMainWindow_GerneralFunction.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_AutoTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_AutoTask.Designer.cs">
+      <DependentUpon>Form_AutoTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_CMD_define_PC2MCU.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_CoarsePositioner_Dialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_CoarsePositioner_Dialog.Designer.cs" />
+    <Compile Include="Form_CoarsePositioner_Encoder_Variable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_CoarsePositioner_JoystickUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_CoarsePositioner_ParametersDefinition.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageShow_AFM_ImageProcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageShow_DrawROI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageShow_DrawROI.Designer.cs" />
+    <Compile Include="Form_ImageShow_RawData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageShow_Realtime.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_ImageShow_Realtime.Designer.cs" />
+    <Compile Include="Form_Indentation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Indentation_PostPorcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Indentation_PostPorcess.Designer.cs" />
+    <Compile Include="Form_SEM_ImageShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_User_AutoEngageWaiting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_User_AutoEngageWaiting.Designer.cs" />
+    <Compile Include="ParameterSettingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ParameterSettingForm.Designer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="FormMainWindow.resx" />
+    <EmbeddedResource Include="Form_CoarsePositioner_Dialog.resx" />
+    <EmbeddedResource Include="Form_ImageShow_DrawROI.resx" />
+    <EmbeddedResource Include="Form_ImageShow_Realtime.resx" />
+    <EmbeddedResource Include="Form_Indentation_PostPorcess.resx" />
+    <EmbeddedResource Include="Form_User_AutoEngageWaiting.resx" />
+    <EmbeddedResource Include="ParameterSettingForm.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

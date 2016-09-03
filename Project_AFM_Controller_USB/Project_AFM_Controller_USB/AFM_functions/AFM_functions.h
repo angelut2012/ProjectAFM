@@ -334,8 +334,8 @@ public:
 
 
 
-	int modeXYScanning_pause0_scan1_pending2;// 0;
-	int y_enable;// 1;
+	int modeXYScanning_pause0_scan1_pending2, modeXYScanning_pause0_scan1_pending2_store;// 0;
+	int y_enable, y_enable_store;// 1;
 	int dds_reset;// 0;
 	int enable;// 1;
 	//output for xy scan
@@ -1515,39 +1515,89 @@ public:
 	{
 		int status = 0;
 		// hold XY DDS generator if PID have not arrive.	
-		static int hold_count = 0;
-		hold_count++;
+		static int hold_count_x = 0, hold_count_y=0;
+		hold_count_x++;
+
 //		   ||
 //		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y)
 //		  				scan: 0-->127, change direction, -128-->-1, change direction again
 //		  				if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)
 			  				
-		if (indx == -N_x || indx == 0)// hold when change direction				
+//		if (indx == -N_x || indx == 0)// hold when change direction				
+//		{
+//			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
+//			    ||
+//		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y
+//			    )
+//			{
+//				if (hold_count > 20)
+//				{
+//					status=XYscanning_WaveGenerator();
+//					hold_count = 0;
+//				}
+//				
+//				// in this case, hold scan to wait for X axis
+//			}
+//			else
+//			{
+//				status=XYscanning_WaveGenerator();
+//				hold_count = 0;
+//			}
+//		}
+//		else
+//		{
+//			status=XYscanning_WaveGenerator();
+//			hold_count = 0;
+//		}
+	
+		//-----------------------------------
+//		if (indx == -N_x || indx == 0)// hold when change direction				
+//		if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)	
+//			if (indx == (N_x - 1) || indx == 0 || indx == -(N_x))
+//			if (indx == (N_x - 1) || indx == 0 )		
+//		|| indx == -(N_x)// has no affection
+//		modeXYScanning_pause0_scan1_pending2
+		
+		
+//		if (indx == (N_x - 1) || indx == -1 )//|| (Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y))
+//		{
+//			if (hold_count_x > 20)
+//			{
+//				status = XYscanning_WaveGenerator();
+//				hold_count_x = 0;
+//			}				
+//			// in this case, hold scan to wait for X axis
+//		}
+//		else
+//		{
+//			status = XYscanning_WaveGenerator();
+//			hold_count_x = 0;
+//		}
+		
+		if (indx != (N_x - 1) || indx != -1 || hold_count_x > 20)
 		{
-			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
-			    ||
-		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y
-			    )
-			{
-				if (hold_count > 20)
-				{
-					status=XYscanning_WaveGenerator();
-					hold_count = 0;
-				}
-				
-				// in this case, hold scan to wait for X axis
-			}
-			else
-			{
-				status=XYscanning_WaveGenerator();
-				hold_count = 0;
-			}
+			status = XYscanning_WaveGenerator();
+			hold_count_x = 0;
 		}
-		else
+		
+		if (indy == (N_x - 1) || indy == -1)
 		{
-			status=XYscanning_WaveGenerator();
-			hold_count = 0;
+			hold_count_y++;	
+			y_enable = 0;
+			if (hold_count_y > 200)
+				y_enable = y_enable_store;
 		}
+		else			
+		{
+			hold_count_y = 0;
+			y_enable_store = y_enable;
+		}
+		
+			// in this case, hold scan to wait for X axis
+			
+		
+		
+		
 		
 //		status = XYscanning_WaveGenerator();
 		

@@ -1649,6 +1649,7 @@ namespace NameSpace_AFM_Project
 
         public void Apporach_start_multi(int times)
         {
+            AFM_UpdateMCUParameters();
             mApproach_state = true;
             mApproach_TimesCounter = times;
             Apporach_start();
@@ -1793,6 +1794,25 @@ namespace NameSpace_AFM_Project
             send_Data_Frame_To_Arduino('C', 'Y', ch);
         }
 
+        Thread mThread_ScanStart;
+        private void button_ScanStart_Click(object sender, EventArgs e)
+        {
+            mThread_ScanStart = new Thread(ThreadFunction_StartScan);
+            mThread_ScanStart.Start();
+        }
+        void ThreadFunction_StartScan()
+        {
+            send_Data_Frame_To_Arduino('C', 'Y', 'D'); 
+            //checkBox_Y_ScanEnable.Checked = false;
+            checkBox_Y_ScanEnable.BeginInvoke((MethodInvoker)delegate() {checkBox_Y_ScanEnable.Checked = false;});
+            AFM_ZFineScannerEngage();            
+            AFM_XYScan_Start();
+            Thread.Sleep(10000);
+            send_Data_Frame_To_Arduino('C', 'Y', 'E'); 
+            //checkBox_Y_ScanEnable.Checked = true;
+            checkBox_Y_ScanEnable.BeginInvoke((MethodInvoker)delegate() { checkBox_Y_ScanEnable.Checked = true; });
+        }
+
         private void button_XY_Scan_Click(object sender, EventArgs e)
         {
             //send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
@@ -1848,6 +1868,9 @@ namespace NameSpace_AFM_Project
         {
             //CCoarseController.SA_GotoPositionRelative_S(mSystemIndex, 0, (int)1 * 1000, 1000);
             AFM_ScaningImageShow_RealTime();      // added on July7 
+            Form_Indentation_PostPorcess mSubForm = new Form_Indentation_PostPorcess(this);     // pop up a new dialog form
+            mSubForm.Show();
+            CallDynamicCode();
             //MY_DEBUG("tres");
             //SpeakVoice("I am test a word");
             //SpeakVoice("you are rate");
@@ -2241,7 +2264,7 @@ namespace NameSpace_AFM_Project
             //MY_DEBUG("end afm image dip");
             mLock_ScaningImageShow_RealTime = false;
         }
-        void AFM_ScaningImageShow_RealTime()
+        void AFM_ScaningImageShow_RealTime_old()
         {
             int ix = (int)para_Nx;
             int iy = (int)para_Ny;
@@ -2553,5 +2576,6 @@ namespace NameSpace_AFM_Project
         }
 
         #endregion
+
     }
 }

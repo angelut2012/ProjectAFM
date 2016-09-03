@@ -60,7 +60,13 @@
     <Reference Include="CSharpEval">
       <HintPath>.\CSharpEval.dll</HintPath>
     </Reference>
+    <Reference Include="MathNet.Numerics">
+      <HintPath>.\MathNet.Numerics.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="RemoteLoader">
+      <HintPath>.\RemoteLoader.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Speech" />
@@ -86,6 +92,9 @@
     <Compile Include="CCoarseController.cs" />
     <Compile Include="CCoarsePositioner.cs" />
     <Compile Include="CIniFile.cs" />
+    <Compile Include="FormMainWindow_DynamicCompilation.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="FormMainWindow_GerneralFunction.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +104,9 @@
     </Compile>
     <Compile Include="FormMainWindow.Designer.cs">
       <DependentUpon>FormMainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form_ImageShow_AFM_ImageProcess.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form_CMD_define_PC2MCU.cs">
       <SubType>Form</SubType>
@@ -117,6 +129,9 @@
     <Compile Include="Form_ImageShow_DrawROI.Designer.cs">
       <DependentUpon>Form_ImageShow_DrawROI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_ImageShow_RawData.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form_ImageShow_Realtime.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -128,6 +143,12 @@
     </Compile>
     <Compile Include="Form_CoarsePositioner_ParametersDefinition.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Indentation_PostPorcess.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Indentation_PostPorcess.designer.cs">
+      <DependentUpon>Form_Indentation_PostPorcess.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_SEM_ImageShow.cs">
       <SubType>Form</SubType>
@@ -158,6 +179,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageShow_Realtime.resx">
       <DependentUpon>Form_ImageShow_Realtime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Indentation_PostPorcess.resx">
+      <DependentUpon>Form_Indentation_PostPorcess.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_User_AutoEngageWaiting.resx">
       <DependentUpon>Form_User_AutoEngageWaiting.cs</DependentUpon>
@@ -220,6 +244,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ico.ico" />
+    <Content Include="Resources\automation.ico" />
     <None Include="Resources\Signal_error.png" />
     <None Include="Resources\Signal_on.png" />
     <None Include="Resources\Signal_off.png" />

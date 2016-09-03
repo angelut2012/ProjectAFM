@@ -66,7 +66,15 @@ class CScanner
 //		const float pid_i [] = {0.01, 0.0051, 0.0051};
 //		const float pid_d [] = {0.0001, 0.00001, 0.00001};				
 		//20160901, overcome xy overshot
-		const float step_size [] = {0.05, 0.001, 0.001};
+//		Z=0,Y=1,X=2
+		
+		// y slow
+//		const float step_size [] = {0.05, 0.0001, 0.001};
+//		const float pid_p [] = {0.2, 0.002, 0.02};
+//		const float pid_i [] = {0.01, 0.000051, 0.00051};
+//		const float pid_d [] = {0.0001, 0.000001, 0.00001};	
+		
+		const float step_size [] = {0.05, 0.0005, 0.001};
 		const float pid_p [] = {0.2, 0.02, 0.02};
 		const float pid_i [] = {0.01, 0.00051, 0.00051};
 		const float pid_d [] = {0.0001, 0.00001, 0.00001};	
