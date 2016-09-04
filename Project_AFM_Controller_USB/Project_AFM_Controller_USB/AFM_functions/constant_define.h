@@ -173,7 +173,7 @@
 
 //#define MAX_STEP_NUMBER (1000000.0/85.0)
 #define EPS (0.000001)
-#define MAX_STEP_SIZE_PIEZO_MODEL_NM (100.0)//do not change this step size, 100nm// 50.0 20// tuning fork(2.0)//(4.0)
+#define MAX_STEP_SIZE_PIEZO_MODEL_NM (100)//(100.0)//do not change this step size, 100nm// 50.0 20// tuning fork(2.0)//(4.0)
 #define MAX_STEP_SIZE_PIEZO_MODEL_01 (MAX_STEP_SIZE_PIEZO_MODEL_NM/SCANNER_RANGE_Z_NM)//(0.001)//step size=20~27 nm (0.05)
 
 

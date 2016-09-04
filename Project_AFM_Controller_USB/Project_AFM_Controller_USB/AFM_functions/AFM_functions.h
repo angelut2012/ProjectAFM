@@ -1543,32 +1543,28 @@ public:
 //			hold_count_x = 0;
 //		}
 		
-		if (indx != (NxInput - 1) || indx != -1 || hold_count_x > 20)
-		{
-			status = XYscanning_WaveGenerator();
-			hold_count_x = 0;
-		}
-		
-		if (indy == (NxInput - 1) || indy == -1)
-		{
-			hold_count_y++;	
-			y_enable = 0;
-			if (hold_count_y > 200)
-				y_enable = y_enable_store;
-		}
-		else			
-		{
-			hold_count_y = 0;
-			y_enable_store = y_enable;
-		}
+//		if (indx != (NxInput - 1) || indx != -1 || hold_count_x > 20)
+//		{
+//			status = XYscanning_WaveGenerator();
+//			hold_count_x = 0;
+//		}
+//		
+//		if (indy == (NxInput - 1) || indy == -1)
+//		{
+//			hold_count_y++;	
+//			y_enable = 0;
+//			if (hold_count_y > 200)
+//				y_enable = y_enable_store;
+//		}
+//		else			
+//		{
+//			hold_count_y = 0;
+//			y_enable_store = y_enable;
+//		}
 		
 			// in this case, hold scan to wait for X axis
-			
 		
-		
-		
-		
-//		status = XYscanning_WaveGenerator();
+		status = XYscanning_WaveGenerator();
 		
 		XYscanning_MovePositioner();
 		return status;
@@ -1653,7 +1649,7 @@ public:
 		float distance_tip_sample_error = mPID_ZLOOP->GetError();
 		//		mHoldXYScanner = true;// for test only  to test zero scan
 		mHoldXYScanner = Math_Abs(distance_tip_sample_error) > mZLoopPID_WorkingDistance_Threshold_01;
-//		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
+		if (mHoldXYScanner == false)// 2.8 kHz, if do not move XY, 10.78 kHz
 			XYscanning_EachLoop();	
 
 		float Z_sensor_height01 = mCScanner[PIEZO_Z].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));		
