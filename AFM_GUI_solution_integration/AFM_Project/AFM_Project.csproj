@@ -173,6 +173,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_CoarsePositioner_Dialog.resx">
       <DependentUpon>Form_CoarsePositioner_Dialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ImageShow_DrawROI.resx">
       <DependentUpon>Form_ImageShow_DrawROI.cs</DependentUpon>

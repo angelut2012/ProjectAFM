@@ -1506,7 +1506,7 @@ namespace NameSpace_AFM_Project
             {
                 string m = "approach: initial PRC value: " + final_adc_value.ToString();
                 MY_DEBUG(m);
-                Sys_Inf = m;
+                update_UI_label(m);
             }
             if (done == 255)
             {

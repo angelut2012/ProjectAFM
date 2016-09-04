@@ -604,8 +604,9 @@ namespace NameSpace_AFM_Project
             set_AFM_parameters('N', ref para_NumberOfFrameToScan, textBox_NumberOfFrameToScan, 1, 2000);
 
             set_AFM_parameters('t', ref para_TF_DC_Gain, textBox_TF_DC_Gain, -5000, 5000);
-
-
+            
+            AFM_Y_ScanEnable(); 
+            
             // set channel5, Dout2 last will cause self-oscillation stop on madcity lab probe
             //send_DR_Value(0, 5, Convert.ToByte(checkBox_IC0_DO2.Checked));
 
@@ -1785,6 +1786,8 @@ namespace NameSpace_AFM_Project
         }
 
         private void checkBox_Y_ScanEnable_CheckedChanged(object sender, EventArgs e)
+        { AFM_Y_ScanEnable(); }
+        void AFM_Y_ScanEnable()
         {
             char ch;
             if (checkBox_Y_ScanEnable.Checked == true)

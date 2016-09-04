@@ -98,12 +98,12 @@ namespace NameSpace_AFM_Project
             try
             {
                 pParent.MY_DEBUG("show line:", pParent.point_now_y);
-                ShowLine(pParent.mImageArrayHL, pParent.point_now_y, zedGraphControl_Height, false, Color.Red);
-                ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height, true, Color.Blue);
+                ShowLine(pParent.mImageArrayHL, pParent.point_now_y, zedGraphControl_Height, true, Color.Red);
+                ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height, false, Color.Blue);
                 //ShowLine(pParent.mImageArrayHR, pParent.point_now_y, zedGraphControl_Height2, true, Color.Blue);
 
-                ShowLine(pParent.mImageArrayEL, pParent.point_now_y, zedGraphControl_Error, false, Color.Red);
-                ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error, true, Color.Blue);
+                ShowLine(pParent.mImageArrayEL, pParent.point_now_y, zedGraphControl_Error, true, Color.Red);
+                ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error, false, Color.Blue);
                 //ShowLine(pParent.mImageArrayER, pParent.point_now_y, zedGraphControl_Error2, true, Color.Blue);
 
 

@@ -314,22 +314,22 @@ public:
 
 	////////////////////////// input for  xy scan
 	int N_FramesToScan;// 1;
-	int XL_NM;// 
-	int DX_NM;// 1000, 
-	int YL_NM;// 0, 
-	int DY_NM;// 1000;
+	float XL_NM;// 
+	float DX_NM;// 1000, 
+	float YL_NM;// 0, 
+	float DY_NM;// 1000;
 
-	int XL;// 0, 
-	int YL;// 0, 
-	int DX;// 0, 
-	int DY;// 0; //to be calculated in calculate_scan_parameter()
+	float XL;// 0, 
+	float YL;// 0, 
+	float DX;// 0, 
+	float DY;// 0; //to be calculated in calculate_scan_parameter()
 	// XL_NM * DAC_PER_NM_X, DX ;// DX_NM * DAC_PER_NM_X, 
 	// YL_NM * DAC_PER_NM_Y, DY ;// DY_NM * DAC_PER_NM_Y;
 
 
 	float scan_rate;// 0.5;//line per second 
-	int N_x;// 128, 
-	int N_y;// 128;// image size
+	int NxInput;// 128, 
+	int NyInput;// 128;// image size
 	int diry_input;// 0;
 
 
@@ -341,11 +341,9 @@ public:
 	//output for xy scan
 	int indx;// 0, 
 	int indy;// 0;// x y index for image
-	int VDACx;// 0, 
-	int VDACy;// 0, 
-	int VDACz;// 0;//value output to DAC 
-	int SX;// 0, 
-	int SY;// 0;
+	float VDACx;// 0, 
+	float VDACy;// 0, 
+
 	//typedef int 
 	enum DDS_XY_Scanner_State {DDS_XY_Reset, DDS_XY_Scan, DDS_XY_Idle};
 	// sys_ini;//0;// 0:initial, power on
@@ -515,8 +513,8 @@ public:
 
 		// scan_rate=100;// 100 is 1 line/s
 		scan_rate = 0.5;//line per second 
-		N_x = 128;
-		N_y = 128;// image size
+		NxInput = 128;
+		NyInput = 128;// image size
 		diry_input = 0;
 
 		//// Zloop
@@ -531,9 +529,6 @@ public:
 		indy = 0;// x y index for image
 		VDACx = 0;
 		VDACy = 0;
-		VDACz = 0;//value output to DAC 
-		SX = 0;
-		SY = 0;
 
 		mDDS_XY_Scanner_State = DDS_XY_Reset; // the 
 		/////////////////////// image
@@ -1364,14 +1359,11 @@ public:
 		VDACy = 0;
 		indx = 0;
 		indy = 0;
-		int Nx = (int)((float)SamplingFrequency_ZLoop_Hz / scan_rate);
-
-		//mUSerial.print("Nx"); 
-		//mUSerial.println(Nx,DEC);
-		//int Nx = SamplingFrequency_ZLoop_Hz * scan_second_per_line;
-		int Ny = N_y;
+		float NxKernel = (int)((float)SamplingFrequency_ZLoop_Hz / scan_rate);
+//		int NyKernel = NyInput;
+		float NyKernel = NxKernel*NyInput*2.0;
 		diry_input = -diry_input;
-		static int sx = -XL * Nx / DX, sy = -YL * Ny / DY, dirx = 1, diry_core = diry_input; // for index kernel
+		static float sx = -XL * NxKernel / DX, sy = -YL * NyKernel / DY, dirx = 1, diry_core = diry_input; // for index kernel
 		//  static int dds_reset_old = 0;
 
 		//// sys_ini=0;// 0:initial, power on
@@ -1405,19 +1397,20 @@ public:
 			if (frame_counter < N_FramesToScan && enable == 1)
 				sx += dirx; // kernel tick
 
-			if (sx == 0 && dirx == -1 && y_enable == 1)
+			//if (sx == 0 && dirx == -1 && y_enable == 1)
+			if (y_enable == 1)
 				sy += diry_core * diry_input;
 
 			if (sx == 0)
 				dirx = 1;
 
-			if (sx == Nx)
+			if (sx == NxKernel)
 				dirx = -1;
 
 			if (sy == 0)
 				diry_core = diry_input;
 
-			if (sy == Ny)// eg. 128
+			if (sy == NyKernel)
 			{
 				if (diry_core == diry_input) // to avoid continue adding
 				{
@@ -1459,8 +1452,8 @@ public:
 			//mUSerial.println("sxsy:");
 			//mUSerial.println(sx,DEC);
 			//mUSerial.println(sy,DEC);
-			int  stepx = Math_Max(1, Math_Abs(sx) >> 12)*SIGN(sx); //sx/3000
-			int  stepy = Math_Max(1, Math_Abs(sy) >> 12)*SIGN(sy); // xy/3000
+			int  stepx = Math_Max(1, Math_Abs(sx) /4096.0)*SIGN(sx); //sx/3000
+			int  stepy = Math_Max(1, Math_Abs(sy) /4096.0)*SIGN(sy); // xy/3000
 			if (enable == 1)
 			{
 				if (sx != 0)
@@ -1475,34 +1468,10 @@ public:
 		}// reset
 #pragma endregion
 		///////// DAC output
-		VDACx = XL + DX * sx / Nx;
-		VDACy = YL + DY * sy / Ny;
-
-		//if (diry_input == 1)
-		//{
-		//if (dirx == 1)
-		//indsx = sx >> 1;
-		//else
-		//indsx = ((Nx << 1) - sx) >> 1;
-		//}
-		//else
-		//{
-		//if (dirx == -1)
-		//indsx = sx >> 1;
-		//else
-		//indsx = ((Nx << 1) - sx) >> 1;
-		//}
-
-		////    indsx=(sx*float((dirx==-1))+(2*Nx-sx)*float((dirx==1)))/2;
-
-		//VDACy = YL + DY * (sy * Nx + indsx) / Ny / Nx; // smooth Y axis
-		//
-
-		//     px=VDACx;
-		//     py=VDACy;
-		// sawx sawy has sign to show its direction
-		indx = sx * N_x / Nx * dirx; // sawx has floating point number
-		indy = sy * diry_core;
+		VDACx = XL + DX * sx / NxKernel;
+		VDACy = YL + DY * sy / NyKernel;
+		indx = sx * NxInput / NxKernel * dirx; // sawx has floating point number
+		indy = sy * NyInput / NyKernel * diry_core;
 		//sawx=round(sawx);
 		//sawy=round(sawy);
 		//sys_state_out = mDDS_XY_Scanner_State;
@@ -1521,9 +1490,9 @@ public:
 //		   ||
 //		   Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y)
 //		  				scan: 0-->127, change direction, -128-->-1, change direction again
-//		  				if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)
+//		  				if (indx == (NxInput - 1) || indx == 0 || indx == -(NxInput) || indx == -1)
 			  				
-//		if (indx == -N_x || indx == 0)// hold when change direction				
+//		if (indx == -NxInput || indx == 0)// hold when change direction				
 //		{
 //			if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) > mThreshold01_XYscanning_X
 //			    ||
@@ -1551,15 +1520,15 @@ public:
 //		}
 	
 		//-----------------------------------
-//		if (indx == -N_x || indx == 0)// hold when change direction				
-//		if (indx == (N_x - 1) || indx == 0 || indx == -(N_x) || indx == -1)	
-//			if (indx == (N_x - 1) || indx == 0 || indx == -(N_x))
-//			if (indx == (N_x - 1) || indx == 0 )		
-//		|| indx == -(N_x)// has no affection
+//		if (indx == -NxInput || indx == 0)// hold when change direction				
+//		if (indx == (NxInput - 1) || indx == 0 || indx == -(NxInput) || indx == -1)	
+//			if (indx == (NxInput - 1) || indx == 0 || indx == -(NxInput))
+//			if (indx == (NxInput - 1) || indx == 0 )		
+//		|| indx == -(NxInput)// has no affection
 //		modeXYScanning_pause0_scan1_pending2
 		
 		
-//		if (indx == (N_x - 1) || indx == -1 )//|| (Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y))
+//		if (indx == (NxInput - 1) || indx == -1 )//|| (Math_Abs(mCScanner[PIEZO_Y].GetPositionError01()) > mThreshold01_XYscanning_Y))
 //		{
 //			if (hold_count_x > 20)
 //			{
@@ -1574,13 +1543,13 @@ public:
 //			hold_count_x = 0;
 //		}
 		
-		if (indx != (N_x - 1) || indx != -1 || hold_count_x > 20)
+		if (indx != (NxInput - 1) || indx != -1 || hold_count_x > 20)
 		{
 			status = XYscanning_WaveGenerator();
 			hold_count_x = 0;
 		}
 		
-		if (indy == (N_x - 1) || indy == -1)
+		if (indy == (NxInput - 1) || indy == -1)
 		{
 			hold_count_y++;	
 			y_enable = 0;
@@ -1886,8 +1855,8 @@ public:
 		//		if (para == 'D') mPID_ZLOOP->SetPID_D(vf*DTS_Sensitivity_B18_per_nm);
 
 		// when set:DTS_Sensitivity_B18_per_nm, also recalculate pid_input_Gain_adjustm, referenceWorkingPoint01
-		if (para == 'X') {console_XYScanReset();N_x = vf;}
-		if (para == 'Y') {console_XYScanReset();N_y = vf;}
+		if (para == 'X') {console_XYScanReset();NxInput = vf;}
+		if (para == 'Y') {console_XYScanReset();NyInput = vf;}
 		if (para == 'x') {console_XYScanReset();DX_NM = vf;}
 		if (para == 'y') {console_XYScanReset();DY_NM = vf;}
 		if (para == 'm') {console_XYScanReset();XL_NM = vf;console_XYScanReset();}
