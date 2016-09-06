@@ -1,3 +1,5 @@
+Float values have between 6 and 9 digits of precision, with most float values having at least 7 significant digits
+
 20160429
 AFM_clock.h .c
 recover stm32f7xx_hal.h .c to system library

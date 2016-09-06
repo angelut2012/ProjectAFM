@@ -118,8 +118,9 @@ float CPID::ComputePositioner(float mInput)
 //	if (ITerm > mStepSize) ITerm = mStepSize;
 //	else if (ITerm < -mStepSize) ITerm = -mStepSize;
 
-	if (ITerm > 1) ITerm = 1;
-	else if (ITerm < -1) ITerm = -1;
+	ITerm = LIMIT_MAX_MIN(ITerm,1,-1);
+//	if (ITerm > 1) ITerm = 1;
+//	else if (ITerm < -1) ITerm = -1;
 	
 	/*Compute CPID Output*/
 	float output = 0;
@@ -165,8 +166,9 @@ float CPID::ComputePI_PRC_Loop(float mInput)// for PID PRC sensor loop
 	
 //	if (ITerm > outMax) ITerm = outMax;
 //	else if (ITerm < outMin) ITerm = outMin;
-	if (ITerm > 1) ITerm = 0.01;
-	else if (ITerm < -1) ITerm = -0.01;
+	ITerm = LIMIT_MAX_MIN(ITerm, 0.01, -0.01);
+//	if (ITerm > 1) ITerm = 0.01;
+//	else if (ITerm < -1) ITerm = -0.01;
 
 	/*Compute CPID Output*/
 	float output = 0;

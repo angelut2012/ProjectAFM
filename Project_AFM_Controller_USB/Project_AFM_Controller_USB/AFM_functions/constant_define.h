@@ -151,10 +151,10 @@
 //#define SCANNER_RANGE_X_NM (92.509*1000.0)
 //#define SCANNER_RANGE_Y_NM (71.816*1000.0)
 
-// calibrated by SEM, 20160831
-#define SCANNER_RANGE_Z_NM  (9365)
-#define SCANNER_RANGE_X_NM (45748)// (83.717*1000.0/2.0)
-#define SCANNER_RANGE_Y_NM (39800)//(70.532*1000.0/2.0)
+// calibrated by SEM, 20160831// must use flaoting number
+#define SCANNER_RANGE_Z_NM  (9365.0f)
+#define SCANNER_RANGE_X_NM (45748.0f)// (83.717*1000.0/2.0)
+#define SCANNER_RANGE_Y_NM (39800.0f)//(70.532*1000.0/2.0)
 
 //#define SCANNER_RANGE_Z_NM (12.50465*1000.0)//10.98
 //#define SCANNER_RANGE_X_NM (72.22*1000.0)
@@ -173,7 +173,7 @@
 
 //#define MAX_STEP_NUMBER (1000000.0/85.0)
 #define EPS (0.000001)
-#define MAX_STEP_SIZE_PIEZO_MODEL_NM (100)//(100.0)//do not change this step size, 100nm// 50.0 20// tuning fork(2.0)//(4.0)
+#define MAX_STEP_SIZE_PIEZO_MODEL_NM (20.1f)//(100.0)//do not change this step size, 100nm// 50.0 20// tuning fork(2.0)//(4.0)
 #define MAX_STEP_SIZE_PIEZO_MODEL_01 (MAX_STEP_SIZE_PIEZO_MODEL_NM/SCANNER_RANGE_Z_NM)//(0.001)//step size=20~27 nm (0.05)
 
 
@@ -184,15 +184,15 @@
 
 
 //CPID mPID_ZLOOP(&DInput_01, &DOutput_01, &referenceWorkingPoint01,2,5,0, DIRECT);
-#define BIT18MAX (262143.0)
+#define BIT18MAX (262143.0f)
 //#define BIT18MAX_RECIPROCAL  (3.814711817595740e-06)
-#define BIT18MAX_HALF (BIT18MAX/2.0)
-#define BIT18MAX_0D75 (BIT18MAX*3.0/4.0)
-#define BIT18MAX_0D66 (BIT18MAX*2.0/3.0)
-#define BIT18MAX_0D33 (BIT18MAX*1.0/3.0)
-#define BIT18MAX_0D9 (BIT18MAX*0.9)
-#define BIT32MAX (4294967295.0)
-#define BIT24MAX (16777215.0)
+#define BIT18MAX_HALF (BIT18MAX/2.0f)
+#define BIT18MAX_0D75 (BIT18MAX*3.0f/4.0f)
+#define BIT18MAX_0D66 (BIT18MAX*2.0f/3.0f)
+#define BIT18MAX_0D33 (BIT18MAX*1.0f/3.0f)
+#define BIT18MAX_0D9 (BIT18MAX*0.9f)
+#define BIT32MAX (4294967295.0f)
+#define BIT24MAX (16777215.0f)
 
 
 

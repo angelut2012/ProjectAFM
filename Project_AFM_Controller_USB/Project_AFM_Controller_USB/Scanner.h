@@ -79,8 +79,13 @@ class CScanner
 //		const float pid_i [] = {0.01, 0.00051, 0.00051};
 //		const float pid_d [] = {0.0001, 0.00001, 0.00001};	
 		
-		//20160904
-		const float step_size [] = {0.05, 0.001, 0.001};
+//		//20160904
+//		const float step_size [] = {0.05, 0.001, 0.001};
+//		const float pid_p [] = {0.2, 0.02, 0.02};
+//		const float pid_i [] = {0.01, 0.00051, 0.00051};
+//		const float pid_d [] = {0.0001, 0.00001, 0.00001};	
+				//20160904_14:00
+		const float step_size [] = {0.05, 0.0001, 0.001};
 		const float pid_p [] = {0.2, 0.02, 0.02};
 		const float pid_i [] = {0.01, 0.00051, 0.00051};
 		const float pid_d [] = {0.0001, 0.00001, 0.00001};	

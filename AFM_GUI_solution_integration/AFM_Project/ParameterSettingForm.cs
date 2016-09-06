@@ -97,6 +97,10 @@ namespace NameSpace_AFM_Project
 
         void function_wave_generator()
         {
+            double[] p101 = { 0.100000000000000, 0.116000000000000, 0.132000000000000, 0.148000000000000, 0.164000000000000, 0.180000000000000, 0.196000000000000, 0.212000000000000, 0.228000000000000, 0.244000000000000, 0.260000000000000, 0.276000000000000, 0.292000000000000, 0.308000000000000, 0.324000000000000, 0.340000000000000, 0.356000000000000, 0.372000000000000, 0.388000000000000, 0.404000000000000, 0.420000000000000, 0.436000000000000, 0.452000000000000, 0.468000000000000, 0.484000000000000, 0.500000000000000, 0.516000000000000, 0.532000000000000, 0.548000000000000, 0.564000000000000, 0.580000000000000, 0.596000000000000, 0.612000000000000, 0.628000000000000, 0.644000000000000, 0.660000000000000, 0.676000000000000, 0.692000000000000, 0.708000000000000, 0.724000000000000, 0.740000000000000, 0.756000000000000, 0.772000000000000, 0.788000000000000, 0.804000000000000, 0.820000000000000, 0.836000000000000, 0.852000000000000, 0.868000000000000, 0.884000000000000, 0.900000000000000, 0.884000000000000, 0.868000000000000, 0.852000000000000, 0.836000000000000, 0.820000000000000, 0.804000000000000, 0.788000000000000, 0.772000000000000, 0.756000000000000, 0.740000000000000, 0.724000000000000, 0.708000000000000, 0.692000000000000, 0.676000000000000, 0.660000000000000, 0.644000000000000, 0.628000000000000, 0.612000000000000, 0.596000000000000, 0.580000000000000, 0.564000000000000, 0.548000000000000, 0.532000000000000, 0.516000000000000, 0.500000000000000, 0.484000000000000, 0.468000000000000, 0.452000000000000, 0.436000000000000, 0.420000000000000, 0.404000000000000, 0.388000000000000, 0.372000000000000, 0.356000000000000, 0.340000000000000, 0.324000000000000, 0.308000000000000, 0.292000000000000, 0.276000000000000, 0.260000000000000, 0.244000000000000, 0.228000000000000, 0.212000000000000, 0.196000000000000, 0.180000000000000, 0.164000000000000, 0.148000000000000, 0.132000000000000, 0.116000000000000 };
+            double[] p2 = { 0.2, 0.8 };
+
+            double[] p = p2;
             while (mWaveRun == true)
             {
                 int N = Convert.ToInt32(textBox_T_Test_cycles.Text);
@@ -108,17 +112,30 @@ namespace NameSpace_AFM_Project
                     //Thread.Sleep(dt);
                     //pParent.set_output_DAC_Value_0_5(axis_wave, 0);
                     //Thread.Sleep(dt);
-                    if (listBox_ScannerMode.SelectedIndex == 2)
-                        pParent.set_output_Position_Value_01(axis_wave + 100, 0.8);                 
-                    if (listBox_ScannerMode.SelectedIndex == 0)
-                        pParent.set_output_DAC_Value_0_5(axis_wave, 5);
-                    Thread.Sleep(dt);
 
-                    if (listBox_ScannerMode.SelectedIndex == 2)
-                        pParent.set_output_Position_Value_01(axis_wave + 100, 0.2);
-                    if (listBox_ScannerMode.SelectedIndex == 0)
-                        pParent.set_output_DAC_Value_0_5(axis_wave, 0);
-                    Thread.Sleep(dt);
+                    //if (listBox_ScannerMode.SelectedIndex == 2)
+                    //    pParent.set_output_Position_Value_01(axis_wave + 100, 0.8);                 
+                    //if (listBox_ScannerMode.SelectedIndex == 0)
+                    //    pParent.set_output_DAC_Value_0_5(axis_wave, 5);
+                    //Thread.Sleep(dt);
+
+                    //if (listBox_ScannerMode.SelectedIndex == 2)
+                    //    pParent.set_output_Position_Value_01(axis_wave + 100, 0.2);
+                    //if (listBox_ScannerMode.SelectedIndex == 0)
+                    //    pParent.set_output_DAC_Value_0_5(axis_wave, 0);
+                    //Thread.Sleep(dt);
+
+
+
+                    //for (int k = 0; k < p.Length; k++)
+                    //{
+                    //    pParent.set_output_Position_Value_01(axis_wave + 100, p[k]);
+                    //    Thread.Sleep(dt);
+                    //    if (mWaveRun == false)
+                    //        break;
+                    //}
+
+
 
 
                 }
@@ -192,6 +209,24 @@ namespace NameSpace_AFM_Project
             value_01 = pParent.LIMIT_MAX_MIN(value_01, 1, 0);
             textBox_Position_Value.Text = value_01.ToString();
             pParent.set_output_Position_Value_01(axis + 100, value_01);
+        }
+
+        private void button_Test_Click(object sender, EventArgs e)
+        {
+            int dt = Convert.ToInt32(textBox_T_test_dt.Text);
+            axis_wave = (byte)listBox_ScannerAxis.SelectedIndex;
+
+            const double SCANNER_RANGE_Z_NM = 9365;
+            const double SCANNER_RANGE_X_NM = 45748;
+            const double SCANNER_RANGE_Y_NM = 39800;
+
+            double step = 1000.0 / SCANNER_RANGE_X_NM;
+
+           
+            pParent.set_output_Position_Value_01(axis_wave + 100, 0.5 + step);
+            Thread.Sleep(dt);
+            pParent.set_output_Position_Value_01(axis_wave + 100, 0.5);
+            Thread.Sleep(dt);
         }
 
     }

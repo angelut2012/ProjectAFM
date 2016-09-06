@@ -114,6 +114,7 @@
             this.pictureBox_AFM_Real_Image = new System.Windows.Forms.PictureBox();
             this.button_ExportData = new System.Windows.Forms.Button();
             this.groupBox_AFMImage = new System.Windows.Forms.GroupBox();
+            this.button_StartTask = new System.Windows.Forms.Button();
             this.button_ScanStart = new System.Windows.Forms.Button();
             this.checkBox_User_AutoStartScanAfterEngage = new System.Windows.Forms.CheckBox();
             this.button_User_AutoEngage = new System.Windows.Forms.Button();
@@ -172,7 +173,6 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage_backup = new System.Windows.Forms.TabPage();
             this.tabPage_Control = new System.Windows.Forms.TabPage();
-            this.button_StartTask = new System.Windows.Forms.Button();
             this.button_WaveTest = new System.Windows.Forms.Button();
             this.button_DataCapture = new System.Windows.Forms.Button();
             this.tabPage_DataExport = new System.Windows.Forms.TabPage();
@@ -268,7 +268,7 @@
             this.button_SetParameters.Name = "button_SetParameters";
             this.button_SetParameters.Size = new System.Drawing.Size(81, 41);
             this.button_SetParameters.TabIndex = 11;
-            this.button_SetParameters.Text = "Para Update";
+            this.button_SetParameters.Text = " ";
             this.toolTip_Help.SetToolTip(this.button_SetParameters, "set parameters");
             this.button_SetParameters.UseVisualStyleBackColor = false;
             this.button_SetParameters.Click += new System.EventHandler(this.button_SetParameters_Click);
@@ -347,7 +347,7 @@
             this.textBox_Dy.Name = "textBox_Dy";
             this.textBox_Dy.Size = new System.Drawing.Size(38, 20);
             this.textBox_Dy.TabIndex = 57;
-            this.textBox_Dy.Text = "20000";
+            this.textBox_Dy.Text = "15000";
             this.toolTip_Help.SetToolTip(this.textBox_Dy, "Enter the step length here.");
             // 
             // textBox_Dx
@@ -357,7 +357,7 @@
             this.textBox_Dx.Name = "textBox_Dx";
             this.textBox_Dx.Size = new System.Drawing.Size(38, 20);
             this.textBox_Dx.TabIndex = 55;
-            this.textBox_Dx.Text = "20000";
+            this.textBox_Dx.Text = "15000";
             this.toolTip_Help.SetToolTip(this.textBox_Dx, "Enter the step length here.");
             // 
             // textBox_YL
@@ -387,7 +387,7 @@
             this.textBox_ScanRate.Name = "textBox_ScanRate";
             this.textBox_ScanRate.Size = new System.Drawing.Size(38, 20);
             this.textBox_ScanRate.TabIndex = 63;
-            this.textBox_ScanRate.Text = "0.5";
+            this.textBox_ScanRate.Text = "1";
             this.toolTip_Help.SetToolTip(this.textBox_ScanRate, "Enter the step length here.");
             // 
             // textBox_Sensitivity
@@ -397,7 +397,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "113";
+            this.textBox_Sensitivity.Text = "94";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm
@@ -407,7 +407,7 @@
             this.textBox_SetDeltaValueNm.Name = "textBox_SetDeltaValueNm";
             this.textBox_SetDeltaValueNm.Size = new System.Drawing.Size(38, 20);
             this.textBox_SetDeltaValueNm.TabIndex = 67;
-            this.textBox_SetDeltaValueNm.Text = "20";
+            this.textBox_SetDeltaValueNm.Text = "5";
             this.toolTip_Help.SetToolTip(this.textBox_SetDeltaValueNm, "Enter the step length here.");
             // 
             // textBox_NumberOfFrameToScan
@@ -1055,6 +1055,7 @@
             // groupBox_AFMImage
             // 
             this.groupBox_AFMImage.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox_AFMImage.Controls.Add(this.button_StartTask);
             this.groupBox_AFMImage.Controls.Add(this.button_ScanStart);
             this.groupBox_AFMImage.Controls.Add(this.checkBox_User_AutoStartScanAfterEngage);
             this.groupBox_AFMImage.Controls.Add(this.button_User_AutoEngage);
@@ -1072,6 +1073,16 @@
             this.groupBox_AFMImage.TabIndex = 103;
             this.groupBox_AFMImage.TabStop = false;
             this.groupBox_AFMImage.Text = "AFM Imaging Result";
+            // 
+            // button_StartTask
+            // 
+            this.button_StartTask.Location = new System.Drawing.Point(19, 599);
+            this.button_StartTask.Name = "button_StartTask";
+            this.button_StartTask.Size = new System.Drawing.Size(97, 34);
+            this.button_StartTask.TabIndex = 87;
+            this.button_StartTask.Text = "start task";
+            this.button_StartTask.UseVisualStyleBackColor = true;
+            this.button_StartTask.Click += new System.EventHandler(this.button_StartTask_Click);
             // 
             // button_ScanStart
             // 
@@ -1772,7 +1783,6 @@
             // 
             // tabPage_Control
             // 
-            this.tabPage_Control.Controls.Add(this.button_StartTask);
             this.tabPage_Control.Controls.Add(this.button_WaveTest);
             this.tabPage_Control.Controls.Add(this.button_DataCapture);
             this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
@@ -1788,16 +1798,6 @@
             this.tabPage_Control.TabIndex = 4;
             this.tabPage_Control.Text = "backup1";
             this.tabPage_Control.UseVisualStyleBackColor = true;
-            // 
-            // button_StartTask
-            // 
-            this.button_StartTask.Location = new System.Drawing.Point(143, 270);
-            this.button_StartTask.Name = "button_StartTask";
-            this.button_StartTask.Size = new System.Drawing.Size(97, 34);
-            this.button_StartTask.TabIndex = 87;
-            this.button_StartTask.Text = "start task";
-            this.button_StartTask.UseVisualStyleBackColor = true;
-            this.button_StartTask.Click += new System.EventHandler(this.button_StartTask_Click);
             // 
             // button_WaveTest
             // 

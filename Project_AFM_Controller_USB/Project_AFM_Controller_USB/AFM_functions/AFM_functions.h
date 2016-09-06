@@ -580,7 +580,7 @@ public:
 		//com_buffer_frame[LENGTH_COM_FRAME_PC2MCU - 4] = {0};
 
 		measured_sampling_frequency_of_system = 0;
-		mSystemScanMode_Openloop0_CloseloopXY1_CloseloopXYZ2 = 2;//1
+		mSystemScanMode_Openloop0_CloseloopXY1_CloseloopXYZ2 =2;//1
 		
 		calculate_scan_parameter();
 
@@ -1542,29 +1542,31 @@ public:
 //			status = XYscanning_WaveGenerator();
 //			hold_count_x = 0;
 //		}
+//		if (indx != (NxInput - 1) && indx != -1 )	
+//			mCScanner[PIEZO_X].mPID_Scanner->ResetMemory();
 		
-//		if (indx != (NxInput - 1) || indx != -1 || hold_count_x > 20)
-//		{
-//			status = XYscanning_WaveGenerator();
-//			hold_count_x = 0;
-//		}
-//		
-//		if (indy == (NxInput - 1) || indy == -1)
-//		{
-//			hold_count_y++;	
-//			y_enable = 0;
-//			if (hold_count_y > 200)
-//				y_enable = y_enable_store;
-//		}
-//		else			
-//		{
-//			hold_count_y = 0;
-//			y_enable_store = y_enable;
-//		}
+//		if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) < mThreshold01_XYscanning_X  || hold_count_x > 5)
 		
-			// in this case, hold scan to wait for X axis
+		if (indy == (NxInput - 1) || indy == -1)
+		{
+			hold_count_y++;	
+			y_enable = 0;
+			if (hold_count_y > 200)
+				y_enable = y_enable_store;
+		}
+		else			
+		{
+			hold_count_y = 0;
+			y_enable_store = y_enable;
+		}
 		
-		status = XYscanning_WaveGenerator();
+		if (	(indx != (NxInput - 1) && indx != -1 )		|| hold_count_x > 5)
+		{			
+			status = XYscanning_WaveGenerator();
+			hold_count_x = 0;
+		}	
+		
+//		status = XYscanning_WaveGenerator();
 		
 		XYscanning_MovePositioner();
 		return status;
@@ -1653,8 +1655,9 @@ public:
 			XYscanning_EachLoop();	
 
 		float Z_sensor_height01 = mCScanner[PIEZO_Z].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false));		
-		
-//		// update temperature for each line 
+		float Y_sensor_B24 = LIMIT_MAX_MIN(mCScanner[PIEZO_Y].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false)), 1, 0)*SCANNER_RANGE_Y_NM;		
+		float X_sensor_B24 = LIMIT_MAX_MIN(mCScanner[PIEZO_X].GetSensorPosition01(mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false)), 1, 0)*SCANNER_RANGE_X_NM;	
+//		// update temperature for each line				
 //		static int indy_last = 1000;
 //		if (indy != indy_last)
 //		{
@@ -1675,8 +1678,8 @@ public:
 						                         Z_sensor_height01, 
 						                         distance_tip_sample_error, 
 						                         mAFM_DAC.ReadDACValue(PIEZO_Z),
-												mCScanner[PIEZO_Z].mTemperature,
-												mCScanner[PIEZO_X].mTemperature
+				Y_sensor_B24,//mCScanner[PIEZO_Z].mTemperature,
+				X_sensor_B24//mCScanner[PIEZO_X].mTemperature
 			                       );			
 		}
 		if( modeXYScanning_pause0_scan1_pending2!=1) //after engaged before xy start to scan, also send back data
@@ -3340,6 +3343,7 @@ public:
 		
 		
 		CHECK_COUNT_DUE(2000);
+
 //		int wait_count = ;// 50000;		
 //		CHECK_COUNT_DUE(1000000);
 		//		test_sensor_drift();		
@@ -3712,9 +3716,9 @@ public:
 //[12808] SCSG max : 152606 
 //[12808] SCSG max : 13944 
 //[12808] SCSG max : 39198 
-				// without temp compensation
-		const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {43430, 174586, 142590};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
-		const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {152606, 39198, 13944};//{241554, 244873, 61734};//{241802, 244504, 62131};
+				// without temp compensation  20160904_15:30
+		const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {139344, 74206, 92732};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
+		const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {257044, 10168, 14046};//{241554, 244873, 61734};//{241802, 244504, 62131};
 
 		
 		// here, we should call realtimeScanProcess to evaluate the time. and set mPeriod_RealtimePID_us
@@ -3759,7 +3763,7 @@ public:
 		const float noise_STD_B18_Y = 5.2362;
 		//			10.3889};
 
-		mThreshold01_XYscanning_X = 10.0*noise_STD_B18_X / Math_Abs( (mSCSG_B18_Max[PIEZO_X] - mSCSG_B18_Min[PIEZO_X]));
+		mThreshold01_XYscanning_X = 20.0*noise_STD_B18_X / Math_Abs( (mSCSG_B18_Max[PIEZO_X] - mSCSG_B18_Min[PIEZO_X]));
 		mThreshold01_XYscanning_Y = 30.0*noise_STD_B18_Y / Math_Abs( (mSCSG_B18_Max[PIEZO_Y] - mSCSG_B18_Min[PIEZO_Y]));
 		
 	}

@@ -50,6 +50,7 @@
             this.button_P = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.listBox_ScannerMode = new System.Windows.Forms.ListBox();
+            this.button_Test = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_PositionOutput)).BeginInit();
             this.SuspendLayout();
             // 
@@ -264,11 +265,22 @@
             this.listBox_ScannerMode.Size = new System.Drawing.Size(82, 56);
             this.listBox_ScannerMode.TabIndex = 26;
             // 
+            // button_Test
+            // 
+            this.button_Test.Location = new System.Drawing.Point(350, 231);
+            this.button_Test.Name = "button_Test";
+            this.button_Test.Size = new System.Drawing.Size(84, 32);
+            this.button_Test.TabIndex = 27;
+            this.button_Test.Text = "test";
+            this.button_Test.UseVisualStyleBackColor = true;
+            this.button_Test.Click += new System.EventHandler(this.button_Test_Click);
+            // 
             // ParameterSettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(513, 432);
+            this.Controls.Add(this.button_Test);
             this.Controls.Add(this.listBox_ScannerMode);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_N);
@@ -323,5 +335,6 @@
         private System.Windows.Forms.Button button_P;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox_ScannerMode;
+        private System.Windows.Forms.Button button_Test;
     }
 }

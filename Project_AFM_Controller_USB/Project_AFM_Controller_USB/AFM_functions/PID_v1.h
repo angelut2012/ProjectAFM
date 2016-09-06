@@ -75,6 +75,12 @@ private:
 	int GetMode();						  //  inside the CPID.
 	bool GetDirection(){return mDirection_DirectTrue_ReverseFalse;};					  //
 	//float millis(){return 1;};
+	void ResetMemory()
+	{
+		lastInput = mySetpoint;
+		ITerm = 0;
+	}
+	
 	void Reset(float position_01=0)
 	{
 	   lastInput = mySetpoint;

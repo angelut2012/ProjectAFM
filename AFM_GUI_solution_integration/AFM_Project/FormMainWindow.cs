@@ -73,9 +73,9 @@ namespace NameSpace_AFM_Project
         //const double SCANNER_RANGE_Y_NM = (70.532 * 1000.0 / 2.0);
 
         // calibrated by SEM 20160825  // calibrated by SEM, 20160831
-        const double SCANNER_RANGE_Z_NM =  9365;
-        const double SCANNER_RANGE_X_NM = 45748;
-        const double SCANNER_RANGE_Y_NM = 39800;
+        public const double SCANNER_RANGE_Z_NM = 9365;
+        public const double SCANNER_RANGE_X_NM = 45748;
+        public const double SCANNER_RANGE_Y_NM = 39800;
         
 
 
@@ -586,11 +586,11 @@ namespace NameSpace_AFM_Project
             set_AFM_parameters('y', ref para_Dy, textBox_Dy, 1, SCANNER_RANGE_Y_NM);
             // start point of XY
 
-            double xl = SCANNER_RANGE_X_NM / 2 - Convert.ToDouble(textBox_Dx.Text) / 2;
-            textBox_XL.Text = xl.ToString();
+            //double xl = SCANNER_RANGE_X_NM / 2 - Convert.ToDouble(textBox_Dx.Text) / 2;
+            //textBox_XL.Text = xl.ToString();
 
-            double yl = SCANNER_RANGE_Y_NM / 2 - Convert.ToDouble(textBox_Dy.Text) / 2;
-            textBox_YL.Text = yl.ToString();
+            //double yl = SCANNER_RANGE_Y_NM / 2 - Convert.ToDouble(textBox_Dy.Text) / 2;
+            //textBox_YL.Text = yl.ToString();
 
             set_AFM_parameters('m', ref para_XL, textBox_XL, 1, SCANNER_RANGE_X_NM);
             set_AFM_parameters('n', ref para_YL, textBox_YL, 1, SCANNER_RANGE_Y_NM);
@@ -1401,6 +1401,12 @@ namespace NameSpace_AFM_Project
                 MY_DEBUG("save image: indx " + indx.ToString() + "indy " + indy.ToString());
                 SaveImage_StartThread();
                 para_NumberOfFrameFinished++;// not used right now
+
+                //send_Data_Frame_To_Arduino_SetSystemIdle_Multi();// after each image,withdraw to refresh V_PRC_infinite
+                //AFM_XYScan_Reset();
+                //AFM_EngageWaitStartScan_Thread();
+
+
             }
 
             if (indx == 0 & indx_store_for_save_image == -1)// update y when x finish one line and back
@@ -1799,6 +1805,8 @@ namespace NameSpace_AFM_Project
 
         Thread mThread_ScanStart;
         private void button_ScanStart_Click(object sender, EventArgs e)
+        { AFM_EngageWaitStartScan_Thread();}
+        void AFM_EngageWaitStartScan_Thread()
         {
             mThread_ScanStart = new Thread(ThreadFunction_StartScan);
             mThread_ScanStart.Start();
@@ -1808,7 +1816,20 @@ namespace NameSpace_AFM_Project
             send_Data_Frame_To_Arduino('C', 'Y', 'D'); 
             //checkBox_Y_ScanEnable.Checked = false;
             checkBox_Y_ScanEnable.BeginInvoke((MethodInvoker)delegate() {checkBox_Y_ScanEnable.Checked = false;});
-            AFM_ZFineScannerEngage();            
+            AFM_ZFineScannerEngage();
+            double mSampleDistance_NM_old = 0;
+            for (int k = 0; k < 100;k++ )
+            {
+                Thread.Sleep(2000);
+                if (Math.Abs(mSampleDistance_NM_old - mSampleDistance_NM) < 3)
+                    break;
+                else
+                {
+                    // simple filter
+                    mSampleDistance_NM_old += mSampleDistance_NM;
+                    mSampleDistance_NM_old /= 2;
+                }
+            }
             AFM_XYScan_Start();
             Thread.Sleep(10000);
             send_Data_Frame_To_Arduino('C', 'Y', 'E'); 
@@ -1951,11 +1972,17 @@ namespace NameSpace_AFM_Project
 
         void ThreadFunction_SaveImage()
         {
-            string file_name = mDataPath + "Image_" + textBox_FileName.Text;
+            string file_name = mDataPath + "Image_" + textBox_FileName.Text
+
+                +"_"+textBox_Nx.Text+"p"
+                + "_" + textBox_ScanRate.Text + "Hz"
+                + "_" + textBox_Dx.Text + "nm"        
+                + "_" + textBox_SetDeltaValueNm.Text + "s"        
+                                ;
             string t = DateTime.Now.ToString("yyyyMMddHHmmss");
             //UpdateImageShow_SaveMat(t);           
             SaveImageToTextFile_Multi(file_name, t);
-            SaveImageToTextFile_Multi(file_name, null);
+            //SaveImageToTextFile_Multi(file_name, null);
         }
         void SaveImageToTextFile_Multi(string file_name, string time)
         {
@@ -2219,15 +2246,55 @@ namespace NameSpace_AFM_Project
         }
 
         //-------------------------- task cunction
+        Thread mThread_Task;
         private void button_StartTask_Click(object sender, EventArgs e)
         {
-            mTaskTimer = new System.Windows.Forms.Timer();
-            mTaskTimer.Interval = 6 * 3600 * 1000; //6512;
-            mTaskTimer.Tick += new System.EventHandler(this.timerFunction_Task);
-            mTaskTimer.Stop();
-            mTaskTimer.Start();    //trigger function   timerFunction_Appraoch
-        }
+            //mTaskTimer = new System.Windows.Forms.Timer();
+            //mTaskTimer.Interval = 6 * 3600 * 1000; //6512;
+            //mTaskTimer.Tick += new System.EventHandler(this.timerFunction_Task);
+            //mTaskTimer.Stop();
+            //mTaskTimer.Start();    //trigger function   timerFunction_Appraoch
 
+            mThread_Task = new Thread(ThreadFunction_Task);
+            mThread_Task.Start();
+
+        }
+        void ThreadFunction_Task()
+        {
+            para_NumberOfFrameFinished=4;
+            double[] size = { 15000,7000 };
+            double[] speed = { 1,0.5,0.25 };
+            for (int f = 0; f < size.Length; f++)
+            {
+                textBox_ScanRate.Invoke((MethodInvoker)delegate()
+                {
+                    textBox_ScanRate.Text = speed[f].ToString();
+                });
+                for (int k = 0; k < size.Length; k++)
+                {
+                    while (para_NumberOfFrameFinished < 4)// wait here for 4 frame to finish
+                        Thread.Sleep(1000);
+                    para_NumberOfFrameFinished = 0;
+                    send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
+                    AFM_XYScan_Reset();
+
+                    textBox_Dx.Invoke((MethodInvoker)delegate()
+                    {
+                        textBox_Dx.Text = size[k].ToString();
+                    });
+
+                    textBox_Dy.Invoke((MethodInvoker)delegate()
+                    {
+                        textBox_Dy.Text = size[k].ToString();
+                    });
+
+                    textBox_FileName.Invoke((MethodInvoker)delegate() { textBox_FileName.Text = "sample" + size[k].ToString(); });
+                    AFM_UpdateMCUParameters();
+                    AFM_EngageWaitStartScan_Thread();
+                }
+            }
+        
+        }
         System.Windows.Forms.Timer mTaskTimer;         //= new System.Windows.Forms.Timer();
         private void timerFunction_Task(object sender, EventArgs e)
         {

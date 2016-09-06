@@ -93,7 +93,10 @@ public 	const int CMD_PC2MCU_InitialParameter_ZLoop	=  (CMD_PC2MCU_BASE + 5);
             value = value / x;
             value = Math.Max(value, low_limit);
             value = Math.Min(value, up_limit);
-            T.Text = Convert.ToString(value);
+            T.Invoke((MethodInvoker)delegate()
+            {
+                T.Text = Convert.ToString(value);}
+                );
 
             set_AFM_parameters(parameter_name, ref para_store, T);
         }
