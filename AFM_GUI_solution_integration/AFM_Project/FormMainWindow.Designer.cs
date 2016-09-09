@@ -56,9 +56,9 @@
             this.textBox_SetDeltaValueNm = new System.Windows.Forms.TextBox();
             this.textBox_NumberOfFrameToScan = new System.Windows.Forms.TextBox();
             this.textBox_TF_DC_Gain = new System.Windows.Forms.TextBox();
-            this.textBox_TaskTime = new System.Windows.Forms.TextBox();
-            this.textBox_TaskNumber = new System.Windows.Forms.TextBox();
-            this.textBox_Task_PointsNumber = new System.Windows.Forms.TextBox();
+            this.textBox_Task_TimeToWait = new System.Windows.Forms.TextBox();
+            this.textBox_Task_NumberOfIndentation = new System.Windows.Forms.TextBox();
+            this.textBox_Task_NumberOfPoint = new System.Windows.Forms.TextBox();
             this.textBox_T = new System.Windows.Forms.TextBox();
             this.button_Update_ParaPID = new System.Windows.Forms.Button();
             this.button_ScannerCalibration = new System.Windows.Forms.Button();
@@ -194,7 +194,6 @@
             this.groupBox_Setup.SuspendLayout();
             this.groupBox_SystemStatus.SuspendLayout();
             this.tabPage_TopoScan.SuspendLayout();
-            this.tabPage_Indentation.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPage_backup.SuspendLayout();
             this.tabPage_Control.SuspendLayout();
@@ -397,7 +396,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "94";
+            this.textBox_Sensitivity.Text = "130";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm
@@ -430,39 +429,39 @@
             this.textBox_TF_DC_Gain.Text = "1";
             this.toolTip_Help.SetToolTip(this.textBox_TF_DC_Gain, "Enter the step length here.");
             // 
-            // textBox_TaskTime
+            // textBox_Task_TimeToWait
             // 
-            this.textBox_TaskTime.Location = new System.Drawing.Point(12, 276);
-            this.textBox_TaskTime.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBox_TaskTime.Name = "textBox_TaskTime";
-            this.textBox_TaskTime.Size = new System.Drawing.Size(60, 20);
-            this.textBox_TaskTime.TabIndex = 87;
-            this.textBox_TaskTime.Text = "20";
-            this.toolTip_Help.SetToolTip(this.textBox_TaskTime, "Enter the step length here.");
+            this.textBox_Task_TimeToWait.Location = new System.Drawing.Point(24, 502);
+            this.textBox_Task_TimeToWait.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBox_Task_TimeToWait.Name = "textBox_Task_TimeToWait";
+            this.textBox_Task_TimeToWait.Size = new System.Drawing.Size(60, 20);
+            this.textBox_Task_TimeToWait.TabIndex = 87;
+            this.textBox_Task_TimeToWait.Text = "5";
+            this.toolTip_Help.SetToolTip(this.textBox_Task_TimeToWait, "Enter the step length here.");
             // 
-            // textBox_TaskNumber
+            // textBox_Task_NumberOfIndentation
             // 
-            this.textBox_TaskNumber.Location = new System.Drawing.Point(12, 317);
-            this.textBox_TaskNumber.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBox_TaskNumber.Name = "textBox_TaskNumber";
-            this.textBox_TaskNumber.Size = new System.Drawing.Size(60, 20);
-            this.textBox_TaskNumber.TabIndex = 89;
-            this.textBox_TaskNumber.Text = "11";
-            this.toolTip_Help.SetToolTip(this.textBox_TaskNumber, "Enter the step length here.");
+            this.textBox_Task_NumberOfIndentation.Location = new System.Drawing.Point(24, 543);
+            this.textBox_Task_NumberOfIndentation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBox_Task_NumberOfIndentation.Name = "textBox_Task_NumberOfIndentation";
+            this.textBox_Task_NumberOfIndentation.Size = new System.Drawing.Size(60, 20);
+            this.textBox_Task_NumberOfIndentation.TabIndex = 89;
+            this.textBox_Task_NumberOfIndentation.Text = "11";
+            this.toolTip_Help.SetToolTip(this.textBox_Task_NumberOfIndentation, "Enter the step length here.");
             // 
-            // textBox_Task_PointsNumber
+            // textBox_Task_NumberOfPoint
             // 
-            this.textBox_Task_PointsNumber.Location = new System.Drawing.Point(12, 367);
-            this.textBox_Task_PointsNumber.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBox_Task_PointsNumber.Name = "textBox_Task_PointsNumber";
-            this.textBox_Task_PointsNumber.Size = new System.Drawing.Size(60, 20);
-            this.textBox_Task_PointsNumber.TabIndex = 91;
-            this.textBox_Task_PointsNumber.Text = "1";
-            this.toolTip_Help.SetToolTip(this.textBox_Task_PointsNumber, "Enter the step length here.");
+            this.textBox_Task_NumberOfPoint.Location = new System.Drawing.Point(24, 593);
+            this.textBox_Task_NumberOfPoint.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.textBox_Task_NumberOfPoint.Name = "textBox_Task_NumberOfPoint";
+            this.textBox_Task_NumberOfPoint.Size = new System.Drawing.Size(60, 20);
+            this.textBox_Task_NumberOfPoint.TabIndex = 91;
+            this.textBox_Task_NumberOfPoint.Text = "10";
+            this.toolTip_Help.SetToolTip(this.textBox_Task_NumberOfPoint, "Enter the step length here.");
             // 
             // textBox_T
             // 
-            this.textBox_T.Location = new System.Drawing.Point(12, 419);
+            this.textBox_T.Location = new System.Drawing.Point(11, 421);
             this.textBox_T.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.textBox_T.Name = "textBox_T";
             this.textBox_T.Size = new System.Drawing.Size(60, 20);
@@ -892,7 +891,7 @@
             // 
             // button_StartIndent
             // 
-            this.button_StartIndent.Location = new System.Drawing.Point(93, 525);
+            this.button_StartIndent.Location = new System.Drawing.Point(27, 432);
             this.button_StartIndent.Margin = new System.Windows.Forms.Padding(2);
             this.button_StartIndent.Name = "button_StartIndent";
             this.button_StartIndent.Size = new System.Drawing.Size(68, 45);
@@ -904,10 +903,10 @@
             // propertyGrid_AFM_Parameter
             // 
             this.propertyGrid_AFM_Parameter.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.propertyGrid_AFM_Parameter.Location = new System.Drawing.Point(48, 56);
+            this.propertyGrid_AFM_Parameter.Location = new System.Drawing.Point(11, 19);
             this.propertyGrid_AFM_Parameter.Margin = new System.Windows.Forms.Padding(2);
             this.propertyGrid_AFM_Parameter.Name = "propertyGrid_AFM_Parameter";
-            this.propertyGrid_AFM_Parameter.Size = new System.Drawing.Size(289, 450);
+            this.propertyGrid_AFM_Parameter.Size = new System.Drawing.Size(289, 409);
             this.propertyGrid_AFM_Parameter.TabIndex = 78;
             // 
             // checkBox_ForceSetAll
@@ -935,7 +934,7 @@
             // 
             // button_CancelIndent
             // 
-            this.button_CancelIndent.Location = new System.Drawing.Point(194, 527);
+            this.button_CancelIndent.Location = new System.Drawing.Point(99, 434);
             this.button_CancelIndent.Margin = new System.Windows.Forms.Padding(2);
             this.button_CancelIndent.Name = "button_CancelIndent";
             this.button_CancelIndent.Size = new System.Drawing.Size(68, 43);
@@ -946,10 +945,10 @@
             // 
             // button_MultiTask
             // 
-            this.button_MultiTask.Location = new System.Drawing.Point(100, 308);
+            this.button_MultiTask.Location = new System.Drawing.Point(139, 502);
             this.button_MultiTask.Margin = new System.Windows.Forms.Padding(2);
             this.button_MultiTask.Name = "button_MultiTask";
-            this.button_MultiTask.Size = new System.Drawing.Size(68, 45);
+            this.button_MultiTask.Size = new System.Drawing.Size(68, 95);
             this.button_MultiTask.TabIndex = 86;
             this.button_MultiTask.Text = "Multi Indent";
             this.button_MultiTask.UseVisualStyleBackColor = true;
@@ -959,27 +958,27 @@
             // 
             this.label25.AutoSize = true;
             this.label25.BackColor = System.Drawing.Color.Transparent;
-            this.label25.Location = new System.Drawing.Point(18, 261);
+            this.label25.Location = new System.Drawing.Point(30, 487);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(63, 13);
+            this.label25.Size = new System.Drawing.Size(62, 13);
             this.label25.TabIndex = 88;
-            this.label25.Text = "task time (s)";
+            this.label25.Text = "wait time (s)";
             // 
             // label26
             // 
             this.label26.AutoSize = true;
             this.label26.BackColor = System.Drawing.Color.Transparent;
-            this.label26.Location = new System.Drawing.Point(18, 300);
+            this.label26.Location = new System.Drawing.Point(30, 526);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(65, 13);
+            this.label26.Size = new System.Drawing.Size(74, 13);
             this.label26.TabIndex = 90;
-            this.label26.Text = "task number";
+            this.label26.Text = "indent number";
             // 
             // label27
             // 
             this.label27.AutoSize = true;
             this.label27.BackColor = System.Drawing.Color.Transparent;
-            this.label27.Location = new System.Drawing.Point(7, 350);
+            this.label27.Location = new System.Drawing.Point(19, 576);
             this.label27.Name = "label27";
             this.label27.Size = new System.Drawing.Size(111, 13);
             this.label27.TabIndex = 92;
@@ -989,7 +988,7 @@
             // 
             this.label28.AutoSize = true;
             this.label28.BackColor = System.Drawing.Color.Transparent;
-            this.label28.Location = new System.Drawing.Point(18, 404);
+            this.label28.Location = new System.Drawing.Point(17, 406);
             this.label28.Name = "label28";
             this.label28.Size = new System.Drawing.Size(30, 13);
             this.label28.TabIndex = 94;
@@ -1055,16 +1054,23 @@
             // groupBox_AFMImage
             // 
             this.groupBox_AFMImage.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox_AFMImage.Controls.Add(this.button_MultiTask);
             this.groupBox_AFMImage.Controls.Add(this.button_StartTask);
             this.groupBox_AFMImage.Controls.Add(this.button_ScanStart);
             this.groupBox_AFMImage.Controls.Add(this.checkBox_User_AutoStartScanAfterEngage);
             this.groupBox_AFMImage.Controls.Add(this.button_User_AutoEngage);
             this.groupBox_AFMImage.Controls.Add(this.button_User_ImageScan_StartStop);
+            this.groupBox_AFMImage.Controls.Add(this.textBox_Task_TimeToWait);
             this.groupBox_AFMImage.Controls.Add(this.button_CancelIndent);
             this.groupBox_AFMImage.Controls.Add(this.button_StartIndent);
+            this.groupBox_AFMImage.Controls.Add(this.label25);
             this.groupBox_AFMImage.Controls.Add(this.propertyGrid_AFM_Parameter);
             this.groupBox_AFMImage.Controls.Add(this.groupBox6);
+            this.groupBox_AFMImage.Controls.Add(this.textBox_Task_NumberOfIndentation);
             this.groupBox_AFMImage.Controls.Add(this.groupBox7);
+            this.groupBox_AFMImage.Controls.Add(this.label26);
+            this.groupBox_AFMImage.Controls.Add(this.label27);
+            this.groupBox_AFMImage.Controls.Add(this.textBox_Task_NumberOfPoint);
             this.groupBox_AFMImage.Location = new System.Drawing.Point(294, 168);
             this.groupBox_AFMImage.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox_AFMImage.Name = "groupBox_AFMImage";
@@ -1076,11 +1082,11 @@
             // 
             // button_StartTask
             // 
-            this.button_StartTask.Location = new System.Drawing.Point(19, 599);
+            this.button_StartTask.Location = new System.Drawing.Point(484, 38);
             this.button_StartTask.Name = "button_StartTask";
-            this.button_StartTask.Size = new System.Drawing.Size(97, 34);
+            this.button_StartTask.Size = new System.Drawing.Size(75, 41);
             this.button_StartTask.TabIndex = 87;
-            this.button_StartTask.Text = "start task";
+            this.button_StartTask.Text = "start imaging task";
             this.button_StartTask.UseVisualStyleBackColor = true;
             this.button_StartTask.Click += new System.EventHandler(this.button_StartTask_Click);
             // 
@@ -1700,7 +1706,6 @@
             // tabPage_Indentation
             // 
             this.tabPage_Indentation.BackColor = System.Drawing.Color.LightGray;
-            this.tabPage_Indentation.Controls.Add(this.button_MultiTask);
             this.tabPage_Indentation.Location = new System.Drawing.Point(4, 22);
             this.tabPage_Indentation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage_Indentation.Name = "tabPage_Indentation";
@@ -1742,23 +1747,17 @@
             this.tabPage_backup.Controls.Add(this.button_Update_ParaPID);
             this.tabPage_backup.Controls.Add(this.textBox_Dy);
             this.tabPage_backup.Controls.Add(this.textBox_Z_PID_P);
-            this.tabPage_backup.Controls.Add(this.textBox_TaskTime);
             this.tabPage_backup.Controls.Add(this.checkBox_ForceSetAll);
-            this.tabPage_backup.Controls.Add(this.label25);
             this.tabPage_backup.Controls.Add(this.label16);
-            this.tabPage_backup.Controls.Add(this.textBox_TaskNumber);
             this.tabPage_backup.Controls.Add(this.button_SetParameters);
             this.tabPage_backup.Controls.Add(this.label1);
             this.tabPage_backup.Controls.Add(this.label5);
-            this.tabPage_backup.Controls.Add(this.label26);
             this.tabPage_backup.Controls.Add(this.textBox_Z_PID_I);
             this.tabPage_backup.Controls.Add(this.textBox_Dx);
             this.tabPage_backup.Controls.Add(this.textBox_Z_PID_D);
             this.tabPage_backup.Controls.Add(this.label28);
             this.tabPage_backup.Controls.Add(this.label6);
             this.tabPage_backup.Controls.Add(this.textBox_XL);
-            this.tabPage_backup.Controls.Add(this.textBox_Task_PointsNumber);
-            this.tabPage_backup.Controls.Add(this.label27);
             this.tabPage_backup.Controls.Add(this.textBox_Sensitivity);
             this.tabPage_backup.Controls.Add(this.label14);
             this.tabPage_backup.Controls.Add(this.label20);
@@ -1958,7 +1957,6 @@
             this.groupBox_SystemStatus.PerformLayout();
             this.tabPage_TopoScan.ResumeLayout(false);
             this.tabPage_TopoScan.PerformLayout();
-            this.tabPage_Indentation.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
             this.tabPage_backup.ResumeLayout(false);
             this.tabPage_backup.PerformLayout();
@@ -2036,12 +2034,12 @@
         private System.Windows.Forms.TextBox textBox_TF_DC_Gain;
         private System.Windows.Forms.Button button_CancelIndent;
         private System.Windows.Forms.Button button_MultiTask;
-        private System.Windows.Forms.TextBox textBox_TaskTime;
+        private System.Windows.Forms.TextBox textBox_Task_TimeToWait;
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Label label26;
-        private System.Windows.Forms.TextBox textBox_TaskNumber;
+        private System.Windows.Forms.TextBox textBox_Task_NumberOfIndentation;
         private System.Windows.Forms.Label label27;
-        private System.Windows.Forms.TextBox textBox_Task_PointsNumber;
+        private System.Windows.Forms.TextBox textBox_Task_NumberOfPoint;
         private System.Windows.Forms.TextBox textBox_T;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button button_Form_CoarsePositioner;

@@ -1,0 +1,69 @@
+clear
+clc
+R=5000e-9 % tipradius
+K=40% cantilever stiffness
+% Esample=
+Zmax=6000e-9% 6 um z piezo motion range
+Zstd=0.11e-9%1.2e-9%
+N=31% number of points
+
+%sample property
+%eg. teflon
+Ysample=9e6% sample yield strength
+Vsample=0.46
+Esample=0.5516e9
+
+%eg. Aluminium alloy 2014-T6	
+Ysample=400e6% sample yield strength
+Vsample=0.46
+Esample=0.5516e9
+
+
+%% tip property
+Etip=150e9% tip young's modulus
+Ytip=7e9% tip yield strength
+Vtip=0.27%0.26~0.28
+
+clc
+%% working condition, no yield change
+Pcontact=min(Ysample,Ytip);% contact pressure
+%% get Emax
+Dsample=N*Zstd;
+% Dtip=Zmax-Dsample;
+% CR=sqrt(R*Dsample);
+% A=pi*CR*CR;
+A=pi*R*Dsample
+Fmax=Pcontact*A% max contact force
+Dtip_max=Fmax/K
+if (Dtip_max>Zmax-Dsample)
+    disp('sample is too hard');
+end
+%%Emin
+%% get Emin
+Dtip_min=N*Zstd;
+Fmin=Dtip_min*K;
+A=Fmin/Pcontact;
+Dsample_max=sqrt(A/R/pi)
+if (Dsample_max>Zmax-Dsample)
+    disp('sample is too hard');
+end
+
+F=Fmax
+Ex=F/(4/3*R^0.5*Dsample^1.5);
+ExGPa=Ex/1e9;
+
+
+
+
+
+[MaxExGPa,Pmax]=calc_YoungsModulus_judge(Dtip,Dsample,Ytip,Ysample,Vtip,Vsample,R,K)
+%% get Emin
+Dtip=N*Zstd;
+
+
+
+
+Dsample=Zmax-Dtip;
+[MinExGPa,Pmin]=calc_YoungsModulus_judge(Dtip,Dsample,Ytip,Ysample,Vtip,Vsample,R,K)
+E=[MaxExGPa,MinExGPa]
+P=[Pmax,Pmin]

@@ -147,7 +147,7 @@ namespace NameSpace_AFM_Project
 
         public double[,] mIndentData = new double[3, 10000];
         public int mIndentData_index = 0;
-        public bool mSwitch_IndentTrue_FinishFalse = false;
+        public int mSwitch_Indenting1_SavingData2_Idle0 = 0;
 
         public SerialPort serialVirtual_echo;
         //public SerialPort serialVirtual_Coarse;
@@ -1286,7 +1286,7 @@ namespace NameSpace_AFM_Project
                  + "\tVadc:\t" + (v_Adc / BIT18MAX).ToString("f6")
                 + "\tdac:\t" + v_Dac.ToString());
             // MY_DEBUG(textBox_T.Text+" \t"+v_Adc.ToString() + " \t" + (v_Adc / BIT18MAX).ToString("f6"));
-            if (mSwitch_IndentTrue_FinishFalse == true)
+            if (mSwitch_Indenting1_SavingData2_Idle0 == 1)
             {
                 mIndentData_index++;
                 if (mIndentData.Length / (mIndentData.Rank + 1) < mIndentData_index - 1) { MY_DEBUG("exceed"); return; }
@@ -1297,7 +1297,7 @@ namespace NameSpace_AFM_Project
 
                 if (v_Dac == BIT24MAX)// finished
                 {
-                    mSwitch_IndentTrue_FinishFalse = false;// tell the subform to save data
+                    mSwitch_Indenting1_SavingData2_Idle0 = 2;// tell the subform to save data
                     mIndentData_index--;
                     MY_DEBUG("indent finished.");
                 }
@@ -2008,7 +2008,7 @@ namespace NameSpace_AFM_Project
                 // text = text + Convert.ToString(Math.Sin((x+inc++) / 20.0) * 100 + Math.Sin(y / 10.0) * 100) + "\t";
                 text = text + "\r\n";
             }
-            System.IO.File.WriteAllText(Fpath, text);
+            AFM_Write_StringDatatoText(Fpath, text);
         }
 
         void SaveAFMParaToTextFile(string time)
@@ -2035,7 +2035,7 @@ namespace NameSpace_AFM_Project
             for (int k = 0; k < 4; k++)
                 text += para_IC0_DR[k].ToString() + "\t%para_IC0_DR_" + k.ToString("D") + "\r\n";
 
-            System.IO.File.WriteAllText(path, text);
+            AFM_Write_StringDatatoText(path, text);
         }
 
         public static T[,] GetNew2DArray<T>(int x, int y, T initialValue)
@@ -2166,33 +2166,44 @@ namespace NameSpace_AFM_Project
 
         void ThreadFunction_MultiTask()
         {
+            mSwitch_Indenting1_SavingData2_Idle0 = 0;
+            int N = 1; // number of points
+            int P = 1;// P times for each point
+            string fine_name_base=textBox_FileName.Text;
+            for (int n = 0; n < N; n++)
+            {
+                for (int p = 0; p < P; p++)
+                {
+                    while (mSwitch_Indenting1_SavingData2_Idle0 != 0)// wait for previous indent and data saving to finish
+                        Thread.Sleep(500);
 
-            para_NumberOfFrameFinished = 0;
+                    textBox_FileName.Invoke((MethodInvoker)delegate()
+                    {
+                        textBox_FileName.Text = fine_name_base +
+                            "_Point" + n.ToString() +
+                            "_Indent" + p.ToString()
+                            ;
+                    });
 
+                    Indent_StartThread();
+                    MY_DEBUG("Start indent:" + n.ToString() + "_" + p.ToString());
 
-
-
-            //int N = 1; // number of points
-            //int P = 1;// P times for each point
-            //for (int n = 0; n < N; n++)
-            //{
-            //    for (int p = 0; p < P; p++)
-            //    {
-            //        Indent_StartThread();
-
-            //        int time = (int)(Convert.ToDouble(textBox_TaskTime.Text) * 1000);
-            //        Thread.Sleep(time);
-            //        P = Convert.ToInt32(textBox_TaskNumber.Text);
-            //        N = Convert.ToInt32(textBox_Task_PointsNumber.Text);
-            //    }
-            //    SoundNotice(4, 1000);
-            //    //AFM_coarse_positioner_SetSpeed(250);
-            //    //AFM_coarse_positioner_MoveDistance(1, -20000);// % for safety reason, first move up 25*1.2 um
-            //    SoundNotice(5, 1000);
-            //    //Thread.Sleep(5000);
-            //}
-            //SoundNotice(4, 1000);
-            //SoundNotice(6, 1000);
+                    int time = (int)(Convert.ToDouble(textBox_Task_TimeToWait.Text) * 1000);
+                    Thread.Sleep(time);
+                    P = Convert.ToInt32(textBox_Task_NumberOfIndentation.Text);
+                    N = Convert.ToInt32(textBox_Task_NumberOfPoint.Text);
+                }
+                SoundNotice(4, 1000);
+                mCCoarsePositioner.SetSensorModeEnable();
+                Thread.Sleep(1000);
+                mCCoarsePositioner.MoveDistance(mCaxis_y,4000, 500);
+                Thread.Sleep(1000);
+                mCCoarsePositioner.SetSensorModeDisable();
+                Thread.Sleep(5000);
+                SoundNotice(5, 1000);
+            }
+            SoundNotice(4, 1000);
+            SoundNotice(6, 1000);
         }
 
         private void button_Form_CoarsePositioner_Click(object sender, EventArgs e)

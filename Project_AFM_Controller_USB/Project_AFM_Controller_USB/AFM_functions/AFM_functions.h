@@ -1138,15 +1138,21 @@ public:
 		mAFM_DAC.DAC_write_all(BIT18MAX_0D33);
 //		
 		//mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z, true);
+		
+		
+		for (int k = 0;k < mI_MaxStep;k++)
+			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true);// preheat
+			
 		for (int k = 0;k < mI_MaxStep;k++)
 //			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
 //		int k = 0;
 //			while(1)
 		{
 //			toggle_pin_p(p_Tdio4);
-			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);// 7.84 kHz-->6.076kHz,;  3.156*2=6.3kHz, 20160901
-			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
-			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
+//
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, true);// 7.84 kHz-->6.076kHz,;  3.156*2=6.3kHz, 20160901
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
 
 //						mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_TEMPERATURE, true);//2.31*2=4.62 kHz 20160802
 //						mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, false);
@@ -1164,9 +1170,11 @@ public:
 //						mIndentData[2][k] = k;//mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);			 
 			//*p_Tdio4 = 0;
 			
-//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); // 4.206*3*2= 25.236kHz
-//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
-//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); // 4.206*3*2= 25.236kHz
+			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+			
+			
 //			mIndentData[0][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); // 234.8*3*2= 1408Hz
 //			mIndentData[1][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
 //			mIndentData[2][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 

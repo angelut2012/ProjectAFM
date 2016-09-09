@@ -78,7 +78,7 @@ namespace NameSpace_AFM_Project
             double d = Convert.ToDouble(textBox_Distance.Text);
             double dDir = Math.Sign(d);
             d = Math.Abs(d);
-            d = pParent.LIMIT_MAX_MIN(d, 1000, 0.5);
+            d = pParent.LIMIT_MAX_MIN(d, 1000, 0.01);
             //d *= dDir;
             textBox_Distance.Text = d.ToString();
             return d * 1000;// convert to nm

@@ -49,17 +49,19 @@ namespace NameSpace_AFM_Project
         void Indent_StartThread()
         {
             if (mThread_Indent.IsAlive == false)// avoid multi start
-            {
+            {               
+                mThread_Indent = new Thread(ThreadFunction_Indent);// this will delete the previous thread
+                mThread_Indent.Start();
                 System.Media.SystemSounds.Exclamation.Play();// ok
                 Thread.Sleep(300);
                 System.Media.SystemSounds.Hand.Play();
-                mThread_Indent = new Thread(ThreadFunction_Indent);// this will delete the previous thread
-                mThread_Indent.Start();
+
             }
         }
 
         void ThreadFunction_Indent()
         {
+            mSwitch_Indenting1_SavingData2_Idle0 = 1;
             pParent.send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
 
             pParent.set_AFM_parameters('T', pParent.mCParameter.TriggerForce_nN);
@@ -73,16 +75,17 @@ namespace NameSpace_AFM_Project
             pParent.mIndentData = new double[3, 6000];//25*1024
             pParent.mIndentData_index = -1;
             mSwitch_CancelIndent = false;
-            pParent.mSwitch_IndentTrue_FinishFalse = true;
+            pParent.mSwitch_Indenting1_SavingData2_Idle0 = 1;
             Thread.Sleep(500);
             pParent.send_Data_Frame_To_Arduino('C', 'I', 'D');
-            while (pParent.mSwitch_IndentTrue_FinishFalse == true)
+            while (pParent.mSwitch_Indenting1_SavingData2_Idle0 == 1)
             {
                 Thread.Sleep(5);
                 if (mSwitch_CancelIndent == true)
                     return;
             }
 
+            mSwitch_Indenting1_SavingData2_Idle0 = 2;
             string paras = pParent.mCParameter.GetParaString()
                 + pParent.para_XL.ToString() + "%XL\r\n"
                 + pParent.para_YL.ToString() + "%YL\r\n"
@@ -117,11 +120,12 @@ namespace NameSpace_AFM_Project
             Thread.Sleep(800);
             pParent.send_Data_Frame_To_Arduino_SetSystemIdle_Multi();
 
-            try
-            {
-                // ShowIndentData();
-            }
-            catch { MessageBox.Show("show indentation data error"); }
+            mSwitch_Indenting1_SavingData2_Idle0 = 0;
+            //try
+            //{
+            //    // ShowIndentData();
+            //}
+            //catch { MessageBox.Show("show indentation data error"); }
 
         }
 
@@ -241,9 +245,20 @@ namespace NameSpace_AFM_Project
                 // text = text + Convert.ToString(Math.Sin((x+inc++) / 20.0) * 100 + Math.Sin(y / 10.0) * 100) + "\t";
                 text = text + "\r\n";
             }
-            System.IO.File.WriteAllText(Fpath, text);
+            AFM_Write_StringDatatoText(Fpath, text);
         }
-
+        void AFM_Write_StringDatatoText(string Fpath, string text)
+        {
+            try
+            {
+                System.IO.File.WriteAllText(Fpath, text);
+            }
+            catch
+            {
+                System.IO.File.WriteAllText(Fpath+"backup", text);
+            }
+            
+        }
         void ShowIndentData()
         {
             string in_str = in_str = "out_data=1;AFM_show_indent_data();";
@@ -280,11 +295,11 @@ namespace NameSpace_AFM_Project
             pParent.mIndentData_index = -1;
 
             mSwitch_CancelIndent = false;
-            pParent.mSwitch_IndentTrue_FinishFalse = true;
+            pParent.mSwitch_Indenting1_SavingData2_Idle0 = 1;
 
             //pParent.send_Data_Frame_To_Arduino('C', 'I', 'D');
             send_CMD_PC2MCU(CMD_PC2MCU.CMD_PC2MCU_DATA_CAPTURE, 0);
-            while (pParent.mSwitch_IndentTrue_FinishFalse == true)
+            while (pParent.mSwitch_Indenting1_SavingData2_Idle0 == 1)
             {
                 Thread.Sleep(5);
                 if (mSwitch_CancelIndent == true)
