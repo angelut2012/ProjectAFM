@@ -1,3 +1,11 @@
+20161122
+GUI
+delete matlab,
+ use geji mathdotnet
+ 
+
+
+
 Workaround for COM Surrogate error "This action can't be completed because the file is open in COM Surrogate".
 
 kill process"dllhost"

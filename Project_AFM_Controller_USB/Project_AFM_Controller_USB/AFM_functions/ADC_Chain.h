@@ -59,8 +59,8 @@ class CSEM
 #define ADC_CHANNEL_Z	(0)//ADC6 = Z,
 #define ADC_CHANNEL_PRC	(1)//ADC5 = PRC, 
 	
-#define ADC_CHANNEL_X	 (3)	// new connection 20160711		//(2)//ADC4 = X, 
-#define ADC_CHANNEL_Y	(2)//(3)//ADC3 = Y, 
+#define ADC_CHANNEL_X	 (2)	// new connection 20160711		//(2)//ADC4 = X, 
+#define ADC_CHANNEL_Y	(3)//(3)//ADC3 = Y, 
 #define ADC_CHANNEL_TEMPERATURE	(4)//ADC2 = Temperature, 
 #define ADC_CHANNEL_CALIBRATION (5) //PRC_calibration.		
 
@@ -84,7 +84,7 @@ public:
 		mSPI_SEM=new SWSPI(Sspi_mosi, Sspi_miso, Sspi_clk);	
 		mSPI_SEM->SetFrequency(frequencyHz);
 		//mSPI_SEM->format(18,2);// to be adjusted
-		mSPI_SEM->SetMode(1);//2
+		mSPI_SEM->SetMode(2);//use mode 2 for diff, // old mode =1
 		mSPI_SEM->SetDataLength(ADC_DATA_LENGTH);
 
 
@@ -227,10 +227,18 @@ public:
 
 		//mSPI_SEM->transfer_read(1);// send one clock pulse
 		
-		for (int k=0;k<number_of_ADC;k++)
-//			value_array[k]=mSPI_SEM->transfer(0xaa55,ADC_DATA_LENGTH);// data readout at the next clock
-		value_array[k] = mSPI_SEM->transfer_read(ADC_DATA_LENGTH);// data readout at the next clock
-
+		int vadc = 0;
+		for (int k = 0;k < number_of_ADC;k++)
+		{
+			
+			//			value_array[k]=mSPI_SEM->transfer(0xaa55,ADC_DATA_LENGTH);// data readout at the next clock
+			vadc= mSPI_SEM->transfer_read(ADC_DATA_LENGTH);// data readout at the next clock
+			if (vadc > 131072)// 0x20000
+				vadc -= 262144;//0x40000;
+			vadc+= 131072;
+//			{value_array[k]=mSPI_SEM->transfer(0xaa55,ADC_DATA_LENGTH);// data
+			value_array[k] = vadc;
+		}
 		mSPI_CS_AFM->write(1);
 
 	};

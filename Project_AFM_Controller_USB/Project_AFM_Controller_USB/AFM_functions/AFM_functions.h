@@ -496,7 +496,7 @@ public:
 		//V18_Dac[4] = {0};//
 		//position_feedforward_output_01[4] = {0};//
 
-
+//		uint8_t x[128 * 128] = {0};
 		////////////////////////// input for  xy scan
 		N_FramesToScan = 1;
 		XL_NM = 0;
@@ -554,7 +554,7 @@ public:
 		//mIndentData[3][mI_MaxStep] = {0};
 
 		mZLoopPID_WorkingDistance_nm = 5;// set working voltage;// receive from rs232
-		DTS_Sensitivity_B18_per_nm = 110;//@gain205,  40@gain65.6; //192/2;// nm/V   // receive from rs232
+		DTS_Sensitivity_B18_per_nm = 163; // AFMv3, 20161121;    110;//@gain205,  40@gain65.6; //192/2;// nm/V   // receive from rs232
 		VWset_deltaV_ADC_b18 = 0;// use in engage//CONV_DELTA_WORKING_VOLTAGE_MV_TO_ADC(mZLoopPID_WorkingDistance_nm);// update VWset_deltaV_ADC_b18 each time when set mZLoopPID_WorkingDistance_nm
 		//		mTF_DC_Gain = 1;// gain for tf DC actuation
 
@@ -574,7 +574,9 @@ public:
 		//com_image_frame_buffer[LENGTH_IMAGE_FRAME_BUFFER] = {0};// 
 		//		pointer_out_frame_buffer = LENGTH_IMAGE_FRAME_BUFFER;
 
-		mPID_ZLOOP = new CPID(false);//trueDInput_01, DOutput_01, referenceWorkingPoint01, 0.05, 0.02, 0, use true for PRC imagining scanning
+		//mPID_ZLOOP = new CPID(false);// AFM V2 use false
+		mPID_ZLOOP = new CPID(mDtsSensor_direction==1);//AFM V3 20161121, use false
+		
 		//z_output_01 = 0;
 		//com_buffer[LENGTH_COM_FRAME_PC2MCU * 2] = {0};
 		//com_buffer_frame[LENGTH_COM_FRAME_PC2MCU - 4] = {0};
@@ -612,7 +614,7 @@ public:
 		////
 		mTaskScheduler = SystemTask_Idle;
 		mCScanner[PIEZO_Z].SetDestinationPosition01(0);// avoid  motion  in idle process
-		mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z,0);
+		//mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, BIT18MAX_HALF);
 		mCScanner[PIEZO_Z].mPID_Scanner->Reset();
 
 	}
@@ -1125,9 +1127,7 @@ public:
 	}
 
 
-
-
-	void process_data_capture_blocking_MaxSpeed()
+	void process_data_capture_blocking_MaxSpeed_backup()
 	{
 //		for (int k = 0;k < mI_MaxStep;k++)
 //			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
@@ -1187,6 +1187,87 @@ public:
 //			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); // 2.203*3*2= 13.218kHz
 //			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); 
 //			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); 
+		}
+		int index_send = 0;
+		for (int k = 0;k < mI_MaxStep;k++)
+		{
+			*p_Tdio5 = 1;
+			//if (mTaskScheduler != SystemTask_DataCapture) return;// to interrupt during indentation
+			index_send = MOD_range(k, mI_MaxStep); //here % operator has problem with int
+			sendToPC_IndentData_Package(mIndentData[0][index_send], mIndentData[1][index_send], mIndentData[2][index_send]);
+			wait_us(7000);//7ms old delay=4 , but lose point sometimes
+			*p_Tdio5 = 0;
+		}
+		for (int m = 0;m < 4;m++)// send finish signal multi times, to make sure PC receive it
+		{
+			wait_ms(100);
+			sendToPC_IndentData_Package(BIT24MAX, BIT24MAX, BIT24MAX);// finished
+		}
+		// tuning fork indent
+		//uint32_t amp_ad0=analogRead(A0);
+		//sendToPC_system_data_package((uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX),V18_Adc[ADC_PORT_ZlOOP_SENSOR],amp_ad0);
+	}
+
+	void process_data_capture_blocking_MaxSpeed(float data)
+	{
+//		for (int k = 0;k < mI_MaxStep;k++)
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+		
+		// measure step response
+//		mAFM_DAC.DAC_write_all(0);
+//		wait(10);
+		
+//		
+		//mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z, true);
+		
+		
+		for (int k = 0;k < mI_MaxStep;k++)
+			mAFM_SEM.ADC_Read_N(ADC_All, true);// preheat
+			
+		for (int k = 0;k < mI_MaxStep;k++)
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+//		int k = 0;
+//			while(1)
+		{
+			//toggle_pin_p(p_Tdio4);
+			//wait_us(data);
+			
+			//mAFM_DAC.DAC_write_all();
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_All, true);// 2.14kHz
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Txy, false);// 7.84 kHz-->6.076kHz,;  3.156*2=6.3kHz, 20160901
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Tz, false);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, false);	
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Y, true);// 7.84 kHz-->6.076kHz,;  3.156*2=6.3kHz, 20160901
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_X, false);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false);	
+////
+
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false); // 4.206*3*2= 25.236kHz
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false); 
+//			mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true);
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, false); 
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); // 4.206*3*2= 25.236kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_Z, true); 
+//			
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); // 234.8*3*2= 1408Hz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_MultiChannel_Average(ADC_CHANNEL_Z); 
+			
+//			mIndentData[0][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); // 509.78*3*2= 3kHz
+//			mIndentData[1][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
+//			mIndentData[2][k] = mAFM_SEM.ADC_Read_LPF(ADC_CHANNEL_Z); 
+			
+			
+			mIndentData[0][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); // 2.203*3*2= 13.218kHz
+			mIndentData[1][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); 
+			mIndentData[2][k] = mAFM_SEM.ADC_Read_N(ADC_CHANNEL_PRC, true); 
 		}
 		int index_send = 0;
 		for (int k = 0;k < mI_MaxStep;k++)
@@ -1309,8 +1390,9 @@ public:
 		float mZLoopPID_WorkingDistance_PRC18 = (float)(mZLoopPID_WorkingDistance_nm) * DTS_Sensitivity_B18_per_nm;
 		
 		PRC_B18_To_Zrange01 = 1 / DTS_Sensitivity_B18_per_nm / SCANNER_RANGE_Z_NM;
-		float referenceWorkingPoint01 = (PRCSensorAdc18_FarAway + mZLoopPID_WorkingDistance_PRC18)*PRC_B18_To_Zrange01;// here use add, because when contact, PRC readout increase; assume DTS_Sensitivity_B18_per_nm is positive
 
+		float referenceWorkingPoint01 = (PRCSensorAdc18_FarAway + mDtsSensor_direction*mZLoopPID_WorkingDistance_PRC18)*PRC_B18_To_Zrange01;// here use add, because when contact, PRC readout increase; assume DTS_Sensitivity_B18_per_nm is positive              
+		
 		mZLoopPID_WorkingDistance_Threshold_01 =  mZLoopPID_WorkingDistance_PRC18*PRC_B18_To_Zrange01* 10;
 	
 #else	// tuning fork
@@ -1554,33 +1636,44 @@ public:
 //			mCScanner[PIEZO_X].mPID_Scanner->ResetMemory();
 		
 //		if (Math_Abs(mCScanner[PIEZO_X].GetPositionError01()) < mThreshold01_XYscanning_X  || hold_count_x > 5)
+
 		
-		if (indy == (NxInput - 1) || indy == -1)
-		{
-			hold_count_y++;	
-			y_enable = 0;
-			if (hold_count_y > 200)
-				y_enable = y_enable_store;
-		}
-		else			
-		{
-			hold_count_y = 0;
-			y_enable_store = y_enable;
-		}
 		
-		if (	(indx != (NxInput - 1) && indx != -1 )		|| hold_count_x > 5)
-		{			
-			status = XYscanning_WaveGenerator();
-			hold_count_x = 0;
-		}	
 		
-//		status = XYscanning_WaveGenerator();
+		
+//		if (indy == (NxInput - 1) || indy == -1)
+//		{
+//			hold_count_y++;	
+//			y_enable = 0;
+//			if (hold_count_y > 200)
+//				y_enable = y_enable_store;
+//		}
+//		else			
+//		{
+//			hold_count_y = 0;
+//			y_enable_store = y_enable;
+//		}
+//		
+//		if (	(indx != (NxInput - 1) && indx != -1 )		|| hold_count_x > 5)
+//		{			
+//			status = XYscanning_WaveGenerator();
+//			hold_count_x = 0;
+//		}	
+//		
+		
+		
+		
+		status = XYscanning_WaveGenerator();
 		
 		XYscanning_MovePositioner();
 		return status;
 	}
 	void XYscanning_MovePositioner()
 	{
+//		float t = VDACx;
+//		VDACx = VDACy;
+//		VDACy = t;
+		
 		if (mSystemScanMode_Openloop0_CloseloopXY1_CloseloopXYZ2 == 0)
 		{
 			// open loop scan
@@ -2321,7 +2414,7 @@ public:
 	{
 		//mTaskScheduler = SystemTask_DataCapture;
 //		process_data_capture_blocking(data);
-		process_data_capture_blocking_MaxSpeed();
+		process_data_capture_blocking_MaxSpeed(data);
 	}
 	//////////////////////// console end
 	//void test()
@@ -3134,9 +3227,9 @@ public:
 		//z_output_01 = position_01;//0.5;
 	}
 
-	void test_scanner_wave_output_DAC()
+	void test_scanner_wave_output_DAC(float step)
 	{
-		int value = wave_triangle_0ToMax(8192, BIT18MAX, false);//2048
+		int value = wave_triangle_0ToMax(step, BIT18MAX, false);//2048
 		static int v_last = 0;		
 		//		read back
 		//		sendToPC_system_data_package(20,
@@ -3199,12 +3292,12 @@ public:
 		//if (PERIOD_CHECK_TIME_US_DUE_SEND_SYSTEM_PACKAGE(300000) == false) return;//old 1e6
 		//sendToPC_system_data_package((uint32_t)(position_feedforward_output_01[PIEZO_Z]*BIT32MAX),V18_Adc[ADC_PORT_ZlOOP_SENSOR],V18_Dac[PIEZO_Z]);
 
-		int wait_count = 1000000;//50000;
+		int wait_count = 10000;//1000000;//50000;
 		CHECK_COUNT_DUE(wait_count);
 		//		test_sensor_drift();		
 		//		test_scanner_wave_output_CloseLoopPosition();
 
-		test_scanner_wave_output_DAC();
+		test_scanner_wave_output_DAC(2048);
 
 		//		
 	}
@@ -3724,10 +3817,14 @@ public:
 //[12808] SCSG max : 152606 
 //[12808] SCSG max : 13944 
 //[12808] SCSG max : 39198 
-				// without temp compensation  20160904_15:30
-		const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {139344, 74206, 92732};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
-		const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {257044, 10168, 14046};//{241554, 244873, 61734};//{241802, 244504, 62131};
-
+//				// without temp compensation  20160904_15:30
+//		const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {139344, 74206, 92732};//6719, 35349, 211968{4561, 35500, 231916};// {8164, 34928, 232626};
+//		const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {257044, 10168, 14046};//{241554, 244873, 61734};//{241802, 244504, 62131};
+//			
+		// AFM V3 20161121
+		//piezo Z=0,Y=1,X=2
+		const	_Float_ ADC18_Min[NUM_OF_SCANNER] = {53994, 249420, 246005};
+		const	_Float_ ADC18_Max[NUM_OF_SCANNER] = {248556, 15811, 21680};
 		
 		// here, we should call realtimeScanProcess to evaluate the time. and set mPeriod_RealtimePID_us
 		for (int k = 0;k < NUM_OF_SCANNER;k++)
@@ -3794,7 +3891,10 @@ public:
 
 		for (int k = 0;k < BIT18MAX / 1024 * 40;k++)
 		{
-			int value = wave_triangle_0ToMax(1024, BIT18MAX, false);//2048
+			float value = wave_triangle_0ToMax(1024, BIT18MAX, false);//2048
+			
+//			value=(value / BIT18MAX * 0.5 + 0.25)*BIT18MAX;
+			
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_X, value);
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Y, value);
 			mAFM_DAC.FinePositioner_MoveToPositionB18(PIEZO_Z, BIT18MAX-value);

@@ -286,15 +286,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-    <COMReference Include="MKernel">
-      <Guid>{3C0B94DD-D236-45DE-97E1-17BBF0F9B69E}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="MWComUtil">
       <Guid>{FE430597-0370-4AD7-98D1-BF7772D127C3}</Guid>
       <VersionMajor>8</VersionMajor>

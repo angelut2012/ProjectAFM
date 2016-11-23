@@ -271,7 +271,7 @@ namespace NameSpace_AFM_Project
             object Oout_data = (object)out_data;
             try
             {
-                pParent.mKernelClass.StringEval(2, ref Oout_str, ref Oout_data, Oin_str, Oin_data);
+                //pParent.mKernelClass.StringEval(2, ref Oout_str, ref Oout_data, Oin_str, Oin_data);
             }
             catch
             {

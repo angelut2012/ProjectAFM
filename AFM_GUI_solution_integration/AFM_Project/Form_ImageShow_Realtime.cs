@@ -119,7 +119,7 @@ namespace NameSpace_AFM_Project
             //timer_UpdateUI_Show.Enabled = true;
         }
 
-        public double[,] Calculate_Line(double[,] mImageArray, int point_now_y, int fit_order = 1, int index_base_point = 1)
+        public double[,] Calculate_Line_old_matlab(double[,] mImageArray, int point_now_y, int fit_order = 1, int index_base_point = 1)
         {
             //ref double[,] line_show, 
             try
@@ -137,7 +137,7 @@ namespace NameSpace_AFM_Project
                 object Ofit_order = (object)fit_order;
                 object Oindex_base_point = (object)index_base_point;
 
-                pParent.mKernelClass.AFM_line_for_show(1, ref Oline_show, Oline_in, Ofit_order, Oindex_base_point);
+                //pParent.mKernelClass.AFM_line_for_show(1, ref Oline_show, Oline_in, Ofit_order, Oindex_base_point);
 
                 double[,] line_show = (double[,])Oline_show;
                 return line_show;
@@ -149,20 +149,41 @@ namespace NameSpace_AFM_Project
             }
         }
 
+
+        public double[,] Calculate_Line(ref double[,] mImageArray, int point_now_y, int fit_order = 1, int index_base_point = 1)
+        {
+            int ix = mImageArray.GetLength(0);
+            int iy = mImageArray.GetLength(1);
+
+            double[,] line_show =new double[ix,iy]; //mImageArray.Clone();
+
+            for (int y = 0; y < iy; y++)
+            {
+                double[] oneRow = MainWindow.ReadColumn(mImageArray, y);
+                pParent.Math_AFM_line_polyfit_adjust(ref oneRow, fit_order);
+                MainWindow.WriteColumn(ref line_show, oneRow, y);
+            }
+            return line_show;
+        }
+
         public void ShowLine(double[,] mImageArray, int point_now_y, ZedGraph.ZedGraphControl zg, bool clear, Color in_color)
         {
-            double[,] line_show = Calculate_Line(mImageArray, point_now_y);
+            point_now_y--;
+            point_now_y = (int )pParent.LIMIT_MAX_MIN((double)point_now_y, mImageArray.GetLength(1) - 1,0);
 
-            line_show[1, line_show.Length] = line_show[1, line_show.Length - 1];// delete last point
-            line_show[1, 1] = line_show[1, 2];    // delete last point
+            double[,] line_show = Calculate_Line(ref mImageArray, point_now_y);
 
-            double[] line_x = new double[line_show.GetLength(1)];
-            double[] line_y = new double[line_show.GetLength(1)];
-            for (int k = 0; k < line_show.GetLength(1); k++)
+            line_show[0, line_show.GetLength(1)-1] = line_show[0, line_show.GetLength(1) - 2];// delete last point
+            line_show[0, 0] = line_show[0, 1];    // delete last point
+
+            double[] line_x = new double[line_show.GetLength(0)];
+            double[] line_y = new double[line_show.GetLength(0)];
+            for (int k = 0; k < line_show.GetLength(0); k++)
             {
                 line_x[k] = k;
-                line_y[k] = line_show[1, k + 1];
+                //line_y[k] = line_show[point_now_y,k];
             }
+            line_y = MainWindow.ReadColumn(mImageArray, point_now_y);
 
             if (clear == true) zg.GraphPane.CurveList.Clear();
             zg.GraphPane.AddCurve("", line_x, line_y, in_color, SymbolType.Star);
@@ -181,7 +202,9 @@ namespace NameSpace_AFM_Project
 
         private void timer_UpdateUI_Show_Tick(object sender, EventArgs e)
         {
+            //timer_UpdateUI_Show.Stop();
             UpdateUI_ShowImageLine();
+            //timer_UpdateUI_Show.Start();
         }
     }
 }

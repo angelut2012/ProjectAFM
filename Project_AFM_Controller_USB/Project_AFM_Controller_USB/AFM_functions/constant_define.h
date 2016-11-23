@@ -110,8 +110,13 @@
 #define NUM_OF_PIEZO_MODEL (3)
 #define NUM_OF_SCANNER (NUM_OF_PIEZO_MODEL)
 #define PIEZO_Z (0)
+
+// for afmV2 reverse xy
 #define PIEZO_X (2)
 #define PIEZO_Y (1)
+
+//#define PIEZO_X (1)
+//#define PIEZO_Y (2)
 
 //#define PIEZO_X (1)// normal
 //#define PIEZO_Y (2)
@@ -152,9 +157,15 @@
 //#define SCANNER_RANGE_Y_NM (71.816*1000.0)
 
 // calibrated by SEM, 20160831// must use flaoting number
-#define SCANNER_RANGE_Z_NM  (9365.0f)
-#define SCANNER_RANGE_X_NM (45748.0f)// (83.717*1000.0/2.0)
-#define SCANNER_RANGE_Y_NM (39800.0f)//(70.532*1000.0/2.0)
+//#define SCANNER_RANGE_Z_NM  (9365.0f)
+//#define SCANNER_RANGE_X_NM (45748.0f)// (83.717*1000.0/2.0)
+//#define SCANNER_RANGE_Y_NM (39800.0f)//(70.532*1000.0/2.0)
+//
+//      // calibrated by SEM 20161114   calibrated by SEM 
+#define SCANNER_RANGE_Z_NM  (6828.0f)
+#define SCANNER_RANGE_X_NM (55100.0f)// (83.717*1000.0/2.0)
+#define SCANNER_RANGE_Y_NM (50900.0f)//(70.532*1000.0/2.0)
+
 
 //#define SCANNER_RANGE_Z_NM (12.50465*1000.0)//10.98
 //#define SCANNER_RANGE_X_NM (72.22*1000.0)
@@ -173,7 +184,7 @@
 
 //#define MAX_STEP_NUMBER (1000000.0/85.0)
 #define EPS (0.000001)
-#define MAX_STEP_SIZE_PIEZO_MODEL_NM (20.1f)//(100.0)//do not change this step size, 100nm// 50.0 20// tuning fork(2.0)//(4.0)
+#define MAX_STEP_SIZE_PIEZO_MODEL_NM (20.1f)//20.1f(100.0)//do not change this step size, 100nm// 50.0 20// tuning fork(2.0)//(4.0)
 #define MAX_STEP_SIZE_PIEZO_MODEL_01 (MAX_STEP_SIZE_PIEZO_MODEL_NM/SCANNER_RANGE_Z_NM)//(0.001)//step size=20~27 nm (0.05)
 
 
@@ -188,6 +199,7 @@
 //#define BIT18MAX_RECIPROCAL  (3.814711817595740e-06)
 #define BIT18MAX_HALF (BIT18MAX/2.0f)
 #define BIT18MAX_0D75 (BIT18MAX*3.0f/4.0f)
+#define BIT18MAX_0D25 (BIT18MAX/4.0f)
 #define BIT18MAX_0D66 (BIT18MAX*2.0f/3.0f)
 #define BIT18MAX_0D33 (BIT18MAX*1.0f/3.0f)
 #define BIT18MAX_0D9 (BIT18MAX*0.9f)
@@ -214,4 +226,9 @@
 #define REGION_LOCK_RETURN0()  static bool mlock = false;if (mlock == true) return 0;mlock = true; 
 #define REGION_UNLOCK()    mlock = false;
 
+
+
+
+//PRC direction, when pushed, value goes up, use 1, if value does down, use -1
+#define mDtsSensor_direction (-1.0f)// AFM V3, 20161122
 #endif

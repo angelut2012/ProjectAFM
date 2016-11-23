@@ -1,3 +1,6 @@
+20161122
+MCU,  for AFM v3
+
 20160517
 cmd_PC2MCU
 

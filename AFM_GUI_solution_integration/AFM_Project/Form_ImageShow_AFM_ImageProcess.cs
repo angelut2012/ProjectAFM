@@ -16,7 +16,41 @@ namespace NameSpace_AFM_Project
     public partial class MainWindow : Form
     {
 
-        private void AFM_PolyFit_Flatten(ref double[] rawdata, int order)
+        public static void WriteColumn<T>(ref T[,] matrix, T[] array, int row)
+        {
+            var columns = matrix.GetLength(0);
+            //var array = new T[columns];
+            for (int i = 0; i < columns; ++i)
+                matrix[i,row] = array[i];
+            //return array;
+        }
+        public static T[] ReadColumn<T>(T[,] matrix, int row)
+        {
+            var columns = matrix.GetLength(0);
+            var array = new T[columns];
+            for (int i = 0; i < columns; ++i)
+                array[i] = matrix[i,row];
+            return array;
+        }
+
+        public static void WriteRow<T>(ref T[,] matrix, T[] array, int row)
+        {
+            var columns = matrix.GetLength(1);
+            //var array = new T[columns];
+            for (int i = 0; i < columns; ++i)
+                matrix[row, i] = array[i];
+            //return array;
+        }
+        public static T[] ReadRow<T>(T[,] matrix, int row)
+        {
+            var columns = matrix.GetLength(1);
+            var array = new T[columns];
+            for (int i = 0; i < columns; ++i)
+                array[i] = matrix[row, i];
+            return array;
+        }
+
+        public void Math_AFM_line_polyfit_adjust(ref double[] rawdata, int order)
         {
             int rawdata_length = rawdata.Length;
             double[] xdata = new double[rawdata_length];
@@ -66,26 +100,27 @@ namespace NameSpace_AFM_Project
         }
 
         //mImageArrayHL
-        void AFM_ScaningImageShow_RealTime()
+        void AFM_ScaningImageShow_RealTime(double[,] mImageArray)
         {
-            int ix = 128;
-            int iy = 128;
+            //mImageArrayHL = new double[(int)para_Nx__dimension_0, (int)para_Ny__dimension_1];
+            int ix = mImageArray.GetLength(0);
+            int iy = mImageArray.GetLength(1);
 
             double[,] temp_img = new double[ix, iy];
             double[] temp_row = new double[ix];
             double[] normalized_data = new double[ix];
 
-            for (int m = 0; m < ix; m++)
+            for (int y = 0; y < iy; y++)
             {
-                for (int n = 0; n < iy; n++)
+                for (int x = 0; x < ix; x++)
                 {
-                    temp_row[n] = RawImage[m, n];
+                    temp_row[x] = mImageArray[x,y];//RawImage[m, n];
                 }
 
-                AFM_PolyFit_Flatten(ref temp_row, 2);
-                for (int k = 0; k < iy; k++)
+                Math_AFM_line_polyfit_adjust(ref temp_row, 2);
+                for (int k = 0; k < ix; k++)
                 {
-                    temp_img[m, k] = temp_row[k];
+                    temp_img[k, y] = temp_row[k];
                 }
             }
 
@@ -143,13 +178,14 @@ namespace NameSpace_AFM_Project
 
             temp_img = DataPlaneNormalization(temp_img);
 
-            for (int m1 = 0; m1 < ix; m1++)
+            for (int y = 0; y < iy; y++)
             {
-                for (int k1 = 0; k1 < iy; k1++)
+                for (int x = 0; x < ix; x++)
                 {
+                   // temp_row[x] = mImageArray[x, y];//RawImage[m, n];
                     data[p++] = 0;    // Convert.ToByte(Math.Abs(temp_img[m1, k1]));
-                    data[p++] = Convert.ToByte(Math.Abs(temp_img[m1, k1]));
-                    data[p++] = Convert.ToByte(Math.Abs(temp_img[m1, k1]));
+                    data[p++] = Convert.ToByte(Math.Abs(temp_img[x, y]));
+                    data[p++] = Convert.ToByte(Math.Abs(temp_img[x, y]));
                     data[p++] = 0;
                 }
             }
@@ -184,7 +220,6 @@ namespace NameSpace_AFM_Project
                 }
             }
         }
-
         
     }
 }

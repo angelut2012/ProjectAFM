@@ -61,7 +61,7 @@ for k=1:length(fns)
     legend('extend','withdraw','Location','NorthWest')
     xlabel('indent depth (nm)')
     ylabel('force (nN)')
-  save_figure(h,[pfn '.png'])
+    save_figure(h,[pfn '.png'])
     
     continue
     figure(5)

@@ -97,7 +97,7 @@
             // 
             // timer_UpdateUI_Show
             // 
-            this.timer_UpdateUI_Show.Interval = 2000;
+            this.timer_UpdateUI_Show.Interval = 500;
             this.timer_UpdateUI_Show.Tick += new System.EventHandler(this.timer_UpdateUI_Show_Tick);
             // 
             // pictureBox_Error

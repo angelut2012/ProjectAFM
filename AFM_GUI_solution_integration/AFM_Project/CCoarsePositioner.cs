@@ -350,6 +350,9 @@ namespace NameSpace_AFM_Project
         public void MoveDistance_CloseLoop(uint channel, double distance, uint frequency)//uint channelIndex, int stepsize, int speed)// close loop
         {
             distance *= mDirection[(uint)channel];
+
+            // added 20161121
+            CCoarseController.SA_SetClosedLoopMoveSpeed_S(mSystemIndex, channel, (uint)Math.Abs(frequency*1000*50));
             CCoarseController.SA_GotoPositionRelative_S(mSystemIndex, channel, (int)distance, 1000);
             //SetSpeedCloseLoop((uint)channelIndex,abs(stepsize)*100);
             //SetSpeedCloseLoop((uint)channel, (uint)Math.Abs(frequency));

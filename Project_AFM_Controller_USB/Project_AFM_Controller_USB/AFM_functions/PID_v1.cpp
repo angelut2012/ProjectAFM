@@ -23,7 +23,7 @@ CPID::CPID(bool Direction_DirectTrue_ReverseFalse)
 	CPID::SetOutputLimits(-131072, 131071);				//default output limit corresponds to 
 	//the arduino pwm limits
 
-	mSampleTimeIn_us = 1;							//default Controller Sample Time is 1 us
+	mSampleTimeIn_us = 500;		//1					//default Controller Sample Time is 1 us
 
 	//CPID::SetControllerDirection(ControllerDirection);
 	//CPID::SetTunings(Kp, Ki, Kd);
@@ -164,8 +164,10 @@ float CPID::ComputePI_PRC_Loop(float mInput)// for PID PRC sensor loop
 	error = mySetpoint - input;
 	ITerm += (ki * error);
 	
+
 //	if (ITerm > outMax) ITerm = outMax;
 //	else if (ITerm < outMin) ITerm = outMin;
+//	ITerm = LIMIT_MAX_MIN(ITerm, 0.001, -0.001);
 	ITerm = LIMIT_MAX_MIN(ITerm, 0.01, -0.01);
 //	if (ITerm > 1) ITerm = 0.01;
 //	else if (ITerm < -1) ITerm = -0.01;
@@ -177,16 +179,23 @@ float CPID::ComputePI_PRC_Loop(float mInput)// for PID PRC sensor loop
 		output += kp * error;
 		output += ITerm;
 		output -= kd * dInput;
+		
+		output = LIMIT_MAX_MIN(output, mStepSize, -mStepSize);
+		mPosition -= output;
 	}
 	else
 	{//output =-( kp * error + ITerm- kd * dInput;)
 		output -= kp * error;
 		output -= ITerm;
 		output += kd * dInput;
+		
+		output = LIMIT_MAX_MIN(output, mStepSize, -mStepSize);
+		mPosition += output;
 	}		
 
-	output = LIMIT_MAX_MIN(output, mStepSize, -mStepSize);
-	mPosition += output;
+//	output = LIMIT_MAX_MIN(output, mStepSize, -mStepSize);
+//	mPosition += output;
+	
 	mPosition = LIMIT_MAX_MIN(mPosition, outMax, outMin);
 //	if(output > outMax) output = outMax;
 //	else if(output < outMin) output = outMin;

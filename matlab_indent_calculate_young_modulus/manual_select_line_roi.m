@@ -1,4 +1,4 @@
-function [sx,sy,index]=manual_select_line_roi(x,y,str,varargin);
+function [sx,sy,index,indent_data_length]=manual_select_line_roi(x,y,str,varargin);
 if nargin==5
 indent_data_length=varargin{1};
 AFM_type='brucker'
@@ -8,8 +8,8 @@ AFM_type='PRC';
 end
 
 
-x=data_filter(x,indent_data_length);
-y=data_filter(y,indent_data_length);
+x=indentation_data_filter(x,indent_data_length);
+y=indentation_data_filter(y,indent_data_length/3);
 %% find the last noise point <0 as the start contact point
 % inds=find(fy<0);
 % inds=inds(end);
@@ -60,8 +60,12 @@ if re_select_roi_N0_L1_C2==-1
 %     end
 
 A=a;
-        a(1)=mean(A([1 1  1 1  2  2  2]));
-        a(2)=mean(A([1 1 1 2 2 2 2]));
+
+da=a(2)-a(1);
+a=a+da*0.2.*[1 -1];
+
+%         a(1)=mean(A([1 1  1 1  2  2  2]));
+%         a(2)=mean(A([1 1 1 2 2 2 2]));
     a=round(a);
 else
     [a,b]=ginput_judge_mat_save('data_manual_select_roi_contact.mat');
@@ -84,10 +88,11 @@ mL=min(d);
 mH=max(d);
 d=(d-mL)./(mH-mL);
 end
-function y=data_filter(y,indent_data_length);
+function y=indentation_data_filter(y,indent_data_length);
 N=length(y);
 % w=round(N/300);
 w=ceil(indent_data_length/(31/3));
+w=ceil(indent_data_length/(90/3));
 my=medfilt1(y,w);
 W=ones(w,1)./w;
 fy=filter2(W,my,'symmetric');

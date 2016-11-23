@@ -18,7 +18,7 @@ namespace NameSpace_AFM_Project
     public partial class MainWindow : Form
     {
         public string mDataPath = "c:\\AFMdata\\";
-        public MKernel.KernelClass mKernelClass;
+        //public MKernel.KernelClass mKernelClass;
 
         public Bitmap mAFMImage_show;
 
@@ -72,11 +72,17 @@ namespace NameSpace_AFM_Project
         //const double SCANNER_RANGE_X_NM = (83.717 * 1000.0 / 2.0);
         //const double SCANNER_RANGE_Y_NM = (70.532 * 1000.0 / 2.0);
 
-        // calibrated by SEM 20160825  // calibrated by SEM, 20160831
-        public const double SCANNER_RANGE_Z_NM = 9365;
-        public const double SCANNER_RANGE_X_NM = 45748;
-        public const double SCANNER_RANGE_Y_NM = 39800;
-        
+        //// calibrated by SEM 20160825  // calibrated by SEM, 20160831
+        //public const double SCANNER_RANGE_Z_NM = 9365;
+        //public const double SCANNER_RANGE_X_NM = 45748;
+        //public const double SCANNER_RANGE_Y_NM = 39800;
+
+                // calibrated by SEM 20161114   calibrated by SEM 
+        public const double SCANNER_RANGE_Z_NM = 6828.0f;
+        public const double SCANNER_RANGE_X_NM = 55100.0f;
+        public const double SCANNER_RANGE_Y_NM = 50900.0f;
+
+   
 
 
         //        #define SCANNER_RANGE_Z_NM ( *1000.0)
@@ -162,6 +168,7 @@ namespace NameSpace_AFM_Project
         Form_ImageShow_Realtime mForm_ImageShow_Realtime;
 
         public double mSampleDistance_NM = 0;
+        public double mWaveNumber = 0;
 
         public MainWindow()
         {
@@ -234,10 +241,10 @@ namespace NameSpace_AFM_Project
 
         public void ThreadFunction_UpdateUI()
         {
-            mKernelClass = new MKernel.KernelClass();
+            //mKernelClass = new MKernel.KernelClass();
             MY_DEBUG("MKernel started.");
             //MessageBox.Show("MKernel started.");
-            LoadAFMParamter();
+            //LoadAFMParamter();
             while (mThread_UI_Update_running == true)
             {
                 Function_UpdateUI();
@@ -261,7 +268,7 @@ namespace NameSpace_AFM_Project
             object Oin_data = (object)in_data;
             double[,] out_data = new double[NumberOfParameters, 1];
             object Oout_data = (object)out_data;
-            mKernelClass.StringEval(2, ref Oout_str, ref Oout_data, Oin_str, Oin_data);
+            //mKernelClass.StringEval(2, ref Oout_str, ref Oout_data, Oin_str, Oin_data);
 
             out_data = (double[,])Oout_data;
             if (out_data.Length == NumberOfParameters)
@@ -1196,6 +1203,10 @@ namespace NameSpace_AFM_Project
                 double v_Temperature_SEM = convert_Temperature2Degree_SEM(v[2]);
                 double v_Temperature_MCU = convert_Temperature2Degree_MCU(v[0]);
                 string s = "data, ";
+                s += ",Tz, " + Convert_VRadc2Temperature_z(v3).ToString("f4")+",  ";
+                s += ",Txy, " + Convert_VRadc2Temperature_xy(v2).ToString("f4") + ",  ";
+                s+=mWaveNumber.ToString() ;
+
                 for (int j = 0; j < 7; j++)
                     s += v[j].ToString() + "\t, \t";
 
@@ -1208,7 +1219,7 @@ namespace NameSpace_AFM_Project
                 s += "Vy, " + (v4 / BIT18MAX * 5.0).ToString("f4") + ", ";
                 s += "Vx, " + (v5 / BIT18MAX * 5.0).ToString("f4") + ", ";
                 s += "Vz, " + (v7 / BIT18MAX * 5.0).ToString("f4") + ", ";
-                //s += "T, " + textBox_TC.Text;
+                s += "T, " + textBox_TC.Text;
                 s += ",pz, " + GetSensorPosition01(PIEZO_Z, (int)v7, (int)v3).ToString("f6");
                 s += ",px, " + GetSensorPosition01(PIEZO_X, (int)v4, (int)v2).ToString("f6");
                 s += ",py, " + GetSensorPosition01(PIEZO_Y, (int)v5, (int)v2).ToString("f6");
@@ -1228,6 +1239,18 @@ namespace NameSpace_AFM_Project
             double p1 = 0.00000006348549803628420000;
             double p2 = -0.00483842959102221000000000;
             double p3 = 103.66310311575000000000000000;
+            p1= -5.128221637662034e-11;
+            p2=8.151520813957732e-05;
+            p3= 10.972631583026976;
+
+     //       cf_xy_V2T = 
+
+     //Linear model Poly2:
+     //cf_xy_V2T(x) = p1*x^2 + p2*x + p3
+     //Coefficients (with 95% confidence bounds):
+     //  p1 =  -5.128e-11  (-1.019e-10, -6.772e-13)
+     //  p2 =   8.152e-05  (6.311e-05, 9.992e-05)
+     //  p3 =       10.97  (9.338, 12.61)
 
             return (p1 * VRadc + p2) * VRadc + p3;
         }
@@ -1236,7 +1259,22 @@ namespace NameSpace_AFM_Project
             double p1 = -0.00000000462849120918884000;
             double p2 = 0.00006395673239768250000000;
             double p3 = 92.46784306755080000000000000;
+            p1 = -4.704300466897327e-11;
+            p2 = 7.257813018105888e-05;
+            p3 = 14.783208236333813;
+
             return (p1 * VRadc + p2) * VRadc + p3;
+
+            
+//cf_z_V2T = 
+
+//     Linear model Poly2:
+//     cf_z_V2T(x) = p1*x^2 + p2*x + p3
+//     Coefficients (with 95% confidence bounds):
+//       p1 =  -4.704e-11  (-1.214e-10, 2.733e-11)
+//       p2 =   7.258e-05  (4.526e-05, 9.99e-05)
+//       p3 =       14.78  (12.35, 17.22)
+
         }
 
 
@@ -1890,11 +1928,18 @@ namespace NameSpace_AFM_Project
 
         private void button2_Click(object sender, EventArgs e)
         {
+            double [] d=new double[]{1,2,3,4,5,6,7,8,9};
+            Math_AFM_line_polyfit_adjust(ref d, 1);
+
+
             //CCoarseController.SA_GotoPositionRelative_S(mSystemIndex, 0, (int)1 * 1000, 1000);
-            AFM_ScaningImageShow_RealTime();      // added on July7 
-            Form_Indentation_PostPorcess mSubForm = new Form_Indentation_PostPorcess(this);     // pop up a new dialog form
-            mSubForm.Show();
-            CallDynamicCode();
+           // AFM_ScaningImageShow_RealTime(mImageArrayHR);      // added on July7 
+            //Form_Indentation_PostPorcess mSubForm = new Form_Indentation_PostPorcess(this);     // pop up a new dialog form
+            //mSubForm.Show();
+
+            //CallDynamicCode();
+
+
             //MY_DEBUG("tres");
             //SpeakVoice("I am test a word");
             //SpeakVoice("you are rate");
@@ -2116,7 +2161,7 @@ namespace NameSpace_AFM_Project
             object Oout_data = (object)out_data;
 
             object OmImageArrayHL = (object)mImageArrayHL;
-            mKernelClass.AFM_scan_set_ROI(1, ref Oout_data, OmImageArrayHL, Oin_data);
+            //mKernelClass.AFM_scan_set_ROI(1, ref Oout_data, OmImageArrayHL, Oin_data);
 
             out_data = (double[,])Oout_data;
             int k = 1;
@@ -2341,7 +2386,7 @@ namespace NameSpace_AFM_Project
         private void ThreadFunction_AFM_ScaningImageShow_RealTime()
         {
             //MY_DEBUG("start afm image dip");
-            AFM_ScaningImageShow_RealTime();
+            AFM_ScaningImageShow_RealTime(mImageArrayHR);
             //MY_DEBUG("end afm image dip");
             mLock_ScaningImageShow_RealTime = false;
         }
@@ -2379,7 +2424,7 @@ namespace NameSpace_AFM_Project
             //MY_DEBUG("start  ");
             try
             {
-                mKernelClass.AFM_convert_height2RGB(3, ref Oout_r, ref Oout_g, ref Oout_b, OmImageArrayHL, Opara);// time =5s
+                //mKernelClass.AFM_convert_height2RGB(3, ref Oout_r, ref Oout_g, ref Oout_b, OmImageArrayHL, Opara);// time =5s
 
                 //MY_DEBUG("end  ");
                 out_r = (double[,])Oout_r;

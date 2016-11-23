@@ -114,6 +114,7 @@
             this.pictureBox_AFM_Real_Image = new System.Windows.Forms.PictureBox();
             this.button_ExportData = new System.Windows.Forms.Button();
             this.groupBox_AFMImage = new System.Windows.Forms.GroupBox();
+            this.textBox_TC = new System.Windows.Forms.TextBox();
             this.button_StartTask = new System.Windows.Forms.Button();
             this.button_ScanStart = new System.Windows.Forms.Button();
             this.checkBox_User_AutoStartScanAfterEngage = new System.Windows.Forms.CheckBox();
@@ -396,7 +397,7 @@
             this.textBox_Sensitivity.Name = "textBox_Sensitivity";
             this.textBox_Sensitivity.Size = new System.Drawing.Size(38, 20);
             this.textBox_Sensitivity.TabIndex = 65;
-            this.textBox_Sensitivity.Text = "130";
+            this.textBox_Sensitivity.Text = "137";
             this.toolTip_Help.SetToolTip(this.textBox_Sensitivity, "Enter the step length here.");
             // 
             // textBox_SetDeltaValueNm
@@ -733,10 +734,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(20, 360);
+            this.button2.Location = new System.Drawing.Point(22, 814);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(84, 54);
+            this.button2.Size = new System.Drawing.Size(70, 33);
             this.button2.TabIndex = 51;
             this.button2.Text = "test";
             this.button2.UseVisualStyleBackColor = true;
@@ -1054,6 +1055,7 @@
             // groupBox_AFMImage
             // 
             this.groupBox_AFMImage.BackColor = System.Drawing.Color.LightGray;
+            this.groupBox_AFMImage.Controls.Add(this.textBox_TC);
             this.groupBox_AFMImage.Controls.Add(this.button_MultiTask);
             this.groupBox_AFMImage.Controls.Add(this.button_StartTask);
             this.groupBox_AFMImage.Controls.Add(this.button_ScanStart);
@@ -1079,6 +1081,14 @@
             this.groupBox_AFMImage.TabIndex = 103;
             this.groupBox_AFMImage.TabStop = false;
             this.groupBox_AFMImage.Text = "AFM Imaging Result";
+            // 
+            // textBox_TC
+            // 
+            this.textBox_TC.Location = new System.Drawing.Point(177, 13);
+            this.textBox_TC.Name = "textBox_TC";
+            this.textBox_TC.Size = new System.Drawing.Size(100, 20);
+            this.textBox_TC.TabIndex = 108;
+            this.textBox_TC.Text = "26";
             // 
             // button_StartTask
             // 
@@ -1785,7 +1795,6 @@
             this.tabPage_Control.Controls.Add(this.button_WaveTest);
             this.tabPage_Control.Controls.Add(this.button_DataCapture);
             this.tabPage_Control.Controls.Add(this.listBox_SelectIdlePackage);
-            this.tabPage_Control.Controls.Add(this.button2);
             this.tabPage_Control.Controls.Add(this.button1);
             this.tabPage_Control.Controls.Add(this.checkBox_ShowImage);
             this.tabPage_Control.Controls.Add(this.textBox_TF_DC_Gain);
@@ -1923,10 +1932,11 @@
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.LightGray;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(1664, 1012);
+            this.ClientSize = new System.Drawing.Size(1594, 1025);
             this.Controls.Add(this.label_SystemState);
             this.Controls.Add(this.groupBox_SEMPreview);
             this.Controls.Add(this.pictureBox_SEMImage);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox_AFMImage);
             this.Controls.Add(this.groupBox_Setup);
@@ -2123,6 +2133,7 @@
         private System.Windows.Forms.Button button_User_AutoEngage;
         private System.Windows.Forms.CheckBox checkBox_User_AutoStartScanAfterEngage;
         private System.Windows.Forms.Button button_ScanStart;
+        private System.Windows.Forms.TextBox textBox_TC;
     }
 }
 
